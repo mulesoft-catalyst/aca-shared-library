@@ -23,9 +23,10 @@ def executeCanaryAnalysis(){
   post.getOutputStream().write(message.getBytes("UTF-8"));
   def postRC = post.getResponseCode();
   println(postRC);
-  if(postRC.equals(200)) {
-    println(post.getInputStream().getText());
-  }
+  //if(postRC.equals(200)) {
+    //println(post.getInputStream().getText());
+  //}
+  println(post.getInputStream().getText());
 }
 
 def retrieveAnalysisResults(){
