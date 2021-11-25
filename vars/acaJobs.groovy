@@ -30,7 +30,11 @@ def executeCanaryAnalysis(){
 }
 
 def retrieveAnalysisResults(analysisId){
-  def get = new URL("http://192.168.0.45:8090/standalone_canary_analysis/${analysisId}").openConnection();
+  def url = "http://192.168.0.45:8090/standalone_canary_analysis/${analysisId}";
+  def get = new URL(url).openConnection();
+  get.setRequestMethod("GET")
+  get.setRequestProperty("Accept", '*/*')
+  get.setRequestProperty("Content-Type", "application/json")
   def getRC = get.getResponseCode();
   println(getRC);
   if(getRC.equals(200)) {
