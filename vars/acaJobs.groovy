@@ -37,9 +37,7 @@ def retrieveAnalysisResults(analysisId){
   get.setRequestProperty("Content-Type", "application/json")
   def getRC = get.getResponseCode();
   println(getRC);
-  if(getRC.equals(200)) {
-    println(get.getInputStream().getText());
-  }
+
   def slurper = new JsonSlurper()
   def result = slurper.parseText(get.getInputStream().getText())
 
