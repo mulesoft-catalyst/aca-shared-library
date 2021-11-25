@@ -24,10 +24,11 @@ def executeCanaryAnalysis(){
   post.getOutputStream().write(message.getBytes("UTF-8"));
   def postRC = post.getResponseCode();
   println(postRC);
-  //if(postRC.equals(200)) {
-    //println(post.getInputStream().getText());
-  //}
-  println(post.getInputStream().getText());
+
+  def slurper = new JsonSlurper()
+  def result = slurper.parseText(post.getInputStream().getText())
+
+  println(result.canaryAnalysisExecutionId);
 }
 
 def retrieveAnalysisResults(){
