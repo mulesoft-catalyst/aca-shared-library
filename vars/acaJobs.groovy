@@ -28,7 +28,7 @@ def executeCanaryAnalysis(){
   def slurper = new JsonSlurper()
   def result = slurper.parseText(post.getInputStream().getText())
 
-  println(result.canaryAnalysisExecutionId);
+  return result.canaryAnalysisExecutionId;
 }
 
 def retrieveAnalysisResults(){
