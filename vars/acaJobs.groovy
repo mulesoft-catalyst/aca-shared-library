@@ -22,20 +22,29 @@ def executeCanaryAnalysis(){
     http.setRequestProperty("Accept", '*/*')
     http.setRequestProperty("Content-Type", 'application/json')
 
-    http.outputStream.write(body.getBytes("UTF-8"))
-    http.connect()
+    //http.outputStream.write(body.getBytes("UTF-8"))
+    //http.connect()
 
-    def response = [:]
+    //def response = [:]
 
-    if (http.responseCode == 200) {
-        println "HTTP response code is 200"
-        response = new JsonSlurper().parseText(http.inputStream.getText('UTF-8'))
-    } else {
-        println "HTTP response code is different than 200"
-        response = new JsonSlurper().parseText(http.errorStream.getText('UTF-8'))
+    //if (http.responseCode == 200) {
+    //    println "HTTP response code is 200"
+    //    response = new JsonSlurper().parseText(http.inputStream.getText('UTF-8'))
+    //} else {
+    //    println "HTTP response code is different than 200"
+    //    response = new JsonSlurper().parseText(http.errorStream.getText('UTF-8'))
+    //}
+
+    //println "response: ${response}"
+
+    http.getOutputStream().write(message.getBytes("UTF-8"));
+    def postRC = http.getResponseCode();
+    println(postRC);
+    if(postRC.equals(200)) {
+        println(http.getInputStream().getText());
+    else {
+        println "code != 200"
     }
-
-    println "response: ${response}"
 
   } catch (Exception e) {
     echo e
