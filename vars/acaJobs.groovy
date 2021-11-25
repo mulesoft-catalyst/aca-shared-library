@@ -16,14 +16,12 @@ def executeLoadTesting(){
 def executeCanaryAnalysis(){
   def post = new URL("http://192.168.0.45:8090/standalone_canary_analysis/?metricsAccountName=canary-prometheus&storageAccountName=in-memory-store-account&application=Canary+Test").openConnection();
   def message = '{\"canaryConfig\":{\"name\":\"canary-config-prometheus\",\"description\":\"Configuration for Prometheus\",\"configVersion\":\"1\",\"applications\":[\"ad-hoc\"],\"judge\":{\"name\":\"NetflixACAJudge-v1.0\",\"judgeConfigurations\":{}},\"metrics\":[{\"name\":\"Avg Response Time\",\"query\":{\"type\":\"prometheus\",\"customInlineTemplate\":\"PromQL:avg(avg_over_time(cloudhub_prometheus_rt{instance=\\\"prometheus-metrics.us-e2.cloudhub.io:80\\\", job=\\\"cloudhub-metrics\\\", canary=\\\"${scope}\\\"}[120m]))\",\"serviceType\":\"prometheus\"},\"groups\":[\"Canaries\"],\"analysisConfigurations\":{\"canary\":{\"critical\":false,\"nanStrategy\":\"replace\",\"effectSize\":{\"allowedIncrease\":1,\"allowedDecrease\":1},\"outliers\":{\"strategy\":\"keep\"},\"direction\":\"decrease\"}},\"scopeName\":\"default\"},{\"name\":\"Success Rate\",\"query\":{\"type\":\"prometheus\",\"customInlineTemplate\":\"PromQL:sum(sum_over_time(cloudhub_prometheus{instance=\\\"prometheus-metrics.us-e2.cloudhub.io:80\\\", job=\\\"cloudhub-metrics\\\", http_code=\\\"200\\\", canary=\\\"${scope}\\\"}[120m]))\",\"serviceType\":\"prometheus\"},\"groups\":[\"Canaries\"],\"analysisConfigurations\":{\"canary\":{\"nanStrategy\":\"replace\",\"critical\":false,\"effectSize\":{\"allowedIncrease\":1,\"allowedDecrease\":1},\"outliers\":{\"strategy\":\"keep\"},\"direction\":\"decrease\"}},\"scopeName\":\"default\"}],\"templates\":{},\"classifier\":{\"groupWeights\":{\"Canaries\":100}}},\"executionRequest\":{\"scopes\":[{\"scopeName\":\"default\",\"controlScope\":0,\"controlLocation\":\"us-east-1\",\"controlOffsetInMinutes\":\"10\",\"experimentScope\":1,\"experimentLocation\":\"us-east-1\",\"startTimeIso\":\"2021-11-17T15:00:00Z\",\"endTimeIso\":\"2021-11-17T19:00:00Z\",\"step\":2,\"extendedScopeParams\":{}}],\"thresholds\":{\"pass\":95,\"marginal\":75}}}'
-  println(message)
   post.setRequestMethod("POST")
   post.setDoOutput(true)
   post.setRequestProperty("Accept", '*/*')
   post.setRequestProperty("Content-Type", "application/json")
   post.getOutputStream().write(message.getBytes("UTF-8"));
   def postRC = post.getResponseCode();
-  println(postRC);
 
   def slurper = new JsonSlurper()
   def result = slurper.parseText(post.getInputStream().getText())
@@ -31,8 +29,17 @@ def executeCanaryAnalysis(){
   return result.canaryAnalysisExecutionId;
 }
 
-def retrieveAnalysisResults(){
-  echo "ok"
+def retrieveAnalysisResults(analysisId){
+  def get = new URL("http://192.168.0.45:8090/standalone_canary_analysis/${analysisId}").openConnection();
+  def getRC = get.getResponseCode();
+  println(getRC);
+  if(getRC.equals(200)) {
+    println(get.getInputStream().getText());
+  }
+  def slurper = new JsonSlurper()
+  def result = slurper.parseText(get.getInputStream().getText())
+
+  return result.canaryAnalysisExecutionResult;
 }
 
 def decideBasedOnResults(){
