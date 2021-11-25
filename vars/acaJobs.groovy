@@ -5,7 +5,7 @@ def printMessage(message){
   echo "${message}"
 }
 
-def applyCanaryPolicy{
+def applyCanaryPolicy(){
   echo "ok"
 }
 
