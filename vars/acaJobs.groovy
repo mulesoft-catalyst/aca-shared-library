@@ -42,7 +42,7 @@ def executeCanaryAnalysis(){
     println(postRC);
     if(postRC.equals(200)) {
         println(http.getInputStream().getText());
-    else {
+    } else {
         println "code != 200"
     }
 
