@@ -5,5 +5,5 @@ def call(String name = 'User') {
 }
 
 def printMessage(message){
-  echo ${message}
+  echo "${message}"
 }
