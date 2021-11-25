@@ -28,8 +28,10 @@ def executeCanaryAnalysis(){
     def response = [:]
 
     if (http.responseCode == 200) {
+        println "HTTP response code is 200"
         response = new JsonSlurper().parseText(http.inputStream.getText('UTF-8'))
     } else {
+        println "HTTP response code is different than 200"
         response = new JsonSlurper().parseText(http.errorStream.getText('UTF-8'))
     }
 
