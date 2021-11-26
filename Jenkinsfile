@@ -1,5 +1,5 @@
-@Library('automated-canary-analysis-lib') _
 import groovy.json.JsonSlurper
+@Library('automated-canary-analysis-lib') _
 
 def analysisId = ''
 def analysisresult = new JsonSlurper()
