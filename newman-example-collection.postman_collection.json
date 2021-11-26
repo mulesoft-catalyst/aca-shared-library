@@ -1,0 +1,20 @@
+{
+	"info": {
+		"_postman_id": "bd7bc7c7-03b9-4f08-ae6c-4a6443b78ebf",
+		"name": "newman-example-collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "httpbin example coll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	]
+}
