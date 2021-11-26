@@ -31,7 +31,8 @@ pipeline {
 
 
             script {
-              LOAD_TEST_REPORT_COMPLETE_PATH = sh(script: "find ${POSTMAN_REPORT_PATH} -maxdepth 1 -name '*.html'", returnStdout: true).trim()
+              //LOAD_TEST_REPORT_COMPLETE_PATH = sh(script: "find ${POSTMAN_REPORT_PATH} -maxdepth 1 -name '*.html'", returnStdout: true).trim()
+              LOAD_TEST_REPORT_COMPLETE_PATH = sh(script: "ls ${POSTMAN_REPORT_PATH}", returnStdout: true).trim()
               LOAD_TEST_REPORT_NAME = sh(script: "basename ${LOAD_TEST_REPORT_COMPLETE_PATH}", returnStdout: true).trim()
             }
 
