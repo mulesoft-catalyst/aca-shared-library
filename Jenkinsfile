@@ -1,8 +1,6 @@
 @Library('automated-canary-analysis-lib') _
-import groovy.json.*
 
 def analysisId = ''
-def analysisresult = null
 
 pipeline {
     agent any
@@ -64,7 +62,7 @@ pipeline {
         stage("Retrieve Analysis canary Results"){
           steps {
             script {
-              analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
+              def analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
             }
           }
         }
