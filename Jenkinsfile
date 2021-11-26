@@ -1,5 +1,8 @@
 @Library('automated-canary-analysis-lib') _
 
+def analysisId = ''
+def analysisresult = ''
+
 pipeline {
     agent any
 
@@ -26,7 +29,7 @@ pipeline {
         stage("Execute Canary Analysis"){
           steps {
             script {
-              def analysisId = acaJobs.executeCanaryAnalysis()
+              analysisId = acaJobs.executeCanaryAnalysis()
               echo "${analysisId}"
             }
           }
@@ -34,14 +37,14 @@ pipeline {
 
         stage("Wait period"){
           steps {
-            sleep(60)
+            sleep(10)
           }
         }
 
         stage("Retrieve Analysis canary Results"){
           steps {
             script {
-              def analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
+              analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
               echo "Result is: ${analysisresult}"
             }
           }
