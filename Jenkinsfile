@@ -5,7 +5,9 @@ pipeline {
 
     stages{
       stage("Apply Canary Policy"){
-        acaJobs.applyCanaryPolicy()
+        steps {
+          acaJobs.applyCanaryPolicy()
+        }
       }
 
       stage('Canary Load tests') {
@@ -20,21 +22,29 @@ pipeline {
         }
 
         stage("Execute Canary Analysis"){
-          def analysisId = acaJobs.executeCanaryAnalysis()
-          echo "${analysisId}"
+          steps {
+            def analysisId = acaJobs.executeCanaryAnalysis()
+            echo "${analysisId}"
+          }
         }
 
         stage("Wait period"){
-          sleep(60)
+          steps {
+            sleep(60)
+          }
         }
 
         stage("Retrieve Analysis canary Results"){
-          def analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
-          echo "Result is: ${analysisresult}"
+          steps {
+            def analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
+            echo "Result is: ${analysisresult}"
+          }
         }
 
         stage("Decided Based on Results"){
-          acaJobs.decideBasedOnResults()
+          steps {
+            acaJobs.decideBasedOnResults()
+          }
         }
     }
 }
