@@ -2,7 +2,7 @@
 import groovy.json.*
 
 def analysisId = ''
-def analysisresult = ''
+def analysisresult = null
 
 pipeline {
     agent any
@@ -65,8 +65,6 @@ pipeline {
           steps {
             script {
               analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
-              def strResult = new JsonBuilder(${analysisresult}).toPrettyString()
-              echo "Result is: ${strResult}" 
             }
           }
         }
