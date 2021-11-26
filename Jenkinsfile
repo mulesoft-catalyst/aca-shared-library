@@ -31,7 +31,17 @@ pipeline {
                 --suppress-exit-code """
 
 
-            publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: false, reportDir: "${POSTMAN_REPORT_PATH}", reportFiles: "${POSTMAN_REPORT_FILENAME}", reportName: 'Canary Load Test Report', reportTitles: ''])
+            publishHTML( target:
+              [
+                allowMissing: true,
+                alwaysLinkToLastBuild: false,
+                keepAll: false,
+                reportDir: "${POSTMAN_REPORT_PATH}",
+                reportFiles: "${POSTMAN_REPORT_FILENAME}",
+                reportName: 'Canary Load Test Report',
+                reportTitles: ''
+              ]
+            )
           }
         }
 
