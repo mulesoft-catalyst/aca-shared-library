@@ -2,7 +2,6 @@ import groovy.json.JsonSlurper
 @Library('automated-canary-analysis-lib') _
 
 def analysisId = ''
-def analysisresult = new JsonSlurper()
 
 pipeline {
     agent any
@@ -64,7 +63,7 @@ pipeline {
         stage("Retrieve Analysis canary Results"){
           steps {
             script {
-              analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
+              def analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
             }
           }
         }
