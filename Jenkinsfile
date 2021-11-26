@@ -28,15 +28,15 @@ pipeline {
                 -r htmlextra \
                 --reporter-htmlextra-export ${POSTMAN_REPORT_PATH} \
                   --suppress-exit-code """
+
+
+            script {
+              INT_TEST_REPORT_COMPLETE_PATH = sh(script: "find ${POSTMAN_REPORT_PATH} -maxdepth 1 -name '*.html'", returnStdout: true).trim()
+              INT_TEST_REPORT_NAME = sh(script: "basename ${INT_TEST_REPORT_COMPLETE_PATH}", returnStdout: true).trim()
+            }
+
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: false, reportDir: "${POSTMAN_REPORT_PATH}", reportFiles: "${INT_TEST_REPORT_NAME}", reportName: 'Integration Test Report', reportTitles: ''])
           }
-
-          script {
-            INT_TEST_REPORT_COMPLETE_PATH = sh(script: "find ${POSTMAN_REPORT_PATH} -maxdepth 1 -name '*.html'", returnStdout: true).trim()
-            INT_TEST_REPORT_NAME = sh(script: "basename ${INT_TEST_REPORT_COMPLETE_PATH}", returnStdout: true).trim()
-          }
-
-          publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: false, reportDir: "${POSTMAN_REPORT_PATH}", reportFiles: "${INT_TEST_REPORT_NAME}", reportName: 'Integration Test Report', reportTitles: ''])
-
         }
 
         stage("Execute Canary Analysis"){
