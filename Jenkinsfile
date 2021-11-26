@@ -1,4 +1,5 @@
 @Library('automated-canary-analysis-lib') _
+import groovy.json.*
 
 def analysisId = ''
 def analysisresult = ''
@@ -64,7 +65,8 @@ pipeline {
           steps {
             script {
               analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
-              echo "Result is: ${analysisresult}"
+              def strResult = new JsonBuilder(${analysisresult}).toPrettyString()
+              echo "Result is: ${strResult}" 
             }
           }
         }
