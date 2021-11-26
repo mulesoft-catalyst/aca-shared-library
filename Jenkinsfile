@@ -27,7 +27,7 @@ pipeline {
               sh """ ${NEWMAN_PATH} run ${NEWMAN_COLLECTION} \
                 -n ${NEWMAN_ITERATIONS} \
                 -r htmlextra \
-                --reporter-htmlextra-export ${POSTMAN_REPORT_PATH}"\"${POSTMAN_REPORT_FILENAME} \
+                --reporter-htmlextra-export ${POSTMAN_REPORT_PATH}"/"${POSTMAN_REPORT_FILENAME} \
                 --suppress-exit-code """
 
 
