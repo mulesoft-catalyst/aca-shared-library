@@ -6,7 +6,9 @@ pipeline {
     stages{
       stage("Apply Canary Policy"){
         steps {
-          acaJobs.applyCanaryPolicy()
+          script {
+            acaJobs.applyCanaryPolicy()
+          }
         }
       }
 
@@ -23,8 +25,10 @@ pipeline {
 
         stage("Execute Canary Analysis"){
           steps {
-            def analysisId = acaJobs.executeCanaryAnalysis()
-            echo "${analysisId}"
+            script {
+              def analysisId = acaJobs.executeCanaryAnalysis()
+              echo "${analysisId}"
+            }
           }
         }
 
@@ -36,14 +40,18 @@ pipeline {
 
         stage("Retrieve Analysis canary Results"){
           steps {
-            def analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
-            echo "Result is: ${analysisresult}"
+            script {
+              def analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
+              echo "Result is: ${analysisresult}"
+            }
           }
         }
 
         stage("Decided Based on Results"){
           steps {
-            acaJobs.decideBasedOnResults()
+            script {
+              acaJobs.decideBasedOnResults()
+            }
           }
         }
     }
