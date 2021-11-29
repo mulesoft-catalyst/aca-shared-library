@@ -170,8 +170,6 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   echo "${newLine}"
   outputStream.writeBytes("${assetId}")
   echo "${assetId}"
-  outputStream.writeBytes(lineEnd)
-  echo lineEnd
 	outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
 	outputStream.writeBytes('Content-Disposition: form-data; name="version"' + lineEnd)
@@ -180,8 +178,6 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   echo "${newLine}"
 	outputStream.writeBytes("${assetVersion}")
   echo "${assetVersion}"
-  outputStream.writeBytes(lineEnd)
-  echo lineEnd
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
   outputStream.writeBytes('Content-Disposition: form-data; name="name"' + lineEnd)
@@ -190,8 +186,6 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   echo "${newLine}"
   outputStream.writeBytes("${assetName}")
   echo "${assetName}"
-  outputStream.writeBytes(lineEnd)
-  echo lineEnd
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
   outputStream.writeBytes('Content-Disposition: form-data; name="classifier"' + lineEnd)
@@ -200,8 +194,6 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   echo "${newLine}"
   outputStream.writeBytes("${assetClassifier}")
   echo "${assetClassifier}"
-  outputStream.writeBytes(lineEnd)
-  echo lineEnd
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
   outputStream.writeBytes('Content-Disposition: form-data; name="apiVersion"' + lineEnd)
@@ -210,8 +202,6 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   echo "${newLine}"
   outputStream.writeBytes("${apiVersion}")
   echo "${apiVersion}"
-  outputStream.writeBytes(lineEnd)
-  echo lineEnd
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
   outputStream.writeBytes('Content-Disposition: form-data; name="asset"' + lineEnd)
@@ -219,8 +209,6 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   echo "${newLine}"
   outputStream.writeBytes("${apiVersion}")
   echo "${apiVersion}"
-  outputStream.writeBytes(lineEnd)
-  echo lineEnd
 	outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
 	outputStream.writeBytes('Content-Disposition: form-data; name="asset"' + lineEnd)
