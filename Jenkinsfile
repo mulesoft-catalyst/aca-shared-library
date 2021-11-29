@@ -19,6 +19,7 @@ def portCanary="443"
 def protocolCanary="HTTPS"
 def pathCanary="/500"
 def weightCanary="50"
+def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
 
 pipeline {
     agent any
@@ -27,8 +28,8 @@ pipeline {
       stage("Apply Canary Policy"){
         steps {
           script {
-            echo "Calling applyCanaryPolicy with ${groupId}, ${assetId}, ${assetVersion}, ${host}, ${port}, ${protocol}, ${path}, ${weight}, ${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary}"
-            acaJobs.applyCanaryPolicy("${groupId}", "${assetId}", "${assetVersion}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
+            echo "Calling applyCanaryPolicy with ${organizationId}, ${groupId}, ${assetId}, ${assetVersion}, ${host}, ${port}, ${protocol}, ${path}, ${weight}, ${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary}"
+            acaJobs.applyCanaryPolicy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
           }
         }
       }
