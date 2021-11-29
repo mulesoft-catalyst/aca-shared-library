@@ -144,8 +144,8 @@ def createProxy(String organizationId, String groupId, String assetId, String as
     -F 'version: ${assetVersion}' \
     -F 'name: ${assetName}' \
     -F 'classifier: ${assetClassifier}' \
-    -F 'apiVersion: ${apiVersion}'" \
-    -F 'asset: \"undefined\"', returnStdout: true)
+    -F 'apiVersion: ${apiVersion}' \
+    -F 'asset: \"undefined\"' ", returnStdout: true)
 
   def http_code = response.split("HTTPSTATUS:")[1]
   println "http code: ${http_code}"
