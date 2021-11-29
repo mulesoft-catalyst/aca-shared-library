@@ -27,6 +27,7 @@ pipeline {
       stage("Apply Canary Policy"){
         steps {
           script {
+            echo "Calling applyCanaryPolicy with ${groupId}, ${assetId}, ${assetVersion},${host}, ${port}, ${protocol}, ${path}, ${weight},${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary}"
             acaJobs.applyCanaryPolicy(${groupId}, ${assetId}, ${assetVersion},
                                       ${host}, ${port}, ${protocol}, ${path}, ${weight},
                                       ${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary})
