@@ -133,7 +133,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
 
   def authToken=getAuthToken("${authAPIEndpoint}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_USR}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW}")
   echo "Bearer ${authToken}"
-  
+
   //Step 1) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
   echo ("1.a")
   def connection = new URL(exchangeAssetsUrl).openConnection()
@@ -156,7 +156,8 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   //outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
   //outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
-  outputStream.writeBytes("${groupId}")
+  //outputStream.writeBytes("${groupId}")
+  outputStream.writeBytes("${organizationId}")
   echo ("1.d")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
