@@ -154,6 +154,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
 
   //Step 2) Create Endpoint with a Proxy
   def postBody = """
+  {
       "endpoint": {
         "isCloudHub":true,
         "muleVersion4OrAbove":true,
