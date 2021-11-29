@@ -26,12 +26,12 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
 
   def postBody = [
       configurationData: [
-        host: ${host},
-        port: ${port},
-        protocol: ${protocol},
-        path: ${path},
-        weight: ${weight},
-        hostCanary: ${hostCanary},
+        host: "${host}",
+        port: "${port}",
+        protocol: "${protocol}",
+        path: "${path}",
+        weight: "${weight}",
+        hostCanary: "${hostCanary}",
         portCanary: ${portCanary},
         protocolCanary: ${protocolCanary},
         pathCanary: ${pathCanary},
@@ -147,7 +147,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
-  outputStream.writeBytes(${organizationId})
+  outputStream.writeBytes("${organizationId}")
   echo ("1.c")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
@@ -155,7 +155,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
-  outputStream.writeBytes(${groupId})
+  outputStream.writeBytes("${groupId}")
   echo ("1.d")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
@@ -163,7 +163,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
-  outputStream.writeBytes(${assetId})
+  outputStream.writeBytes("${assetId}")
   echo ("1.e")
   outputStream.writeBytes(lineEnd)
 	outputStream.writeBytes(twoHyphens + boundary + lineEnd)
@@ -171,7 +171,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
 	outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
 	outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
 	outputStream.writeBytes(lineEnd)
-	outputStream.writeBytes(${assetVersion})
+	outputStream.writeBytes("${assetVersion}")
   echo ("1.f")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
@@ -179,7 +179,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
-  outputStream.writeBytes(${assetName})
+  outputStream.writeBytes("${assetName}")
   echo ("1.g")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
@@ -187,7 +187,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
-  outputStream.writeBytes(${assetClassifier})
+  outputStream.writeBytes("${assetClassifier}")
   echo ("1.h")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
@@ -195,7 +195,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
-  outputStream.writeBytes(${apiVersion})
+  outputStream.writeBytes("${apiVersion}")
   echo ("1.i")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
@@ -203,7 +203,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
-  outputStream.writeBytes(${apiVersion})
+  outputStream.writeBytes("${apiVersion}")
   echo ("1.j")
   outputStream.writeBytes(lineEnd)
 	outputStream.writeBytes(twoHyphens + boundary + lineEnd)
@@ -244,9 +244,9 @@ def createProxy(String organizationId, String groupId, String assetId, String as
       ],
       providerId:null,
       spec:[
-          assetId:${assetId},
-          groupId:${groupId},
-          assetVersion:${assetVersion}
+          assetId:"${assetId}",
+          groupId:"${groupId}",
+          assetVersion:"${assetVersion}"
        ]
   ]
 
