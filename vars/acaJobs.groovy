@@ -197,5 +197,7 @@ def executePOSTBash(String url, String token, String body, String expectedHttpCo
   proc.consumeProcessOutput(id, serr)
   proc.waitFor()
 
+  response = proc.text
+  print "${response}"
   return id.toString().trim()
 }
