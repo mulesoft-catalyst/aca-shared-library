@@ -126,110 +126,26 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
   def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
-  def boundary =  'abcd' + Long.toString(System.currentTimeMillis()) * 2 + 'dcba'
-  def twoHyphens = '----'
-  def lineEnd = '\r'
-  def newLine = '\n'
+  def boundary =  '----abcd' + Long.toString(System.currentTimeMillis()) * 2 + 'dcba'
   def exchangeAssetsUrl = "https://anypoint.mulesoft.com/exchange/api/v1/assets"
 
   def authToken=getAuthToken("${authAPIEndpoint}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_USR}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW}")
   echo "Bearer ${authToken}"
 
   //Step 1) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
-  def connection = new URL(exchangeAssetsUrl).openConnection()
-  connection.setRequestMethod("POST")
-  connection.setDoOutput(true)
-  connection.setRequestProperty ("Authorization", "Bearer ${authToken}")
-  connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=${twoHyphens}${boundary}")
-  echo "multipart/form-data; boundary=${twoHyphens}${boundary}"
-
-  def outputStream = new DataOutputStream(connection.getOutputStream())
-  outputStream.writeBytes(twoHyphens + boundary + lineEnd);
-  echo twoHyphens + boundary + lineEnd
-  outputStream.writeBytes('Content-Disposition: form-data; name="organizationId"' + lineEnd)
-  echo 'Content-Disposition: form-data; name="organizationId"' + lineEnd
-  outputStream.writeBytes("${newLine}")
-  echo "${newLine}"
-  outputStream.writeBytes("${organizationId}")
-  echo "${organizationId}"
-  outputStream.writeBytes(lineEnd)
-  echo lineEnd
-  outputStream.writeBytes(twoHyphens + boundary + lineEnd)
-  echo twoHyphens + boundary + lineEnd
-  outputStream.writeBytes('Content-Disposition: form-data; name="groupId"' + lineEnd)
-  echo 'Content-Disposition: form-data; name="groupId"' + lineEnd
-  outputStream.writeBytes("${organizationId}")
-  echo "${organizationId}"
-  outputStream.writeBytes(lineEnd)
-  echo lineEnd
-  outputStream.writeBytes(twoHyphens + boundary + lineEnd)
-  echo twoHyphens + boundary + lineEnd
-  outputStream.writeBytes('Content-Disposition: form-data; name="assetId"' + lineEnd)
-  echo 'Content-Disposition: form-data; name="assetId"' + lineEnd
-  outputStream.writeBytes("${newLine}")
-  echo "${newLine}"
-  outputStream.writeBytes("${assetId}")
-  echo "${assetId}"
-	outputStream.writeBytes(twoHyphens + boundary + lineEnd)
-  echo twoHyphens + boundary + lineEnd
-	outputStream.writeBytes('Content-Disposition: form-data; name="version"' + lineEnd)
-  echo 'Content-Disposition: form-data; name="version"' + lineEnd
-  outputStream.writeBytes("${newLine}")
-  echo "${newLine}"
-	outputStream.writeBytes("${assetVersion}")
-  echo "${assetVersion}"
-  outputStream.writeBytes(twoHyphens + boundary + lineEnd)
-  echo twoHyphens + boundary + lineEnd
-  outputStream.writeBytes('Content-Disposition: form-data; name="name"' + lineEnd)
-  echo 'Content-Disposition: form-data; name="name"' + lineEnd
-  outputStream.writeBytes("${newLine}")
-  echo "${newLine}"
-  outputStream.writeBytes("${assetName}")
-  echo "${assetName}"
-  outputStream.writeBytes(twoHyphens + boundary + lineEnd)
-  echo twoHyphens + boundary + lineEnd
-  outputStream.writeBytes('Content-Disposition: form-data; name="classifier"' + lineEnd)
-  echo 'Content-Disposition: form-data; name="classifier"' + lineEnd
-  outputStream.writeBytes("${newLine}")
-  echo "${newLine}"
-  outputStream.writeBytes("${assetClassifier}")
-  echo "${assetClassifier}"
-  outputStream.writeBytes(twoHyphens + boundary + lineEnd)
-  echo twoHyphens + boundary + lineEnd
-  outputStream.writeBytes('Content-Disposition: form-data; name="apiVersion"' + lineEnd)
-  echo 'Content-Disposition: form-data; name="apiVersion"' + lineEnd
-  outputStream.writeBytes("${newLine}")
-  echo "${newLine}"
-  outputStream.writeBytes("${apiVersion}")
-  echo "${apiVersion}"
-  outputStream.writeBytes(twoHyphens + boundary + lineEnd)
-  echo twoHyphens + boundary + lineEnd
-  outputStream.writeBytes('Content-Disposition: form-data; name="asset"' + lineEnd)
-  outputStream.writeBytes("${newLine}")
-  echo "${newLine}"
-  outputStream.writeBytes("${apiVersion}")
-  echo "${apiVersion}"
-	outputStream.writeBytes(twoHyphens + boundary + lineEnd)
-  echo twoHyphens + boundary + lineEnd
-	outputStream.writeBytes('Content-Disposition: form-data; name="asset"' + lineEnd)
-  echo 'Content-Disposition: form-data; name="asset"' + lineEnd
-  outputStream.writeBytes("${newLine}")
-  echo "${newLine}"
-  outputStream.writeBytes("undefined")
-  echo "undefined"
-  outputStream.writeBytes(twoHyphens + boundary + lineEnd)
-  echo twoHyphens + boundary + lineEnd
-
-  outputStream.flush()
-	outputStream.close()
-
-  def http_code = connection.getResponseCode()
-  def responseTxt = connection.getInputStream().getText()
-
-  echo "http_code: ${http_code}, response: ${responseTxt}"
-
-  // fail step if graph call fails
-  assert http_code.equals(201) : "Upload Exchange Asset response should be a 201 but received ${http_code}! -> ${responseTxt}"
+  sh (script: "curl \
+  -s ${exchangeAssetsUrl} \
+  -X POST \
+  -H 'Content-Type: multipart/form-data; boundary=${boundary}' \
+  -H 'Authorization: Bearer ${authToken} \
+  --form 'organizationId=${oganizationId}' \
+  --form 'groupId=${oganizationId}' \
+  --form 'assetId=${assetId}' \
+  --form 'version=${assetVersion}' \
+  --form 'name=${assetName}' \
+  --form 'classifier=${assetClassifier}' \
+  --form 'apiVersion=${apiVersion}' \
+  --form 'asset="undefined"').trim()
 
   //Step 2) Create Endpoint with a Proxy
   def postBody = [
