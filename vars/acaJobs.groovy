@@ -133,7 +133,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   echo "Bearer ${authToken}"
 
   //Step 1) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
-  sh (script: "curl \
+  String response = sh (script: "curl \
   -s ${exchangeAssetsUrl} \
   -X POST \
   -H 'Content-Type: multipart/form-data; boundary=${boundary}' \
@@ -146,7 +146,12 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   --form 'classifier=${assetClassifier}' \
   --form 'apiVersion=${apiVersion}' \
   --form 'asset=\"undefined\"' " \
-  ,returnStdout: true).trim()
+  returnStdout: true)
+
+  def http_code = response.split("HTTPSTATUS:")[1]
+  println "http code: ${http_code}"
+
+  assert http_code.equals("202") : "Create a base Prx asset response should be a ${expectedHttpCode} but received ${http_code}! -> ${response}"
 
   //Step 2) Create Endpoint with a Proxy
   def postBody = [
