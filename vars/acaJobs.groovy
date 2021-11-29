@@ -24,9 +24,12 @@ def applyCanaryPolicy(String groupId, String assetId, String assetVersion, Strin
                       String hostCanary, Integer portCanary, String protocolCanary, String pathCanary, String weightCanary){
 
   //Step 1 - Create a Proxy app (optional)
+  echo "applyCanaryPolicy Step 1"
   createProxy(${orgId}, ${groupId}, ${assetId}, ${assetVersion}, ${assetName}, ${assetClassifier}, ${apiVersion})
 
-  //Step 3 - Apply the policy
+  //Step 2 - Apply the policy
+  echo "applyCanaryPolicy Step 2"
+
   def postBody = [
       configurationData: [
         host: ${host},
@@ -126,7 +129,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
 
   def authToken=getAuthToken("${authAPIEndpoint}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_USR}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW}")
 
-  //Step 1) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is cconsidering we should always create an asset in Exchange
+  //Step 1) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
   def connection = new URL(exchangeAssetsUrl).openConnection()
   connection.setRequestMethod("POST")
   connection.setDoOutput(true)
@@ -222,23 +225,23 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   def postBody = [
       endpoint: [
         deploymentType: "CH",
-        "isCloudHub":true,
-        "muleVersion4OrAbove":true,
-        "proxyUri":"http://0.0.0.0:8081/200",
-        "proxyTemplate":[
-           "assetVersion":"2.0.2"
+        isCloudHub:true,
+        muleVersion4OrAbove:true,
+        proxyUri:"http://0.0.0.0:8081/200",
+        proxyTemplate:[
+           assetVersion:"2.0.2"
         ],
-        "referencesUserDomain":false,
-        "responseTimeout":null,
-        "type":"http",
-        "uri":"https://httpstat.us",
-        "validation":"NOT_APPLICABLE"
+        referencesUserDomain:false,
+        responseTimeout:null,
+        type:"http",
+        uri:"https://httpstat.us",
+        validation:"NOT_APPLICABLE"
       ],
-      "providerId":null,
-      "spec":[
-          "assetId":${assetId},,
-          "groupId":${groupId},
-          "assetVersion":${assetVersion}
+      providerId:null,
+      spec:[
+          assetId:${assetId},
+          groupId:${groupId},
+          assetVersion:${assetVersion}
        ]
   ]
 
