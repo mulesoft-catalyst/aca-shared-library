@@ -132,7 +132,8 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   def exchangeAssetsUrl = "https://anypoint.mulesoft.com/exchange/api/v1/assets"
 
   def authToken=getAuthToken("${authAPIEndpoint}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_USR}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW}")
-
+  echo "Bearer ${authToken}"
+  
   //Step 1) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
   echo ("1.a")
   def connection = new URL(exchangeAssetsUrl).openConnection()
