@@ -169,7 +169,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
       "instanceLabel": null,
       "spec":{
           "assetId":"${assetId}",
-          "groupId":"${groupId}",
+          "groupId":"${organizationId}",
           "version":"${assetVersion}"
        }
   }
