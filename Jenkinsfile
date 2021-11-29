@@ -3,6 +3,23 @@ import groovy.json.JsonSlurper
 
 def analysisId = ''
 
+//Variables for Canary policy version
+def groupId="6824e136-3ef5-4c4d-aaac-438f3dc41ac2"
+def assetId="canary-release-mule4"
+def assetVersion="1.0.0"
+
+//API Endpoints configuration (Base and Canary). TODO: Externalize as pipeline parameters
+def host="httpstat.us"
+def port=443
+def protocol="HTTPS"
+def path="/200"
+def weight=50
+def hostCanary="httpstat.us"
+def portCanary=443
+def protocolCanary="HTTPS"
+def pathCanary="/500"
+def weightCanary=50
+
 pipeline {
     agent any
 
@@ -10,7 +27,9 @@ pipeline {
       stage("Apply Canary Policy"){
         steps {
           script {
-            acaJobs.applyCanaryPolicy()
+            acaJobs.applyCanaryPolicy(${groupId}, ${assetId}, ${assetVersion},
+                                      ${host}, ${port}, ${protocol}, ${path}, ${weight},
+                                      ${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary})
           }
         }
       }
