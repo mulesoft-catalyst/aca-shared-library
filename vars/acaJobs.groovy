@@ -150,7 +150,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   def http_code = response.split("HTTPSTATUS:")[1]
   println "http code: ${http_code}"
 
-  assert http_code.equals("202") : "Create a base Prx asset response should be a '202' but received ${http_code}! -> ${response}"
+  assert http_code.equals("201") : "Create a base Prx asset response should be a '201' but received ${http_code}! -> ${response}"
 
   //Step 2) Create Endpoint with a Proxy
   def postBody = [
