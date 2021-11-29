@@ -8,7 +8,6 @@ def ANYPOINT_CONNECTED_APP_CREDENTIALS_PWD = "5B02329f8D264ec9822fFc344BFd405f" 
 
 //API Manager API config
 def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
-def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
 def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
 //Canary proxy Exchange Asset (should be externalized to parametrized pipeline)
@@ -20,7 +19,7 @@ def printMessage(message){
   echo "${message}"
 }
 
-def applyCanaryPolicy(String groupId, String assetId, String assetVersion, String host, String port, String protocol, String path, String weight,
+def applyCanaryPolicy(String organizationId, String groupId, String assetId, String assetVersion, String host, String port, String protocol, String path, String weight,
                       String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
 
   //Step 1 - Create a Proxy app (optional)
