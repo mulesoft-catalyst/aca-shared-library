@@ -20,7 +20,8 @@ def printMessage(message){
   echo "${message}"
 }
 
-def applyCanaryPolicy(groupId, assetId, assetVersion, host, port, protocol, path, weight, hostCanary, portCanary, protocolCanary, pathCanary, weightCanary){
+def applyCanaryPolicy(String groupId, String assetId, String assetVersion, String host, Integer port, String protocol, String path, Integer weight,
+                      String hostCanary, Integer portCanary, String protocolCanary, String pathCanary, Integer weightCanary){
 
   //Step 1 - Create a Proxy app (optional)
   echo "applyCanaryPolicy Step 1"
