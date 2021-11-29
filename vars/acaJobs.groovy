@@ -1,14 +1,6 @@
 #!/usr/bin/groovy
 import groovy.json.JsonSlurper
 
-//Auth API config
-authAPIEndpoint = "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
-ANYPOINT_CONNECTED_APP_CREDENTIALS_USR = "1726d936b1d14b1f9a23282f0e5a7330" //TODO: externalize into credentials
-ANYPOINT_CONNECTED_APP_CREDENTIALS_PWD = "5B02329f8D264ec9822fFc344BFd405f" //TODO: externalize into credentials
-
-//API Manager API config
-apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
-environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
 def printMessage(message){
   echo "${message}"
@@ -16,6 +8,14 @@ def printMessage(message){
 
 def applyCanaryPolicy(String organizationId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String host, String port, String protocol, String path, String weight,
                       String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
+  //Auth API config
+  def authAPIEndpoint = "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
+  def ANYPOINT_CONNECTED_APP_CREDENTIALS_USR = "1726d936b1d14b1f9a23282f0e5a7330" //TODO: externalize into credentials
+  def ANYPOINT_CONNECTED_APP_CREDENTIALS_PWD = "5B02329f8D264ec9822fFc344BFd405f" //TODO: externalize into credentials
+
+  //API Manager API config
+  def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
+  def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
   //Step 1 - Create a Proxy app (optional)
   echo "applyCanaryPolicy Step 1"
@@ -116,6 +116,16 @@ def getAuthToken(String oAuthUrl, String clientId, String clientSecret) {
 }
 
 def createProxy(String organizationId, String groupId, String assetId, String assetVersion, String assetName, String assetClassifier, String apiVersion){
+
+  //Auth API config
+  def authAPIEndpoint = "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
+  def ANYPOINT_CONNECTED_APP_CREDENTIALS_USR = "1726d936b1d14b1f9a23282f0e5a7330" //TODO: externalize into credentials
+  def ANYPOINT_CONNECTED_APP_CREDENTIALS_PWD = "5B02329f8D264ec9822fFc344BFd405f" //TODO: externalize into credentials
+
+  //API Manager API config
+  def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
+  def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
+
   def boundary =  'abcd' + Long.toString(System.currentTimeMillis()) * 2 + 'dcba'
   def twoHyphens = '--'
   def lineEnd = '\r\n'
