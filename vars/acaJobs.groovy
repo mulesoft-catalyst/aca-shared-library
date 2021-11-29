@@ -24,7 +24,7 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
 
   //Step 1 - Create a Proxy app (optional)
   echo "applyCanaryPolicy Step 1"
-  createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
+  createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", assetName, "${assetClassifier}", "${apiVersion}")
 
   //Step 2 - Apply the policy
   echo "applyCanaryPolicy Step 2"
@@ -173,7 +173,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
-  outputStream.writeBytes(${assetName})
+  outputStream.writeBytes(assetName)
 
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
