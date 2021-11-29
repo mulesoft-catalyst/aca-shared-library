@@ -138,14 +138,14 @@ def createProxy(String organizationId, String groupId, String assetId, String as
     -X POST ${exchangeAssetsUrl} \
     -H 'Authorization: Bearer ${authToken}' \
     -H 'Content-Type: multipart/form-data' \
-    -F 'organizationId: ${organizationId}' \
-    -F 'groupId: ${groupId}' \
-    -F 'assetId: ${assetId}' \
-    -F 'version: ${assetVersion}' \
-    -F 'name: ${assetName}' \
-    -F 'classifier: ${assetClassifier}' \
-    -F 'apiVersion: ${apiVersion}' \
-    -F 'asset: \"undefined\"' ", returnStdout: true)
+    -F 'organizationId=${organizationId}' \
+    -F 'groupId=${groupId}' \
+    -F 'assetId=${assetId}' \
+    -F 'version=${assetVersion}' \
+    -F 'name=${assetName}' \
+    -F 'classifier=${assetClassifier}' \
+    -F 'apiVersion=${apiVersion}' \
+    -F 'asset=\"undefined\"' ", returnStdout: true)
 
   def http_code = response.split("HTTPSTATUS:")[1]
   println "http code: ${http_code}"
