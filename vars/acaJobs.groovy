@@ -127,7 +127,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
   def boundary =  'abcd' + Long.toString(System.currentTimeMillis()) * 2 + 'dcba'
-  def twoHyphens = '--'
+  def twoHyphens = '----'
   def lineEnd = '\r\n'
   def exchangeAssetsUrl = "https://anypoint.mulesoft.com/exchange/api/v1/assets"
 
@@ -140,9 +140,9 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   connection.setRequestMethod("POST")
   connection.setDoOutput(true)
   connection.setRequestProperty ("Authorization", "Bearer ${authToken}")
-  connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=${boundary}")
+  connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=${twoHyphens}${boundary}")
   connection.setRequestProperty("Content-Length", "874")
-  echo "multipart/form-data; boundary=${boundary}"
+  echo "multipart/form-data; boundary=${twoHyphens}${boundary}"
 
   echo ("1.b")
   def outputStream = new DataOutputStream(connection.getOutputStream())
