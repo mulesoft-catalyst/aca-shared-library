@@ -19,7 +19,7 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
 
   //Step 1 - Create a Proxy app (optional)
   echo "applyCanaryPolicy Step 1"
-  createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", ${assetName}, "${assetClassifier}", "${apiVersion}")
+  createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
 
   //Step 2 - Apply the policy
   echo "applyCanaryPolicy Step 2"
