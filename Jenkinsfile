@@ -34,7 +34,7 @@ pipeline {
         steps {
           script {
             echo "Calling applyCanaryPolicy with ${organizationId}, ${groupId}, ${assetId}, ${assetName}, ${assetVersion}, ${assetClassifier}, ${apiVersion}, ${host}, ${port}, ${protocol}, ${path}, ${weight}, ${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary}"
-            acaJobs.applyCanaryPolicy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
+            acaJobs.applyCanaryPolicy("${organizationId}", "${groupId}", "${assetId}", ${assetName}, ${assetVersion}, ${assetClassifier}, ${apiVersion}, "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
           }
         }
       }
