@@ -143,124 +143,78 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   connection.setRequestProperty("Content-Length", "874")
   echo "multipart/form-data; boundary=${twoHyphens}${boundary}"
 
-  echo ("1.b")
   def outputStream = new DataOutputStream(connection.getOutputStream())
   outputStream.writeBytes(twoHyphens + boundary + lineEnd);
+  echo twoHyphens + boundary + lineEnd
   outputStream.writeBytes('Content-Disposition: form-data; name="organizationId"' + lineEnd)
   echo 'Content-Disposition: form-data; name="organizationId"' + lineEnd
-  //outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
-  //outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
-  //outputStream.writeBytes(lineEnd)
-  //echo lineEnd
   outputStream.writeBytes("${organizationId}")
   echo "${organizationId}"
-  echo ("1.c")
   outputStream.writeBytes(lineEnd)
   echo lineEnd
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
   outputStream.writeBytes('Content-Disposition: form-data; name="groupId"' + lineEnd)
   echo 'Content-Disposition: form-data; name="groupId"' + lineEnd
-  //outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
-  //outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
-  //outputStream.writeBytes(lineEnd)
-  //echo lineEnd
-  //outputStream.writeBytes("${groupId}")
   outputStream.writeBytes("${organizationId}")
   echo "${organizationId}"
-  echo ("1.d")
   outputStream.writeBytes(lineEnd)
   echo lineEnd
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
   outputStream.writeBytes('Content-Disposition: form-data; name="assetId"' + lineEnd)
   echo 'Content-Disposition: form-data; name="assetId"' + lineEnd
-  //outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
-  //outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
-  //outputStream.writeBytes(lineEnd)
-  //echo lineEnd
   outputStream.writeBytes("${assetId}")
   echo "${assetId}"
-  echo ("1.e")
   outputStream.writeBytes(lineEnd)
   echo lineEnd
 	outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
 	outputStream.writeBytes('Content-Disposition: form-data; name="version"' + lineEnd)
   echo 'Content-Disposition: form-data; name="version"' + lineEnd
-	//outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
-	//outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
-	//outputStream.writeBytes(lineEnd)
-  //echo lineEnd
 	outputStream.writeBytes("${assetVersion}")
   echo "${assetVersion}"
-  echo ("1.f")
   outputStream.writeBytes(lineEnd)
   echo lineEnd
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
   outputStream.writeBytes('Content-Disposition: form-data; name="name"' + lineEnd)
   echo 'Content-Disposition: form-data; name="name"' + lineEnd
-  //outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
-  //outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
-  //outputStream.writeBytes(lineEnd)
-  //echo lineEnd
   outputStream.writeBytes("${assetName}")
   echo "${assetName}"
-  echo ("1.g")
   outputStream.writeBytes(lineEnd)
   echo lineEnd
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
   outputStream.writeBytes('Content-Disposition: form-data; name="classifier"' + lineEnd)
   echo 'Content-Disposition: form-data; name="classifier"' + lineEnd
-  //outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
-  //outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
-  //outputStream.writeBytes(lineEnd)
-  //echo lineEnd
   outputStream.writeBytes("${assetClassifier}")
   echo "${assetClassifier}"
-  echo ("1.h")
   outputStream.writeBytes(lineEnd)
   echo lineEnd
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
   outputStream.writeBytes('Content-Disposition: form-data; name="apiVersion"' + lineEnd)
   echo 'Content-Disposition: form-data; name="apiVersion"' + lineEnd
-  //outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
-  //outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
-  //outputStream.writeBytes(lineEnd)
-  //echo lineEnd
   outputStream.writeBytes("${apiVersion}")
   echo "${apiVersion}"
-  echo ("1.i")
   outputStream.writeBytes(lineEnd)
   echo lineEnd
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
   outputStream.writeBytes('Content-Disposition: form-data; name="asset"' + lineEnd)
-  //outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
-  //outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
-  //outputStream.writeBytes(lineEnd)
-  //echo lineEnd
   outputStream.writeBytes("${apiVersion}")
   echo "${apiVersion}"
-  echo ("1.j")
   outputStream.writeBytes(lineEnd)
   echo lineEnd
 	outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   echo twoHyphens + boundary + lineEnd
 	outputStream.writeBytes('Content-Disposition: form-data; name="asset"' + lineEnd)
   echo 'Content-Disposition: form-data; name="asset"' + lineEnd
-	//outputStream.writeBytes('Content-Type: application/octet-stream' + lineEnd)
-	//outputStream.writeBytes('Content-Transfer-Encoding: binary' + lineEnd)
-	//outputStream.writeBytes(lineEnd)
-  //echo lineEnd
   outputStream.writeBytes("undefined")
   echo "undefined"
-  echo ("1.k")
-  outputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd)
-  echo twoHyphens + boundary + twoHyphens + lineEnd
+  outputStream.writeBytes(twoHyphens + boundary + lineEnd)
+  echo twoHyphens + boundary + lineEnd
 
   outputStream.flush()
 	outputStream.close()
