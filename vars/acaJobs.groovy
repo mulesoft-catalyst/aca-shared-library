@@ -8,8 +8,8 @@ def ANYPOINT_CONNECTED_APP_CREDENTIALS_PWD = "5B02329f8D264ec9822fFc344BFd405f" 
 
 //API Manager API config
 def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
-def orgId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
-def envId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
+def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
+def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
 //Canary proxy Exchange Asset (should be externalized to parametrized pipeline)
 def assetName="canary-release-prx"
@@ -25,7 +25,7 @@ def applyCanaryPolicy(String groupId, String assetId, String assetVersion, Strin
 
   //Step 1 - Create a Proxy app (optional)
   echo "applyCanaryPolicy Step 1"
-  createProxy("${orgId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
+  createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
 
   //Step 2 - Apply the policy
   echo "applyCanaryPolicy Step 2"
@@ -54,7 +54,7 @@ def applyCanaryPolicy(String groupId, String assetId, String assetVersion, Strin
   def jsonBody = groovy.json.JsonOutput.toJson(postBody)
   echo "jsonBody: " + jsonBody
 
-  def localPoliciesUrl = "${apiManagerEndpoint}/${orgId}/environments/${ENVIRONMENT_ID}/apis/${API_ID}/policies"
+  def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${API_ID}/policies"
 
   def post = new URL(localPoliciesUrl).openConnection()
   post.setRequestMethod("POST")
@@ -248,7 +248,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   def jsonBody = groovy.json.JsonOutput.toJson(postBody)
   echo "jsonBody: " + jsonBody
 
-  def endpointWithProxyUrl = "${apiManagerEndpoint}/${organizationId}/environments/${ENVIRONMENT_ID}/apis"
+  def endpointWithProxyUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis"
 
   def post = new URL(endpointWithProxyUrl).openConnection()
   post.setRequestMethod("POST")
