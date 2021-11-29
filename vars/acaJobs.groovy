@@ -238,7 +238,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
       "spec":[
           "assetId":${assetId},,
           "groupId":${groupId},
-           ${assetVersion}
+          "assetVersion":${assetVersion}
        ]
   ]
 
