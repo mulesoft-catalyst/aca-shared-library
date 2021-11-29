@@ -138,8 +138,8 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   -X POST \
   -H 'Content-Type: multipart/form-data; boundary=${boundary}' \
   -H 'Authorization: Bearer ${authToken} \
-  --form 'organizationId=${oganizationId}' \
-  --form 'groupId=${oganizationId}' \
+  --form 'organizationId=${organizationId}' \
+  --form 'groupId=${organizationId}' \
   --form 'assetId=${assetId}' \
   --form 'version=${assetVersion}' \
   --form 'name=${assetName}' \
