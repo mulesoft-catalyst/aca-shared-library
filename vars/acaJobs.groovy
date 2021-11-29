@@ -153,47 +153,48 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   assert http_code.equals("201") : "Create a base Prx asset response should be a '201' but received ${http_code}! -> ${response}"
 
   //Step 2) Create Endpoint with a Proxy
-  def postBody = [
-      endpoint: [
-        deploymentType: "CH",
-        isCloudHub:true,
-        muleVersion4OrAbove:true,
-        proxyUri:"http://0.0.0.0:8081/200",
-        proxyTemplate:[
-           assetVersion:"2.0.2"
-        ],
-        referencesUserDomain:false,
-        responseTimeout:null,
-        type:"http",
-        uri:"https://httpstat.us",
-        validation:"NOT_APPLICABLE"
-      ],
-      providerId:null,
-      spec:[
-          assetId:"${assetId}",
-          groupId:"${groupId}",
-          assetVersion:"${assetVersion}"
-       ]
-  ]
-
-  def jsonBody = groovy.json.JsonOutput.toJson(postBody)
-  echo "jsonBody: " + jsonBody
+  def postBody = """
+      "endpoint": {
+        "isCloudHub":true,
+        "muleVersion4OrAbove":true,
+        "proxyUri":"http://0.0.0.0:8081/200",
+        "proxyTemplate": {
+           "assetVersion":"2.0.2"
+        },
+        "type":"http",
+        "uri":"https://httpstat.us",
+        "validation":"NOT_APPLICABLE"
+      },
+      "instanceLabel": null,
+      "spec":{
+          "assetId":"${assetId}",
+          "groupId":"${groupId}",
+          "assetVersion":"${assetVersion}"
+       }
+  }
+  """
 
   def endpointWithProxyUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis"
+  def apiInstanceCreationResponseObj = executePOSTBash(apiManagerURL, token, body, "201", "createAPIManagerInstance")
 
-  def post = new URL(endpointWithProxyUrl).openConnection()
-  post.setRequestMethod("POST")
-  post.setDoOutput(true)
-  post.setRequestProperty ("Authorization", "Bearer ${authToken}")
-  post.setRequestProperty("Content-Type", "application/json")
-  post.getOutputStream().write(jsonBody.getBytes("UTF-8"))
+  print "Response API Manager API instance creation: ${apiInstanceCreationResponseObj}" 
 
-  http_code = post.getResponseCode()
-  responseTxt = post.getInputStream().getText()
+}
 
-  echo "http_code: ${http_code}, response: ${responseTxt}"
+//TODO: Migrate to a different shared-library
+def executePOSTBash(String url, String token, String body, String expectedHttpCode, String methodName){
+  def process = [ 'bash', '-c', "curl -X POST -d '${body}' -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}" ].execute()
+  process.waitFor()
+  def response = process.text
 
-  // fail step if graph call fails
-  assert http_code.equals(201) : "Create Endpoint with a Proxy response should be a 201 but received ${http_code}! -> ${responseTxt}"
+  def rawResponse = response.split("HTTPSTATUS:")[0]
+  println "rawResponse: ${rawResponse}"
+  def id = new StringBuilder(), serr = new StringBuilder()
+  def proc = ['bash', '-c', "echo '${rawResponse}' | jq '.id'"].execute()
+  proc.consumeProcessOutput(id, serr)
+  proc.waitFor()
 
+  //print "ID: ${id}"
+
+  return id.toString().trim()
 }
