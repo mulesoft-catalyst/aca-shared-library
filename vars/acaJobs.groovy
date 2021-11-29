@@ -128,7 +128,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
 
   def boundary =  'abcd' + Long.toString(System.currentTimeMillis()) * 2 + 'dcba'
   def twoHyphens = '----'
-  def lineEnd = '\r\n'
+  def lineEnd = '\r'
   def exchangeAssetsUrl = "https://anypoint.mulesoft.com/exchange/api/v1/assets"
 
   def authToken=getAuthToken("${authAPIEndpoint}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_USR}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW}")
