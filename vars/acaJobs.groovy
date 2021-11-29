@@ -134,12 +134,13 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   def authToken=getAuthToken("${authAPIEndpoint}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_USR}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW}")
 
   //Step 1) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
+  echo ("1.a")
   def connection = new URL(exchangeAssetsUrl).openConnection()
   connection.setRequestMethod("POST")
   connection.setDoOutput(true)
   connection.setRequestProperty ("Authorization", "Bearer ${authToken}")
   connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary)
-
+  echo ("1.b")
   def outputStream = new DataOutputStream(connection.getOutputStream())
   outputStream.writeBytes(twoHyphens + boundary + lineEnd);
   outputStream.writeBytes('Content-Disposition: form-data; name="organizationId"' + lineEnd)
@@ -147,7 +148,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(${organizationId})
-
+  echo ("1.c")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   outputStream.writeBytes('Content-Disposition: form-data; name="groupId"' + lineEnd)
@@ -155,7 +156,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(${groupId})
-
+  echo ("1.d")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   outputStream.writeBytes('Content-Disposition: form-data; name="assetId"' + lineEnd)
@@ -163,7 +164,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(${assetId})
-
+  echo ("1.e")
   outputStream.writeBytes(lineEnd)
 	outputStream.writeBytes(twoHyphens + boundary + lineEnd)
 	outputStream.writeBytes('Content-Disposition: form-data; name="version"' + lineEnd)
@@ -171,7 +172,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
 	outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
 	outputStream.writeBytes(lineEnd)
 	outputStream.writeBytes(${assetVersion})
-
+  echo ("1.f")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   outputStream.writeBytes('Content-Disposition: form-data; name="name"' + lineEnd)
@@ -179,7 +180,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(${assetName})
-
+  echo ("1.g")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   outputStream.writeBytes('Content-Disposition: form-data; name="classifier"' + lineEnd)
@@ -187,7 +188,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(${assetClassifier})
-
+  echo ("1.h")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   outputStream.writeBytes('Content-Disposition: form-data; name="apiVersion"' + lineEnd)
@@ -195,7 +196,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(${apiVersion})
-
+  echo ("1.i")
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)
   outputStream.writeBytes('Content-Disposition: form-data; name="asset"' + lineEnd)
@@ -203,7 +204,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(${apiVersion})
-
+  echo ("1.j")
   outputStream.writeBytes(lineEnd)
 	outputStream.writeBytes(twoHyphens + boundary + lineEnd)
 	outputStream.writeBytes('Content-Disposition: form-data; name="asset"' + lineEnd)
@@ -211,7 +212,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
 	outputStream.writeBytes('Content-Transfer-Encoding: binary' + lineEnd)
 	outputStream.writeBytes(lineEnd)
   outputStream.writeBytes("undefined")
-
+  echo ("1.k")
   outputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd)
 
   outputStream.flush()
