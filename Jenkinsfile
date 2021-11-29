@@ -10,15 +10,15 @@ def assetVersion="1.0.0"
 
 //API Endpoints configuration (Base and Canary). TODO: Externalize as pipeline parameters
 def host="httpstat.us"
-def port=443
+def port="443"
 def protocol="HTTPS"
 def path="/200"
-def weight=50
+def weight="50"
 def hostCanary="httpstat.us"
-def portCanary=443
+def portCanary="443"
 def protocolCanary="HTTPS"
 def pathCanary="/500"
-def weightCanary=50
+def weightCanary="50"
 
 pipeline {
     agent any
