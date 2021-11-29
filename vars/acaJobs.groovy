@@ -134,8 +134,8 @@ def createProxy(String organizationId, String groupId, String assetId, String as
 
   //Step 1) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
   String response = sh (script: "curl \
-  -s ${exchangeAssetsUrl} \
-  -X POST \
+  -w 'HTTPSTATUS:%{http_code}' \
+  -X POST ${exchangeAssetsUrl} \
   -H 'Content-Type: multipart/form-data; boundary=${boundary}' \
   -H 'Authorization: Bearer ${authToken}' \
   -F 'organizationId=${organizationId}' \
