@@ -170,7 +170,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
       "spec":{
           "assetId":"${assetId}",
           "groupId":"${groupId}",
-          "assetVersion":"${assetVersion}"
+          "version":"${assetVersion}"
        }
   }
   """
@@ -194,8 +194,6 @@ def executePOSTBash(String url, String token, String body, String expectedHttpCo
   def proc = ['bash', '-c', "echo '${rawResponse}' | jq '.id'"].execute()
   proc.consumeProcessOutput(id, serr)
   proc.waitFor()
-
-  //print "ID: ${id}"
 
   return id.toString().trim()
 }
