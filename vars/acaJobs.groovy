@@ -175,9 +175,9 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   """
 
   def endpointWithProxyUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis"
-  def apiInstanceCreationResponseObj = executePOSTBash(apiManagerURL, token, body, "201", "createAPIManagerInstance")
+  def apiInstanceCreationResponseObj = executePOSTBash(${"endpointWithProxyUrl"}, ${"authToken"}, ${"postBody"}, "201", "createProxy - Proxy Instance")
 
-  print "Response API Manager API instance creation: ${apiInstanceCreationResponseObj}" 
+  print "Response API Manager API instance creation: ${apiInstanceCreationResponseObj}"
 
 }
 
