@@ -10,21 +10,16 @@ ANYPOINT_CONNECTED_APP_CREDENTIALS_PWD = "5B02329f8D264ec9822fFc344BFd405f" //TO
 apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
 environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
-//Canary proxy Exchange Asset (should be externalized to parametrized pipeline)
-assetName="canary-release-prx"
-assetClassifier="http"
-apiVersion="v1"
-
 def printMessage(message){
   echo "${message}"
 }
 
-def applyCanaryPolicy(String organizationId, String groupId, String assetId, String assetVersion, String host, String port, String protocol, String path, String weight,
+def applyCanaryPolicy(String organizationId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String host, String port, String protocol, String path, String weight,
                       String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
 
   //Step 1 - Create a Proxy app (optional)
   echo "applyCanaryPolicy Step 1"
-  createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", assetName, "${assetClassifier}", "${apiVersion}")
+  createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", ${assetName}, "${assetClassifier}", "${apiVersion}")
 
   //Step 2 - Apply the policy
   echo "applyCanaryPolicy Step 2"
@@ -173,7 +168,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   outputStream.writeBytes('Content-Type: text/plain; charset=UTF-8' + lineEnd)
   outputStream.writeBytes('Content-Transfer-Encoding: 8bit' + lineEnd)
   outputStream.writeBytes(lineEnd)
-  outputStream.writeBytes(assetName)
+  outputStream.writeBytes(${assetName})
 
   outputStream.writeBytes(lineEnd)
   outputStream.writeBytes(twoHyphens + boundary + lineEnd)

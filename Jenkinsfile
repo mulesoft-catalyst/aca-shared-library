@@ -21,6 +21,11 @@ def pathCanary="/500"
 def weightCanary="50"
 def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
 
+//Canary proxy Exchange Asset (should be externalized to parametrized pipeline)
+def assetName="canary-release-prx"
+def assetClassifier="http"
+def apiVersion="v1"
+
 pipeline {
     agent any
 
@@ -28,7 +33,7 @@ pipeline {
       stage("Apply Canary Policy"){
         steps {
           script {
-            echo "Calling applyCanaryPolicy with ${organizationId}, ${groupId}, ${assetId}, ${assetVersion}, ${host}, ${port}, ${protocol}, ${path}, ${weight}, ${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary}"
+            echo "Calling applyCanaryPolicy with ${organizationId}, ${groupId}, ${assetId}, ${assetName}, ${assetVersion}, ${assetClassifier}, ${apiVersion}, ${host}, ${port}, ${protocol}, ${path}, ${weight}, ${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary}"
             acaJobs.applyCanaryPolicy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
           }
         }
