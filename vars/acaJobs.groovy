@@ -145,7 +145,8 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   --form 'name=${assetName}' \
   --form 'classifier=${assetClassifier}' \
   --form 'apiVersion=${apiVersion}' \
-  --form 'asset="undefined"').trim()
+  --form 'asset=\"undefined\"' \
+  ,returnStdout: true).trim()
 
   //Step 2) Create Endpoint with a Proxy
   def postBody = [
