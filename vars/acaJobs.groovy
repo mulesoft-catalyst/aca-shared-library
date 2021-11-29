@@ -134,24 +134,18 @@ def createProxy(String organizationId, String groupId, String assetId, String as
 
   //Step 1) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
   String response = sh (script: "curl \
-  -w 'HTTPSTATUS:%{http_code}' \
-  -X POST ${exchangeAssetsUrl} \
-  -H 'Content-Type: multipart/form-data; boundary=${boundary}' \
-  -H 'Authorization: Bearer ${authToken}' \
-  -F 'organizationId=${organizationId}' \
-  -F 'groupId=${organizationId}' \
-  -F 'assetId=${assetId}' \
-  -F 'version=${assetVersion}' \
-  -F 'name=${assetName}' \
-  -F 'classifier=${assetClassifier}' \
-  -F 'apiVersion=${apiVersion}' \
-  -F 'asset=\"undefined\"' " \
-  , returnStdout: true)
+    -w 'HTTPSTATUS:%{http_code}' \
+    -X POST ${exchangeAssetsURL} \
+    -H 'Authorization: Bearer ${authToken}' \
+    -H 'Content-Type: multipart/form-data' \
+    -F 'name=${assetName}' \
+    -F 'type=http-api' \
+    -F 'properties.apiVersion=${apiVersion}'", returnStdout: true)
 
   def http_code = response.split("HTTPSTATUS:")[1]
   println "http code: ${http_code}"
 
-  assert http_code.equals("202") : "Create a base Prx asset response should be a ${expectedHttpCode} but received ${http_code}! -> ${response}"
+  assert http_code.equals("202") : "Create a base Prx asset response should be a '202' but received ${http_code}! -> ${response}"
 
   //Step 2) Create Endpoint with a Proxy
   def postBody = [
