@@ -248,7 +248,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   def jsonBody = groovy.json.JsonOutput.toJson(postBody)
   echo "jsonBody: " + jsonBody
 
-  def endpointWithProxyUrl = "${apiManagerEndpoint}/${orgId}/environments/${ENVIRONMENT_ID}/apis"
+  def endpointWithProxyUrl = "${apiManagerEndpoint}/${organizationId}/environments/${ENVIRONMENT_ID}/apis"
 
   def post = new URL(endpointWithProxyUrl).openConnection()
   post.setRequestMethod("POST")
