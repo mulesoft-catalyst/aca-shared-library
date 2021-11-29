@@ -19,11 +19,12 @@ def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
 
 //Variables for Canary policy version
 def groupId="6824e136-3ef5-4c4d-aaac-438f3dc41ac2"
-def assetId="canary-release-mule4"
+def assetIdPolicy="canary-release-mule4"
 def assetVersion="1.0.0"
 
 //Canary proxy Exchange Asset (should be externalized to parametrized pipeline)
 def assetName="canary-release-prx"
+def assetId="canary-release-prx"
 def assetClassifier="http"
 def apiVersion="v1"
 
