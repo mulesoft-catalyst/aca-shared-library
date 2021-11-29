@@ -2,18 +2,18 @@
 import groovy.json.JsonSlurper
 
 //Auth API config
-def authAPIEndpoint = "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
-def ANYPOINT_CONNECTED_APP_CREDENTIALS_USR = "1726d936b1d14b1f9a23282f0e5a7330" //TODO: externalize into credentials
-def ANYPOINT_CONNECTED_APP_CREDENTIALS_PWD = "5B02329f8D264ec9822fFc344BFd405f" //TODO: externalize into credentials
+authAPIEndpoint = "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
+ANYPOINT_CONNECTED_APP_CREDENTIALS_USR = "1726d936b1d14b1f9a23282f0e5a7330" //TODO: externalize into credentials
+ANYPOINT_CONNECTED_APP_CREDENTIALS_PWD = "5B02329f8D264ec9822fFc344BFd405f" //TODO: externalize into credentials
 
 //API Manager API config
-def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
-def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
+apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
+environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
 //Canary proxy Exchange Asset (should be externalized to parametrized pipeline)
-def assetName="canary-release-prx"
-def assetClassifier="http"
-def apiVersion="v1"
+assetName="canary-release-prx"
+assetClassifier="http"
+apiVersion="v1"
 
 def printMessage(message){
   echo "${message}"
