@@ -23,8 +23,8 @@ def assetIdPolicy="canary-release-mule4"
 def assetVersion="1.0.0"
 
 //Canary proxy Exchange Asset (should be externalized to parametrized pipeline)
-def assetName="canary-release-prx"+System.currentTimeMillis()
-def assetId="canary-release-prx"+System.currentTimeMillis()
+def assetName="canary-release-prx-3"
+def assetId="canary-release-prx-3"
 def assetClassifier="http"
 def apiVersion="v1"
 
