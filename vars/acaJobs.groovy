@@ -131,7 +131,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   connection.setRequestMethod("POST")
   connection.setDoOutput(true)
   connection.setRequestProperty ("Authorization", "Bearer ${authToken}")
-  connection.setRequestProperty("Content-Type", "multipart/form-data; boundary="" + boundary)
+  connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary)
 
   def outputStream = new DataOutputStream(connection.getOutputStream())
   outputStream.writeBytes(twoHyphens + boundary + lineEnd);
