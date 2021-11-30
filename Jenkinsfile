@@ -15,7 +15,7 @@ def protocolCanary="HTTPS"
 def pathCanary="/500"
 def weightCanary="50"
 
-def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
+//def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
 def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
 //Variables for Canary policy version (TODO: should be externalized to parametrized pipeline). This is the configuration of the existing policy version
@@ -30,6 +30,10 @@ def assetId="canary-release-prx-" + timeStampMilis
 def assetClassifier="http"
 def apiVersion="v1"
 def assetVersion="1.0.0"
+
+environment {
+  organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
+}
 
 pipeline {
     agent any

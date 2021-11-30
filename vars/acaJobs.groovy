@@ -62,7 +62,6 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
   //API Manager API config
   def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
 
-  def boundary =  '----abcd' + Long.toString(System.currentTimeMillis()) * 2 + 'dcba'
   def exchangeAssetsUrl = "https://anypoint.mulesoft.com/exchange/api/v1/assets"
 
   def authToken=commons.getAuthToken()
