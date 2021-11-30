@@ -1,22 +1,17 @@
 #!/usr/bin/groovy
 import groovy.json.JsonSlurper
 
-
-def printMessage(message){
-  echo "${message}"
-}
-
-def applyCanaryPolicy(String organizationId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String assetVersionPolicy,
+def applyCanaryPolicy(String organizationId, String environmentId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String assetVersionPolicy,
                       String host, String port, String protocol, String path, String weight,
                       String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
 
   //Step 1 - Create a Proxy app (optional)
   echo "applyCanaryPolicy Step 1"
-  def proxyApiId= createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
+  def proxyApiId= createProxy("${organizationId}", "${environmentId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
 
   //Step 2 - Apply the policy
   echo "applyCanaryPolicy Step 2"
-  def applyPolicyResponse = applyPolicy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
+  def applyPolicyResponse = applyPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetId}", "${assetVersion}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
 
 }
 
@@ -59,16 +54,10 @@ def decideBasedOnResults(){
   echo "ok"
 }
 
-def createProxy(String organizationId, String groupId, String assetId, String assetVersion, String assetName, String assetClassifier, String apiVersion){
-
-  //Auth API config
-  def authAPIEndpoint = "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
-  def ANYPOINT_CONNECTED_APP_CREDENTIALS_USR = "1726d936b1d14b1f9a23282f0e5a7330" //TODO: externalize into credentials
-  def ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW = "5B02329f8D264ec9822fFc344BFd405f" //TODO: externalize into credentials
+def createProxy(String organizationId, String environmentId, String groupId, String assetId, String assetVersion, String assetName, String assetClassifier, String apiVersion){
 
   //API Manager API config
   def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
-  def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
   def boundary =  '----abcd' + Long.toString(System.currentTimeMillis()) * 2 + 'dcba'
   def exchangeAssetsUrl = "https://anypoint.mulesoft.com/exchange/api/v1/assets"
@@ -134,7 +123,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
 
 }
 
-def applyPolicy(String organizationId, String groupId, String assetId, String assetVersion, String proxyApiId,
+def applyPolicy(String organizationId, String environmentId, String groupId, String assetId, String assetVersion, String proxyApiId,
                 String host, String port, String protocol, String path, String weight,
                 String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
 
