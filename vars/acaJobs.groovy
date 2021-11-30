@@ -138,8 +138,7 @@ def applyPolicy(String organizationId, String groupId, String assetId, String as
                 String host, String port, String protocol, String path, String weight,
                 String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
 
-  def ANYPOINT_CONNECTED_APP_CREDENTIALS_USR = "1726d936b1d14b1f9a23282f0e5a7330" //TODO: externalize into credentials
-  def ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW = "5B02329f8D264ec9822fFc344BFd405f" //TODO: externalize into credentials
+  def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
 
   def postBody = """
   {
