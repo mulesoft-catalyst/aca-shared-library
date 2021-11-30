@@ -18,7 +18,7 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
   def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
 }
 
-def executeLoadTesting(String NEWMAN_PATH, String NEWMAN_COLLECTION, Integer NEWMAN_ITERATIONS, String POSTMAN_REPORT_PATH, String POSTMAN_REPORT_FILENAME){
+def executeLoadTesting(String NEWMAN_PATH, String NEWMAN_COLLECTION, String NEWMAN_ITERATIONS, String POSTMAN_REPORT_PATH, String POSTMAN_REPORT_FILENAME){
   sh """ ${NEWMAN_PATH} run ${NEWMAN_COLLECTION} \
     -n ${NEWMAN_ITERATIONS} \
     -r htmlextra \
@@ -37,7 +37,6 @@ def executeLoadTesting(String NEWMAN_PATH, String NEWMAN_COLLECTION, Integer NEW
     reportTitles: ''
   ]
   )
-  echo "ok"
 }
 
 def executeCanaryAnalysis(){
