@@ -16,12 +16,12 @@ def pathCanary="/500"
 def weightCanary="50"
 
 //def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
-def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
+//def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
 //Variables for Canary policy version (TODO: should be externalized to parametrized pipeline). This is the configuration of the existing policy version
-def groupId="9033ff23-884a-4352-b75b-14fc8237b2c4"
-def assetIdPolicy="canary-release-mule4"
-def assetVersionPolicy="3.0.11-SNAPSHOT"
+//def groupId="9033ff23-884a-4352-b75b-14fc8237b2c4"
+//def assetIdPolicy="canary-release-mule4"
+//def assetVersionPolicy="3.0.11-SNAPSHOT"
 
 //Canary proxy Exchange Asset (TODO: should be externalized to parametrized pipeline). This is the configuration of the asset to upload to Exchange
 def timeStampMilis=System.currentTimeMillis()
@@ -34,10 +34,18 @@ def assetVersion="1.0.0"
 pipeline {
     agent any
     parameters {
-      string(name: 'organizationId', defaultValue: '9033ff23-884a-4352-b75b-14fc8237b2c4', description: 'The environment ID from Anypoint Platform')
+      string(name: 'organizationId', defaultValue: '9033ff23-884a-4352-b75b-14fc8237b2c4', description: 'The environment ID from Anypoint Platform'),
+      string(name: 'environmentId', defaultValue: 'eb473ffd-2134-4ecf-b7bc-63a5d0856743', description: 'The environment ID from Anypoint Platform'),
+      string(name: 'groupId', defaultValue: '9033ff23-884a-4352-b75b-14fc8237b2c4', description: 'The environment ID from Anypoint Platform'),
+      string(name: 'assetIdPolicy', defaultValue: 'canary-release-mule4', description: 'The name given to the canary policy when installed'),
+      string(name: 'assetVersionPolicy', defaultValue: '3.0.11-SNAPSHOT', description: 'The version of the canary policy to use')
     }
     environment {
       organizationId = "${params.organizationId}"
+      environmentId = "${params.environmentId}"
+      groupId = "${params.groupId}"
+      assetIdPolicy = "${params.assetIdPolicy}"
+      assetVersionPolicy = "${params.assetVersionPolicy}"
     }
 
     stages{
