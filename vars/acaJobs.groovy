@@ -200,7 +200,7 @@ def executePOSTBash(String url, String token, String body, String expectedHttpCo
   //response = proc.text
   //print "${response}"
   //return id.toString().trim()
-  response = sh (script: "echo '${rawResponse}' | jq '.id'", returnStdout: true)
-  print "${response}"
-  return "${response}"
+  String apiId = sh (script: "echo '${rawResponse}' | jq '.id'", returnStdout: true)
+  print "${apiId}"
+  return "${apiId}"
 }
