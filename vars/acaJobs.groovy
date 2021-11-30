@@ -181,7 +181,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
 
   def out = new ByteArrayOutputStream()
   def err = new ByteArrayOutputStream()
-  def proc = ['bash', '-c', "echo '${apiInstanceCreationResponseObj}' | sed -n 's|.*"apiId":\([^"]*\)},.*|\1|p'"].execute()
+  def proc = ['bash', '-c', "echo '${apiInstanceCreationResponseObj}' | sed -n 's|.*"apiId":\\([^"]*\\)},.*|\\1|p'"].execute()
   proc.consumeProcessOutput(out, err)
   proc.waitFor()
 
