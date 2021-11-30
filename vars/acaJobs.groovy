@@ -191,13 +191,12 @@ def executePOSTBash(String url, String token, String body, String expectedHttpCo
 
   def rawResponse = response.split("HTTPSTATUS:")[0]
   println "rawResponse: ${rawResponse}"
-  def id = new StringBuilder(), serr = new StringBuilder()
-  def proc = ['bash', '-c', "echo '${rawResponse}' | jq '.id'"].execute()
-  proc.consumeProcessOutput(id, serr)
-  proc.waitFor()
 
-  response = proc.text
-  print "${response}"
-  return id.toString().trim()
-
+  def command = '''
+    echo '${rawResponse}' | jq '.id'
+'''
+def proc = ['bash', '-c', command].execute()
+proc.waitFor()
+println proc.text
+return proc.text
 }
