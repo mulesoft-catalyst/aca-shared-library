@@ -11,7 +11,7 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
   //Auth API config
   def authAPIEndpoint = "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
   def ANYPOINT_CONNECTED_APP_CREDENTIALS_USR = "1726d936b1d14b1f9a23282f0e5a7330" //TODO: externalize into credentials
-  def ANYPOINT_CONNECTED_APP_CREDENTIALS_PWD = "5B02329f8D264ec9822fFc344BFd405f" //TODO: externalize into credentials
+  def ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW = "5B02329f8D264ec9822fFc344BFd405f" //TODO: externalize into credentials
 
   //API Manager API config
   def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
@@ -19,7 +19,7 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
 
   //Step 1 - Create a Proxy app (optional)
   echo "applyCanaryPolicy Step 1"
-  def proxyApiId= createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}").trim()
+  def proxyApiId= createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
 
   //Step 2 - Apply the policy
   echo "applyCanaryPolicy Step 2"
@@ -177,7 +177,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   proc.waitFor()
 
   println "Created API ID is: ${out.toString()}"
-  return "${out.toString()}"
+  return "${out.toString().trim()}"
 
 }
 
