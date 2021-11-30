@@ -49,7 +49,8 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
   echo "jsonBody: " + jsonBody
 
   def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
-
+  println "${localPoliciesUrl}"
+  println "${localPoliciesUrl}.trim()"
   def post = new URL(localPoliciesUrl).openConnection()
   post.setRequestMethod("POST")
   post.setDoOutput(true)
