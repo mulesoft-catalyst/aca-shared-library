@@ -1,7 +1,5 @@
 #!/usr/bin/groovy
 import groovy.json.JsonSlurper
-@Library('automated-canary-analysis-lib') _
-
 
 def applyCanaryPolicy(String organizationId, String environmentId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String assetIdPolicy, String assetVersionPolicy,
                       String host, String port, String protocol, String path, String weight,
