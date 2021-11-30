@@ -3,6 +3,8 @@ import groovy.json.JsonSlurper
 
 properties([
   parameters([
+    password(name: 'organizationId', defaultValue: '9033ff23-884a-4352-b75b-14fc8237b2c4', description: 'The organization ID from Anypoint Platform', ),
+    password(name: 'environmentId', defaultValue: 'eb473ffd-2134-4ecf-b7bc-63a5d0856743', description: 'The environment ID from Anypoint Platform', ),
     string(name: 'host', defaultValue: 'httpstat.us', description: 'The target host for the baseline', ),
     string(name: 'port', defaultValue: '443', description: 'The target port for the baseline', ),
     string(name: 'protocol', defaultValue: 'HTTPS', description: 'The target protocol for the baseline', ),
@@ -18,20 +20,6 @@ properties([
 
 def analysisId = ''
 
-//API Endpoints configuration (Base and Canary). TODO: Externalize as pipeline parameters
-//def host="httpstat.us"
-//def port="443"
-//def protocol="HTTPS"
-//def path="/200"
-//def weight="50"
-//def hostCanary="httpstat.us"
-//def portCanary="443"
-//def protocolCanary="HTTPS"
-//def pathCanary="/500"
-//def weightCanary="50"
-
-def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
-def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
 //Variables for Canary policy version (TODO: should be externalized to parametrized pipeliine). This is the configuration of the existing policy version
 def groupId="9033ff23-884a-4352-b75b-14fc8237b2c4"
@@ -53,8 +41,8 @@ pipeline {
       stage("Apply Canary Policy"){
         steps {
           script {
-            echo "Calling applyCanaryPolicy with ${organizationId}, ${environmentId}, ${groupId}, ${assetId}, ${assetName}, ${assetVersion}, ${assetClassifier}, ${apiVersion}, ${assetIdPolicy}, ${assetVersionPolicy}, ${params.host}, ${port}, ${protocol}, ${path}, ${weight}, ${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary}"
-            acaJobs.applyCanaryPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetId}", "${assetName}", "${assetVersion}", "${assetClassifier}", "${apiVersion}", "${assetIdPolicy}", "${assetVersionPolicy}", "${params.host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
+            echo "Calling applyCanaryPolicy with ${organizationId}, ${environmentId}, ${groupId}, ${assetId}, ${assetName}, ${assetVersion}, ${assetClassifier}, ${apiVersion}, ${assetIdPolicy}, ${assetVersionPolicy}, ${host}, ${port}, ${protocol}, ${path}, ${weight}, ${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary}"
+            acaJobs.applyCanaryPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetId}", "${assetName}", "${assetVersion}", "${assetClassifier}", "${apiVersion}", "${assetIdPolicy}", "${assetVersionPolicy}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
           }
         }
       }
