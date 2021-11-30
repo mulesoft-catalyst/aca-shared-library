@@ -19,7 +19,7 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
 
   //Step 1 - Create a Proxy app (optional)
   echo "applyCanaryPolicy Step 1"
-  createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
+  def proxyApiId: createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
 
   //Step 2 - Apply the policy
   echo "applyCanaryPolicy Step 2"
@@ -39,7 +39,7 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
       ],
       id: null,
       pointcutData: null,
-      apiVersionId: API_ID,
+      apiVersionId: "${proxyApiId}",
       groupId: "${groupId}",
       assetId: "${assetId}",
       assetVersion: "${assetVersion}"
@@ -176,6 +176,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   proc.waitFor()
 
   println "Created API ID is: ${out.toString()}"
+  return "${out.toString()}"
 
 }
 
