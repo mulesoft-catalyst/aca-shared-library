@@ -6,6 +6,7 @@
 //This pipeline was created by the author specifically for AT&T needs,
 //it is responsability of AT&T teams to evolve and maintain these scripts when
 //the author is not involved in the project anymore
+//Pre-requisites: create a Jenkins credentials called connected-app-credentials, where clientId is stored in the username field and clientSecret in the password field
 
 //Goal: Obtain an access token that can be used to authenticate Anypoint Platform APIs
 def getAuthToken() {
