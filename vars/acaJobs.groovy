@@ -6,16 +6,9 @@ def printMessage(message){
   echo "${message}"
 }
 
-def applyCanaryPolicy(String organizationId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String host, String port, String protocol, String path, String weight,
+def applyCanaryPolicy(String organizationId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String assetVersionPolicy,
+                      String host, String port, String protocol, String path, String weight,
                       String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
-  //Auth API config
-  def authAPIEndpoint = "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
-  def ANYPOINT_CONNECTED_APP_CREDENTIALS_USR = "1726d936b1d14b1f9a23282f0e5a7330" //TODO: externalize into credentials
-  def ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW = "5B02329f8D264ec9822fFc344BFd405f" //TODO: externalize into credentials
-
-  //API Manager API config
-  def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
-  def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
   //Step 1 - Create a Proxy app (optional)
   echo "applyCanaryPolicy Step 1"
@@ -23,39 +16,7 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
 
   //Step 2 - Apply the policy
   echo "applyCanaryPolicy Step 2"
-
-  def postBody = """
-  {
-      "configurationData": {
-        "host": "${host}",
-        "port": "${port}",
-        "protocol": "${protocol}",
-        "path": "${path}",
-        "weight": "${weight}",
-        "hostCanary": "${hostCanary}",
-        "portCanary": "${portCanary}",
-        "protocolCanary": "${protocolCanary}",
-        "pathCanary": "${pathCanary}",
-        "weightCanary": "${weightCanary}"
-      },
-      "id": null,
-      "pointcutData": null,
-      "apiVersionId": "${proxyApiId}",
-      "groupId": "${groupId}",
-      "assetId": "${assetId}",
-      "assetVersion": "${assetVersion}"
-  }
-  """
-
-  def jsonBody = groovy.json.JsonOutput.toJson(postBody)
-  echo "jsonBody: " + jsonBody
-
-  def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
-  println "${localPoliciesUrl}"
-
-  def authToken=getAuthToken("${authAPIEndpoint}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_USR}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW}")
-  def response = executePOSTBash("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
-  println "${response}"
+  def applyPolicyResponse = applyPolicy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
 
 }
 
@@ -112,7 +73,7 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   def boundary =  '----abcd' + Long.toString(System.currentTimeMillis()) * 2 + 'dcba'
   def exchangeAssetsUrl = "https://anypoint.mulesoft.com/exchange/api/v1/assets"
 
-  def authToken=getAuthToken("${authAPIEndpoint}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_USR}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW}")
+  def authToken=getAuthToken()
   echo "Bearer ${authToken}"
 
   //Step 1) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
@@ -173,6 +134,47 @@ def createProxy(String organizationId, String groupId, String assetId, String as
 
 }
 
+def applyPolicy(String organizationId, String groupId, String assetId, String assetVersion, String proxyApiId,
+                String host, String port, String protocol, String path, String weight,
+                String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
+
+  def ANYPOINT_CONNECTED_APP_CREDENTIALS_USR = "1726d936b1d14b1f9a23282f0e5a7330" //TODO: externalize into credentials
+  def ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW = "5B02329f8D264ec9822fFc344BFd405f" //TODO: externalize into credentials
+
+  def postBody = """
+  {
+      "configurationData": {
+        "host": "${host}",
+        "port": "${port}",
+        "protocol": "${protocol}",
+        "path": "${path}",
+        "weight": "${weight}",
+        "hostCanary": "${hostCanary}",
+        "portCanary": "${portCanary}",
+        "protocolCanary": "${protocolCanary}",
+        "pathCanary": "${pathCanary}",
+        "weightCanary": "${weightCanary}"
+      },
+      "id": null,
+      "pointcutData": null,
+      "apiVersionId": "${proxyApiId}",
+      "groupId": "${groupId}",
+      "assetId": "${assetId}",
+      "assetVersion": "${assetVersion}"
+  }
+  """
+
+  def jsonBody = groovy.json.JsonOutput.toJson(postBody)
+  echo "jsonBody: " + jsonBody
+
+  def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
+  println "${localPoliciesUrl}"
+
+  def authToken=getAuthToken()
+  def response = executePOSTBash("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
+  return "${response}"
+}
+
 //TODO: Reusable fx. Migrate to a different shared-library
 def executePOSTBash(String url, String token, String body, String expectedHttpCode, String methodName){
   def process = [ 'bash', '-c', "curl -X POST -d '${body}' -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}" ].execute()
@@ -186,7 +188,10 @@ def executePOSTBash(String url, String token, String body, String expectedHttpCo
 }
 
 //TODO: Externalize into a separate shared library. Repurpose to use executePOSTBash
-def getAuthToken(String oAuthUrl, String clientId, String clientSecret) {
+def getAuthToken() {
+  def oAuthUrl = "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
+  def clientId = "1726d936b1d14b1f9a23282f0e5a7330" //TODO: externalize into credentials
+  def clientSecret = "5B02329f8D264ec9822fFc344BFd405f" //TODO: externalize into credentials
   return sh (script: "curl \
     -s ${oAuthUrl} \
     -X POST \

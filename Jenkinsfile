@@ -17,17 +17,18 @@ def weightCanary="50"
 
 def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
 
-//Variables for Canary policy version
+//Variables for Canary policy version (TODO: should be externalized to parametrized pipeliine). This is the configuration of the existing policy version
 def groupId="9033ff23-884a-4352-b75b-14fc8237b2c4"
 def assetIdPolicy="canary-release-mule4"
-def assetVersion="3.0.11-SNAPSHOT"
+def assetVersionPolicy="3.0.11-SNAPSHOT"
 
-//Canary proxy Exchange Asset (should be externalized to parametrized pipeline)
+//Canary proxy Exchange Asset (TODO: should be externalized to parametrized pipeline). This is the configuration of the asset to upload to Exchange
 def timeStampMilis=System.currentTimeMillis()
 def assetName="canary-release-prx-" + timeStampMilis
 def assetId="canary-release-prx-" + timeStampMilis
 def assetClassifier="http"
 def apiVersion="v1"
+def assetVersion="1.0.0"
 
 pipeline {
     agent any
@@ -36,8 +37,8 @@ pipeline {
       stage("Apply Canary Policy"){
         steps {
           script {
-            echo "Calling applyCanaryPolicy with ${organizationId}, ${groupId}, ${assetId}, ${assetName}, ${assetVersion}, ${assetClassifier}, ${apiVersion}, ${host}, ${port}, ${protocol}, ${path}, ${weight}, ${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary}"
-            acaJobs.applyCanaryPolicy("${organizationId}", "${groupId}", "${assetId}", "${assetName}", "${assetVersion}", "${assetClassifier}", "${apiVersion}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
+            echo "Calling applyCanaryPolicy with ${organizationId}, ${groupId}, ${assetId}, ${assetName}, ${assetVersion}, ${assetClassifier}, ${apiVersion}, ${assetVersionPolicy}, ${host}, ${port}, ${protocol}, ${path}, ${weight}, ${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary}"
+            acaJobs.applyCanaryPolicy("${organizationId}", "${groupId}", "${assetId}", "${assetName}", "${assetVersion}", "${assetClassifier}", "${apiVersion}", "${assetVersionPolicy}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
           }
         }
       }
