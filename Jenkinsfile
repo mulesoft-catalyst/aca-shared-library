@@ -100,7 +100,7 @@ pipeline {
           }
           steps {
               script {
-                acaJobs.executeLoadTesting("${NEWMAN_PATH}", "${NEWMAN_COLLECTION}", ${NEWMAN_ITERATIONS}, "${POSTMAN_REPORT_PATH}", "${POSTMAN_REPORT_FILENAME}")
+                acaJobs.executeLoadTesting("${NEWMAN_PATH}", "${NEWMAN_COLLECTION}", "${NEWMAN_ITERATIONS}", "${POSTMAN_REPORT_PATH}", "${POSTMAN_REPORT_FILENAME}")
               }
           }
         }
