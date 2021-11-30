@@ -4,36 +4,36 @@ import groovy.json.JsonSlurper
 def analysisId = ''
 
 //API Endpoints configuration (Base and Canary). TODO: Externalize as pipeline parameters
-//def host="httpstat.us"
-//def port="443"
-//def protocol="HTTPS"
-//def path="/200"
-//def weight="50"
-//def hostCanary="httpstat.us"
-//def portCanary="443"
-//def protocolCanary="HTTPS"
-//def pathCanary="/500"
-//def weightCanary="50"
+def host="httpstat.us"
+def port="443"
+def protocol="HTTPS"
+def path="/200"
+def weight="50"
+def hostCanary="httpstat.us"
+def portCanary="443"
+def protocolCanary="HTTPS"
+def pathCanary="/500"
+def weightCanary="50"
 
-//def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
-//def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
+def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
+def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
 
 //Variables for Canary policy version (TODO: should be externalized to parametrized pipeline). This is the configuration of the existing policy version
-//def groupId="9033ff23-884a-4352-b75b-14fc8237b2c4"
-//def assetIdPolicy="canary-release-mule4"
-//def assetVersionPolicy="3.0.11-SNAPSHOT"
+def groupId="9033ff23-884a-4352-b75b-14fc8237b2c4"
+def assetIdPolicy="canary-release-mule4"
+def assetVersionPolicy="3.0.11-SNAPSHOT"
 
 //Canary proxy Exchange Asset (TODO: should be externalized to parametrized pipeline). This is the configuration of the asset to upload to Exchange
-//def timeStampMilis=System.currentTimeMillis()
-//def assetName="canary-release-prx-" + timeStampMilis
-//def assetId="canary-release-prx-" + timeStampMilis
-//def assetClassifier="http"
-//def apiVersion="v1"
-//def assetVersion="1.0.0"
+def timeStampMilis=System.currentTimeMillis()
+def assetName="canary-release-prx-" + timeStampMilis
+def assetId="canary-release-prx-" + timeStampMilis
+def assetClassifier="http"
+def apiVersion="v1"
+def assetVersion="1.0.0"
 
 pipeline {
     agent any
-    parameters {
+    /*parameters {
       string(name: 'organizationId', defaultValue: '9033ff23-884a-4352-b75b-14fc8237b2c4', description: 'The environment ID from Anypoint Platform')
       string(name: 'environmentId', defaultValue: 'eb473ffd-2134-4ecf-b7bc-63a5d0856743', description: 'The environment ID from Anypoint Platform')
       string(name: 'groupId', defaultValue: '9033ff23-884a-4352-b75b-14fc8237b2c4', description: 'The environment ID from Anypoint Platform')
@@ -75,7 +75,7 @@ pipeline {
       assetClassifier = "${params.assetClassifier}"
       apiVersion = "${params.apiVersion}"
       assetVersion = "${params.assetVersion}"
-    }
+    }*/
 
     stages{
       stage("Apply Canary Policy"){
