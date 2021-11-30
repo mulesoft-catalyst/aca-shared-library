@@ -31,6 +31,9 @@ def assetClassifier="http"
 def apiVersion="v1"
 def assetVersion="1.0.0"
 
+//Waiting time in seconds to sleep before retrieve analysis result. TODO: Externalize as part of the canary configuration
+def waitingTime=10
+
 pipeline {
     agent any
     /*parameters {
@@ -96,24 +99,9 @@ pipeline {
             POSTMAN_REPORT_FILENAME = "index.html"
           }
           steps {
-              sh """ ${NEWMAN_PATH} run ${NEWMAN_COLLECTION} \
-                -n ${NEWMAN_ITERATIONS} \
-                -r htmlextra \
-                --reporter-htmlextra-export ${POSTMAN_REPORT_PATH}"/"${POSTMAN_REPORT_FILENAME} \
-                --suppress-exit-code """
-
-
-            publishHTML( target:
-              [
-                allowMissing: true,
-                alwaysLinkToLastBuild: false,
-                keepAll: false,
-                reportDir: "${POSTMAN_REPORT_PATH}",
-                reportFiles: "${POSTMAN_REPORT_FILENAME}",
-                reportName: 'Canary Load Test Report',
-                reportTitles: ''
-              ]
-            )
+              script {
+                acaJobs.executeLoadTesting("${NEWMAN_PATH}", "${NEWMAN_COLLECTION}", "${NEWMAN_ITERATIONS}", "${POSTMAN_REPORT_PATH}", "${POSTMAN_REPORT_FILENAME}")
+              }
           }
         }
 
@@ -128,7 +116,7 @@ pipeline {
 
         stage("Wait period"){
           steps {
-            sleep(10)
+            sleep("${waitingTime}")
           }
         }
 
