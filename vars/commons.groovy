@@ -9,7 +9,7 @@
 
 //Goal: Obtain an access token that can be used to authenticate Anypoint Platform APIs
 def getAuthToken() {
-  this.script.withCredentials([usernamePassword(credentialsId: "connected-app-credentials", passwordVariable: 'clientSecret', usernameVariable: 'clientId')]) {
+  withCredentials([usernamePassword(credentialsId: "connected-app-credentials", passwordVariable: 'clientSecret', usernameVariable: 'clientId')]) {
        return this.script.sh (script: "curl \
          -s ${oAuthUrl} \
          -X POST \
