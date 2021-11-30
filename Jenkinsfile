@@ -71,6 +71,10 @@ pipeline {
       protocolCanary="${params.protocolCanary}"
       pathCanary="${params.pathCanary}"
       weightCanary="${params.weightCanary}"
+      assetId="${params.assetId}"
+      assetClassifier="${params.assetClassifier}"
+      apiVersion="${params.apiVersion}"
+      assetVersion="${params.assetVersion}"
     }
 
     stages{
