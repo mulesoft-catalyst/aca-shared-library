@@ -18,7 +18,25 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
   def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
 }
 
-def executeLoadTesting(){
+def executeLoadTesting(String NEWMAN_PATH, String NEWMAN_COLLECTION, Integer NEWMAN_ITERATIONS, String POSTMAN_REPORT_PATH, String POSTMAN_REPORT_FILENAME){
+  sh """ ${NEWMAN_PATH} run ${NEWMAN_COLLECTION} \
+    -n ${NEWMAN_ITERATIONS} \
+    -r htmlextra \
+    --reporter-htmlextra-export ${POSTMAN_REPORT_PATH}"/"${POSTMAN_REPORT_FILENAME} \
+    --suppress-exit-code """
+
+
+  publishHTML( target:
+  [
+    allowMissing: true,
+    alwaysLinkToLastBuild: false,
+    keepAll: false,
+    reportDir: "${POSTMAN_REPORT_PATH}",
+    reportFiles: "${POSTMAN_REPORT_FILENAME}",
+    reportName: 'Canary Load Test Report',
+    reportTitles: ''
+  ]
+  )
   echo "ok"
 }
 
