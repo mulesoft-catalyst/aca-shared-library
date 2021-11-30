@@ -113,7 +113,7 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
 
   def endpointWithProxyUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis"
   print "${postBody}"
-  def apiInstanceCreationResponseObj = executePOSTBash("${endpointWithProxyUrl}", "${authToken}", "${postBody}", "201", "createProxy - Proxy Instance")
+  def apiInstanceCreationResponseObj = commons.executePOSTBash("${endpointWithProxyUrl}", "${authToken}", "${postBody}", "201", "createProxy - Proxy Instance")
 
   def out = new ByteArrayOutputStream()
   def err = new ByteArrayOutputStream()
@@ -162,7 +162,7 @@ def applyPolicy(String organizationId, String environmentId, String groupId, Str
   println "${localPoliciesUrl}"
 
   def authToken=commons.getAuthToken()
-  def response = executePOSTBash("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
+  def response = commons.executePOSTBash("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
   return "${response}"
 }
 
@@ -188,18 +188,6 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
   println "${deploymentsUrl}"
 
   def authToken=commons.getAuthToken()
-  def response = executePOSTBash("${deploymentsUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 3")
+  def response = commons.executePOSTBash("${deploymentsUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 3")
   return "${response}"
-}
-
-//TODO: Reusable fx. Migrate to a different shared-library
-def executePOSTBash(String url, String token, String body, String expectedHttpCode, String methodName){
-  def process = [ 'bash', '-c', "curl -X POST -d '${body}' -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}" ].execute()
-  process.waitFor()
-  def response = process.text
-
-  def rawResponse = response.split("HTTPSTATUS:")[0]
-  println "rawResponse: ${rawResponse}"
-
-  return "${rawResponse}"
 }
