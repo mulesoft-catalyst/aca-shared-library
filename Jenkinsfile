@@ -3,23 +3,32 @@ import groovy.json.JsonSlurper
 
 properties([
   parameters([
-    string(name: 'DEPLOY_ENV', defaultValue: 'Dev', description: 'The target environment', )
+    string(name: 'host', defaultValue: 'httpstat.us', description: 'The target host for the baseline', ),
+    string(name: 'port', defaultValue: '443', description: 'The target port for the baseline', ),
+    string(name: 'protocol', defaultValue: 'HTTPS', description: 'The target protocol for the baseline', ),
+    string(name: 'path', defaultValue: '/200', description: 'The target protocol for the baseline', ),
+    string(name: 'weight', defaultValue: '50', description: 'The target weight for the baseline', ),
+    string(name: 'hostCanary', defaultValue: 'httpstat.us', description: 'The target host for the canary', ),
+    string(name: 'portCanary', defaultValue: '443', description: 'The target port for the canary', ),
+    string(name: 'protocolCanary', defaultValue: 'HTTPS', description: 'The target protocol for the canary', ),
+    string(name: 'pathCanary', defaultValue: '/200', description: 'The target protocol for the canary', ),
+    string(name: 'weightCanary', defaultValue: '50', description: 'The target weight for the canary', ),
    ])
 ])
 
 def analysisId = ''
 
 //API Endpoints configuration (Base and Canary). TODO: Externalize as pipeline parameters
-def host="httpstat.us"
-def port="443"
-def protocol="HTTPS"
-def path="/200"
-def weight="50"
-def hostCanary="httpstat.us"
-def portCanary="443"
-def protocolCanary="HTTPS"
-def pathCanary="/500"
-def weightCanary="50"
+//def host="httpstat.us"
+//def port="443"
+//def protocol="HTTPS"
+//def path="/200"
+//def weight="50"
+//def hostCanary="httpstat.us"
+//def portCanary="443"
+//def protocolCanary="HTTPS"
+//def pathCanary="/500"
+//def weightCanary="50"
 
 def organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
 def environmentId = "eb473ffd-2134-4ecf-b7bc-63a5d0856743"
