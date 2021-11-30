@@ -31,13 +31,13 @@ def assetClassifier="http"
 def apiVersion="v1"
 def assetVersion="1.0.0"
 
-environment {
-  organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
-}
-
 pipeline {
     agent any
 
+    environment {
+      organizationId = "9033ff23-884a-4352-b75b-14fc8237b2c4"
+    }
+    
     stages{
       stage("Apply Canary Policy"){
         steps {
