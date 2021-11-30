@@ -32,17 +32,17 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
         path: "${path}",
         weight: "${weight}",
         hostCanary: "${hostCanary}",
-        portCanary: ${portCanary},
-        protocolCanary: ${protocolCanary},
-        pathCanary: ${pathCanary},
-        weightCanary: ${weightCanary}
+        portCanary: "${portCanary}",
+        protocolCanary: "${protocolCanary}",
+        pathCanary: "${pathCanary}",
+        weightCanary: "${weightCanary}"
       ],
       id: null,
       pointcutData: null,
       apiVersionId: API_ID,
-      groupId: ${groupId},
-      assetId: ${assetId},
-      assetVersion: ${assetVersion}
+      groupId: "${groupId}",
+      assetId: "${assetId}",
+      assetVersion: "${assetVersion}"
   ]
 
   def jsonBody = groovy.json.JsonOutput.toJson(postBody)
@@ -103,16 +103,6 @@ def retrieveAnalysisResults(analysisId){
 
 def decideBasedOnResults(){
   echo "ok"
-}
-
-//TODO: Externalize into a separate shared library
-def getAuthToken(String oAuthUrl, String clientId, String clientSecret) {
-  return sh (script: "curl \
-    -s ${oAuthUrl} \
-    -X POST \
-    -H 'Content-Type: application/json' \
-    -d '{\"grant_type\": \"client_credentials\", \"client_id\": \"${clientId}\", \"client_secret\": \"${clientSecret}\"}' \
-    | sed -n 's|.*\"access_token\":\"\\([^\"]*\\)\".*|\\1|p'", returnStdout: true).trim()
 }
 
 def createProxy(String organizationId, String groupId, String assetId, String assetVersion, String assetName, String assetClassifier, String apiVersion){
@@ -185,12 +175,11 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   proc.consumeProcessOutput(out, err)
   proc.waitFor()
 
-  println "error stream was ${err.toString()}"
-  println "Response API Manager API instance creation: ${out.toString()}"
+  println "Created API ID is: ${out.toString()}"
 
 }
 
-//TODO: Migrate to a different shared-library
+//TODO: Reusable fx. Migrate to a different shared-library
 def executePOSTBash(String url, String token, String body, String expectedHttpCode, String methodName){
   def process = [ 'bash', '-c', "curl -X POST -d '${body}' -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}" ].execute()
   process.waitFor()
@@ -200,4 +189,14 @@ def executePOSTBash(String url, String token, String body, String expectedHttpCo
   println "rawResponse: ${rawResponse}"
 
   return "${rawResponse}"
+}
+
+//TODO: Externalize into a separate shared library. Repurpose to use executePOSTBash
+def getAuthToken(String oAuthUrl, String clientId, String clientSecret) {
+  return sh (script: "curl \
+    -s ${oAuthUrl} \
+    -X POST \
+    -H 'Content-Type: application/json' \
+    -d '{\"grant_type\": \"client_credentials\", \"client_id\": \"${clientId}\", \"client_secret\": \"${clientSecret}\"}' \
+    | sed -n 's|.*\"access_token\":\"\\([^\"]*\\)\".*|\\1|p'", returnStdout: true).trim()
 }
