@@ -48,7 +48,7 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
   def jsonBody = groovy.json.JsonOutput.toJson(postBody)
   echo "jsonBody: " + jsonBody
 
-  def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${API_ID}/policies"
+  def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
 
   def post = new URL(localPoliciesUrl).openConnection()
   post.setRequestMethod("POST")
