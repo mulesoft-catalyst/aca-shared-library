@@ -167,7 +167,7 @@ def applyPolicy(String organizationId, String environmentId, String groupId, Str
 }
 
 def deployCreatedProxy(String organizationId, String environmentId, String assetId, String proxyApiId){
-  def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
+  def apiProxiesEndpoint = "https://anypoint.mulesoft.com/proxies/xapi/v1/organizations"
 
   def postBody = """
   {
@@ -184,7 +184,7 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
   def jsonBody = groovy.json.JsonOutput.toJson(postBody)
   echo "jsonBody: " + jsonBody
 
-  def deploymentsUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
+  def deploymentsUrl = "${apiProxiesEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
   println "${deploymentsUrl}"
 
   def authToken=getAuthToken()
