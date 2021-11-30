@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 import groovy.json.JsonSlurper
 
-def applyCanaryPolicy(String organizationId, String environmentId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String assetVersionPolicy,
+def applyCanaryPolicy(String organizationId, String environmentId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String assetIdPolicy, String assetVersionPolicy,
                       String host, String port, String protocol, String path, String weight,
                       String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
 
@@ -11,7 +11,7 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
 
   //Step 2 - Apply the policy
   echo "applyCanaryPolicy Step 2"
-  def applyPolicyResponse = applyPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetId}", "${assetVersion}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
+  def applyPolicyResponse = applyPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetIdPolicy}", "${assetVersionPolicy}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
 
 }
 
@@ -65,7 +65,7 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
   def authToken=getAuthToken()
   echo "Bearer ${authToken}"
 
-  //Step 1) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
+  //Step a) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
   String response = sh (script: "curl \
     -w 'HTTPSTATUS:%{http_code}' \
     -X POST ${exchangeAssetsUrl} \
@@ -85,7 +85,7 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
 
   assert http_code.equals("201") : "Create a base Prx asset response should be a '201' but received ${http_code}! -> ${response}"
 
-  //Step 2) Create Endpoint with a Proxy
+  //Step b) Create Endpoint with a Proxy
   def postBody = """
   {
       "endpoint": {
