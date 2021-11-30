@@ -24,26 +24,28 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
   //Step 2 - Apply the policy
   echo "applyCanaryPolicy Step 2"
 
-  def postBody = [
-      configurationData: [
-        host: "${host}",
-        port: "${port}",
-        protocol: "${protocol}",
-        path: "${path}",
-        weight: "${weight}",
-        hostCanary: "${hostCanary}",
-        portCanary: "${portCanary}",
-        protocolCanary: "${protocolCanary}",
-        pathCanary: "${pathCanary}",
-        weightCanary: "${weightCanary}"
-      ],
-      id: null,
-      pointcutData: null,
-      apiVersionId: "${proxyApiId}",
-      groupId: "${groupId}",
-      assetId: "${assetId}",
-      assetVersion: "${assetVersion}"
-  ]
+  def postBody = """
+  {
+      "configurationData": {
+        "host": "${host}",
+        "port": "${port}",
+        "protocol": "${protocol}",
+        "path": "${path}",
+        "weight": "${weight}",
+        "hostCanary": "${hostCanary}",
+        "portCanary": "${portCanary}",
+        "protocolCanary": "${protocolCanary}",
+        "pathCanary": "${pathCanary}",
+        "weightCanary": "${weightCanary}"
+      },
+      "id": null,
+      "pointcutData": null,
+      "apiVersionId": "${proxyApiId}",
+      "groupId": "${groupId}",
+      "assetId": "${assetId}",
+      "assetVersion": "${assetVersion}"
+  }
+  """
 
   def jsonBody = groovy.json.JsonOutput.toJson(postBody)
   echo "jsonBody: " + jsonBody
@@ -51,22 +53,10 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
   def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
   println "${localPoliciesUrl}"
 
-  //def post = new URL(localPoliciesUrl).openConnection()
-  //post.setRequestMethod("POST")
-  //post.setDoOutput(true)
-  //post.setRequestProperty ("Authorization", "Bearer " + getAuthToken("${authAPIEndpoint}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_USR}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW}"))
-  //post.setRequestProperty("Content-Type", "application/json")
-  //post.getOutputStream().write(jsonBody.getBytes("UTF-8"))
-
   def authToken=getAuthToken("${authAPIEndpoint}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_USR}", "${ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW}")
   def response = executePOSTBash("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
   println "${response}"
-  //def responseTxt = post.getInputStream().getText()
 
-  //echo "http_code: ${http_code}, response: ${responseTxt}"
-
-  // fail step if graph call fails
-  //assert http_code.equals(201) : "Apply Canary policy response should be a 201 but received ${http_code}! -> ${responseTxt}"
 }
 
 def executeLoadTesting(){
