@@ -19,7 +19,7 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
 
   //Step 1 - Create a Proxy app (optional)
   echo "applyCanaryPolicy Step 1"
-  def proxyApiId= createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
+  def proxyApiId= createProxy("${organizationId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}").trim()
 
   //Step 2 - Apply the policy
   echo "applyCanaryPolicy Step 2"
@@ -50,7 +50,7 @@ def applyCanaryPolicy(String organizationId, String groupId, String assetId, Str
 
   def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
   println "${localPoliciesUrl}"
-  println "${localPoliciesUrl}.trim()"
+
   def post = new URL(localPoliciesUrl).openConnection()
   post.setRequestMethod("POST")
   post.setDoOutput(true)
