@@ -13,6 +13,9 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
   echo "applyCanaryPolicy Step 2"
   def applyPolicyResponse = applyPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetIdPolicy}", "${assetVersionPolicy}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
 
+  //Step 3 - Deploy the proxy (optional)
+  echo "applyCanaryPolicy Step 3"
+  def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
 }
 
 def executeLoadTesting(){
@@ -160,6 +163,32 @@ def applyPolicy(String organizationId, String environmentId, String groupId, Str
 
   def authToken=getAuthToken()
   def response = executePOSTBash("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
+  return "${response}"
+}
+
+def deployCreatedProxy(String organizationId, String environmentId, String assetId, String proxyApiId){
+  def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
+
+  def postBody = """
+  {
+      "applicationName": ${assetId},
+      "gatewayVersion":"4.4.0",
+      "overwrite":true,
+      "type":"CH",
+      "environmentId":"${environmentId}",
+      "environmentName":"Sandbox",
+      "expectedStatus":"deployed"
+  }
+  """
+
+  def jsonBody = groovy.json.JsonOutput.toJson(postBody)
+  echo "jsonBody: " + jsonBody
+
+  def deploymentsUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
+  println "${deploymentsUrl}"
+
+  def authToken=getAuthToken()
+  def response = executePOSTBash("${deploymentsUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 3")
   return "${response}"
 }
 
