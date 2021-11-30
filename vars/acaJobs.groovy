@@ -179,7 +179,14 @@ def createProxy(String organizationId, String groupId, String assetId, String as
   print "${postBody}"
   def apiInstanceCreationResponseObj = executePOSTBash("${endpointWithProxyUrl}", "${authToken}", "${postBody}", "201", "createProxy - Proxy Instance")
 
-  print "Response API Manager API instance creation: ${apiInstanceCreationResponseObj}"
+  def out = new ByteArrayOutputStream()
+  def err = new ByteArrayOutputStream()
+  def proc = ['bash', '-c', "echo '${apiInstanceCreationResponseObj}' | sed -n 's|.*"apiId":\([^"]*\)},.*|\1|p'"].execute()
+  proc.consumeProcessOutput(out, err)
+  proc.waitFor()
+
+  println "error stream was ${err.toString()}"
+  println "Response API Manager API instance creation: ${out.toString()}"
 
 }
 
@@ -191,23 +198,6 @@ def executePOSTBash(String url, String token, String body, String expectedHttpCo
 
   def rawResponse = response.split("HTTPSTATUS:")[0]
   println "rawResponse: ${rawResponse}"
-  //def id = new StringBuilder(), serr = new StringBuilder()
-  //def proc = ['bash', '-c', "echo '${rawResponse}' | jq '.id'"].execute()
-  //proc.consumeProcessOutput(id, serr)
-  //proc.waitFor()
 
-  //response = proc.text
-  //print "${response}"
-  //return id.toString().trim()
-
-  def out = new ByteArrayOutputStream()
-  def err = new ByteArrayOutputStream()
-  def proc = ['bash', '-c', "echo '${rawResponse}' | jq '.id'"].execute()
-  proc.consumeProcessOutput(out, err)
-  proc.waitFor()
-
-  println "error stream was ${err.toString()}"
-
-  return "${err.toString()}"
-
+  return "${rawResponse}"
 }
