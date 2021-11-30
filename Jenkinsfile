@@ -1,6 +1,12 @@
 import groovy.json.JsonSlurper
 @Library('automated-canary-analysis-lib') _
 
+properties([
+  parameters([
+    string(name: 'DEPLOY_ENV', defaultValue: 'Dev', description: 'The target environment', )
+   ])
+])
+
 def analysisId = ''
 
 //API Endpoints configuration (Base and Canary). TODO: Externalize as pipeline parameters
