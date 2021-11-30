@@ -171,11 +171,11 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
 
   def postBody = """
   {
-      "applicationName": ${assetId},
+      "applicationName": "${assetId}",
       "gatewayVersion":"4.4.0",
       "overwrite":true,
       "type":"CH",
-      "environmentId":"${environmentId}",
+      "environmentId": "${environmentId}",
       "environmentName":"Sandbox",
       "expectedStatus":"deployed"
   }
