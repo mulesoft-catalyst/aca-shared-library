@@ -129,7 +129,7 @@ pipeline {
         stage("Retrieve Analysis canary Results"){
           steps {
             script {
-              def analysisresult = acaJobs.retrieveAnalysisResults(analysisId)
+              def analysisresult = acaJobs.retrieveAnalysisResults("${canaryServerProtocol}", "${canaryServer}", "${canaryServerPort}", analysisId)
             }
           }
         }
