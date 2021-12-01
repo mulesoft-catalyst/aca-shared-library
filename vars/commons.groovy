@@ -36,7 +36,7 @@ def executePostWithBody(String url, String token, String body, String expectedHt
 
 //Goal: execute a multipart POST request using Curl in a thread
 def executePostWithMultipart(String curlCommand, String expectedHttpCode, String methodName){
-  def process = [ 'bash', '-c', ${curlCommand} ].execute()
+  def process = [ 'bash', '-c', "${curlCommand}" ].execute()
   process.waitFor()
   def response = process.text
 
