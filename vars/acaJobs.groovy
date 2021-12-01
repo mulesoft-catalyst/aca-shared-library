@@ -85,7 +85,7 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
   echo "Bearer ${authToken}"
 
   //Step a) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
-  String response = sh (script: "curl \
+  String curlCommand = "curl \
     -w 'HTTPSTATUS:%{http_code}' \
     -X POST ${exchangeAssetsUrl} \
     -H 'Authorization: Bearer ${authToken}' \
@@ -97,12 +97,10 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
     -F 'name=${assetName}' \
     -F 'classifier=${assetClassifier}' \
     -F 'apiVersion=${apiVersion}' \
-    -F 'asset=\"undefined\"' ", returnStdout: true)
+    -F 'asset=\"undefined\"' "
 
-  def http_code = response.split("HTTPSTATUS:")[1]
-  println "http code: ${http_code}"
-
-  assert http_code.equals("201") : "Create a base Prx asset response should be a '201' but received ${http_code}! -> ${response}"
+  def uploadToExchangeResponseObj = commons.executePostWithMultipart("${curlCommand}", "201", "createProxy - Upload Asset to Exchange")
+  println "${uploadToExchangeResponseObj}"
 
   //Step b) Create Endpoint with a Proxy
   def postBody = """
@@ -129,7 +127,7 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
 
   def endpointWithProxyUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis"
   print "${postBody}"
-  def apiInstanceCreationResponseObj = commons.executePOSTBash("${endpointWithProxyUrl}", "${authToken}", "${postBody}", "201", "createProxy - Proxy Instance")
+  def apiInstanceCreationResponseObj = commons.executePostWithBody("${endpointWithProxyUrl}", "${authToken}", "${postBody}", "201", "createProxy - Proxy Instance")
 
   def out = new ByteArrayOutputStream()
   def err = new ByteArrayOutputStream()
@@ -178,7 +176,7 @@ def applyPolicy(String organizationId, String environmentId, String groupId, Str
   println "${localPoliciesUrl}"
 
   def authToken=commons.getAuthToken()
-  def response = commons.executePOSTBash("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
+  def response = commons.executePostWithBody("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
   return "${response}"
 }
 
@@ -204,6 +202,6 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
   println "${deploymentsUrl}"
 
   def authToken=commons.getAuthToken()
-  def response = commons.executePOSTBash("${deploymentsUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 3")
+  def response = commons.executePostWithBody("${deploymentsUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 3")
   return "${response}"
 }

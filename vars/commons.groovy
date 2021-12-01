@@ -22,9 +22,21 @@ def getAuthToken() {
 }
 
 
-//Goal: execute a POST request using Curl in a thread
-def executePOSTBash(String url, String token, String body, String expectedHttpCode, String methodName){
+//Goal: execute a POST request with a body using Curl in a thread
+def executePostWithBody(String url, String token, String body, String expectedHttpCode, String methodName){
   def process = [ 'bash', '-c', "curl -X POST -d '${body}' -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}" ].execute()
+  process.waitFor()
+  def response = process.text
+
+  def rawResponse = response.split("HTTPSTATUS:")[0]
+  println "rawResponse: ${rawResponse}"
+
+  return "${rawResponse}"
+}
+
+//Goal: execute a multipart POST request using Curl in a thread
+def executePostWithMultipart(String curlCommand, String expectedHttpCode, String methodName){
+  def process = [ 'bash', '-c', ${curlCommand} ].execute()
   process.waitFor()
   def response = process.text
 
