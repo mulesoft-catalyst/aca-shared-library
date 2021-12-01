@@ -55,8 +55,8 @@ def executeCanaryAnalysis(String canaryServerProtocol, String canaryServer, Stri
   return result.canaryAnalysisExecutionId;
 }
 
-def retrieveAnalysisResults(analysisId){
-  def url = "http://192.168.0.45:8090/standalone_canary_analysis/${analysisId}";
+def retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, String canaryServerPort, String analysisId){
+  def url = "${canaryServerProtocol}://${canaryServer}:${canaryServerPort}/standalone_canary_analysis/${analysisId}";
   def get = new URL(url).openConnection();
   get.setRequestMethod("GET")
   get.setRequestProperty("Accept", '*/*')
@@ -126,7 +126,6 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
   """
 
   def endpointWithProxyUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis"
-  print "${postBody}"
   def apiInstanceCreationResponseObj = commons.executePostWithBody("${endpointWithProxyUrl}", "${authToken}", "${postBody}", "201", "createProxy - Proxy Instance")
 
   def out = new ByteArrayOutputStream()
