@@ -18,11 +18,11 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
   def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
 }
 
-def executeLoadTesting(String NEWMAN_PATH, String NEWMAN_COLLECTION, String NEWMAN_ITERATIONS, String POSTMAN_REPORT_PATH, String POSTMAN_REPORT_FILENAME){
-  sh """ ${NEWMAN_PATH} run ${NEWMAN_COLLECTION} \
-    -n ${NEWMAN_ITERATIONS} \
+def executeLoadTesting(String newmanPath, String newmanCollection, String newmanIterations, String reportPath, String reportFilename){
+  sh """ ${newmanPath} run ${newmanCollection} \
+    -n ${newmanIterations} \
     -r htmlextra \
-    --reporter-htmlextra-export ${POSTMAN_REPORT_PATH}"/"${POSTMAN_REPORT_FILENAME} \
+    --reporter-htmlextra-export ${reportPath}"/"${reportFilename} \
     --suppress-exit-code """
 
 
@@ -31,17 +31,17 @@ def executeLoadTesting(String NEWMAN_PATH, String NEWMAN_COLLECTION, String NEWM
     allowMissing: true,
     alwaysLinkToLastBuild: false,
     keepAll: false,
-    reportDir: "${POSTMAN_REPORT_PATH}",
-    reportFiles: "${POSTMAN_REPORT_FILENAME}",
+    reportDir: "${reportPath}",
+    reportFiles: "${reportFilename}",
     reportName: 'Canary Load Test Report',
     reportTitles: ''
   ]
   )
 }
 
-def executeCanaryAnalysis(){
-  def post = new URL("http://192.168.0.45:8090/standalone_canary_analysis/?metricsAccountName=canary-prometheus&storageAccountName=in-memory-store-account&application=Canary+Test").openConnection();
-  def message = '{\"canaryConfig\":{\"name\":\"canary-config-prometheus\",\"description\":\"Configuration for Prometheus\",\"configVersion\":\"1\",\"applications\":[\"ad-hoc\"],\"judge\":{\"name\":\"NetflixACAJudge-v1.0\",\"judgeConfigurations\":{}},\"metrics\":[{\"name\":\"Avg Response Time\",\"query\":{\"type\":\"prometheus\",\"customInlineTemplate\":\"PromQL:avg(avg_over_time(cloudhub_prometheus_rt{instance=\\\"prometheus-metrics.us-e2.cloudhub.io:80\\\", job=\\\"cloudhub-metrics\\\", canary=\\\"${scope}\\\"}[120m]))\",\"serviceType\":\"prometheus\"},\"groups\":[\"Canaries\"],\"analysisConfigurations\":{\"canary\":{\"critical\":false,\"nanStrategy\":\"replace\",\"effectSize\":{\"allowedIncrease\":1,\"allowedDecrease\":1},\"outliers\":{\"strategy\":\"keep\"},\"direction\":\"decrease\"}},\"scopeName\":\"default\"},{\"name\":\"Success Rate\",\"query\":{\"type\":\"prometheus\",\"customInlineTemplate\":\"PromQL:sum(sum_over_time(cloudhub_prometheus{instance=\\\"prometheus-metrics.us-e2.cloudhub.io:80\\\", job=\\\"cloudhub-metrics\\\", http_code=\\\"200\\\", canary=\\\"${scope}\\\"}[120m]))\",\"serviceType\":\"prometheus\"},\"groups\":[\"Canaries\"],\"analysisConfigurations\":{\"canary\":{\"nanStrategy\":\"replace\",\"critical\":false,\"effectSize\":{\"allowedIncrease\":1,\"allowedDecrease\":1},\"outliers\":{\"strategy\":\"keep\"},\"direction\":\"decrease\"}},\"scopeName\":\"default\"}],\"templates\":{},\"classifier\":{\"groupWeights\":{\"Canaries\":100}}},\"executionRequest\":{\"scopes\":[{\"scopeName\":\"default\",\"controlScope\":0,\"controlLocation\":\"us-east-1\",\"controlOffsetInMinutes\":\"10\",\"experimentScope\":1,\"experimentLocation\":\"us-east-1\",\"startTimeIso\":\"2021-11-17T15:00:00Z\",\"endTimeIso\":\"2021-11-17T19:00:00Z\",\"step\":2,\"extendedScopeParams\":{}}],\"thresholds\":{\"pass\":95,\"marginal\":75}}}'
+def executeCanaryAnalysis(String canaryServerProtocol, String canaryServer, String canaryServerPort, String canaryConfig, String appName){
+  def post = new URL("${canaryServerProtocol}://${canaryServer}:${canaryServerPort}/standalone_canary_analysis/?metricsAccountName=canary-prometheus&storageAccountName=in-memory-store-account&application=${appName}").openConnection();
+  def message = "${canaryConfig}"
   post.setRequestMethod("POST")
   post.setDoOutput(true)
   post.setRequestProperty("Accept", '*/*')
