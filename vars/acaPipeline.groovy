@@ -1,7 +1,6 @@
 #!/usr/bin/groovy
 
 def analysisId = ''
-def runEntirePipeline= false
 
 //Waiting time in seconds to sleep before retrieve analysis result. TODO: Externalize as part of the canary configuration
 def call(Map config){
@@ -11,9 +10,7 @@ def call(Map config){
       stages{
         stage("Apply Canary Policy"){
           when {
-             expression {
-               "${runEntirePipeline}" == true
-             }
+              branch 'nonexistant'
           }
           steps {
             script {
@@ -40,9 +37,7 @@ def call(Map config){
 
           stage("Execute Canary Analysis"){
             when {
-               expression {
-                 "${runEntirePipeline}" == true
-               }
+                branch 'nonexistant'
             }
             environment{
               //Canary Analysis config
@@ -58,9 +53,7 @@ def call(Map config){
 
           stage("Wait period"){
             when {
-               expression {
-                 "${runEntirePipeline}" == true
-               }
+                branch 'nonexistant'
             }
             steps {
               sleep("${params.waitTime}")
@@ -69,9 +62,7 @@ def call(Map config){
 
           stage("Retrieve Analysis canary Results"){
             when {
-               expression {
-                 "${runEntirePipeline}" == true
-               }
+                branch 'nonexistant'
             }
             steps {
               script {
@@ -82,9 +73,7 @@ def call(Map config){
 
           stage("Decided Based on Results"){
             when {
-               expression {
-                 "${runEntirePipeline}" == true
-               }
+                branch 'nonexistant'
             }
             steps {
               script {
