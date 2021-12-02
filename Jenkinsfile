@@ -1,7 +1,8 @@
 @Library('automated-canary-analysis-lib') _
-parameters([
-      password(name: 'organizationId', defaultValue: '9033ff23-884a-4352-b75b-14fc8237b2c4', description: 'The organization ID from Anypoint Platform')
-])
+
+parameters {
+  string defaultValue: '9033ff23-884a-4352-b75b-14fc8237b2c4', description: '', name: 'organizationId', trim: true
+}
 
 //TODO: Externalize as build pipeline parameters
 acaPipeline(organizationId: "${params.organizationId}", //'9033ff23-884a-4352-b75b-14fc8237b2c4',
