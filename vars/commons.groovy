@@ -12,13 +12,6 @@
 def getAuthToken() {
   def oAuthUrl = "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
   withCredentials([usernamePassword(credentialsId: "connected-app-credentials", passwordVariable: 'clientSecret', usernameVariable: 'clientId')]) {
-       /*return sh (script: "curl \
-         -s ${oAuthUrl} \
-         -X POST \
-         -H 'Content-Type: application/json' \
-         -d '{\"grant_type\": \"client_credentials\", \"client_id\": \"${clientId}\", \"client_secret\": \"${clientSecret}\"}' \
-         | sed -n 's|.*\"access_token\":\"\\([^\"]*\\)\".*|\\1|p'", returnStdout: true).trim()*/
-
          String curlCommand = "curl \
            -s ${oAuthUrl} \
            -X POST \
@@ -60,4 +53,12 @@ def executePostWithMultipart(String curlCommand, String expectedHttpCode, String
   println "rawResponse: ${rawResponse}"
 
   return "${rawResponse}"
+}
+
+def executeSh(String pipedCommand){
+  def process = [ 'bash', '-c', "${pipedCommand}" ].execute()
+  process.waitFor()
+  def output = process.text
+  println "SH output: ${output}"
+  return "${output}"
 }

@@ -16,12 +16,13 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
 }
 
 def executeLoadTesting(String newmanPath, String newmanCollection, String newmanIterations, String reportPath, String reportFilename){
-  sh """ ${newmanPath} run ${newmanCollection} \
+  String command = """ ${newmanPath} run ${newmanCollection} \
     -n ${newmanIterations} \
     -r htmlextra \
     --reporter-htmlextra-export ${reportPath}"/"${reportFilename} \
     --suppress-exit-code """
 
+  commons.executeSh(command)
 
   publishHTML( target:
   [
@@ -80,7 +81,7 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
   def authToken=commons.getAuthToken()
 
   //Step a) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
-  String curlCommand = "curl \
+    String curlCommand = "curl \
     -w 'HTTPSTATUS:%{http_code}' \
     -X POST ${exchangeAssetsUrl} \
     -H 'Authorization: Bearer ${authToken}' \
