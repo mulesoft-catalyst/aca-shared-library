@@ -26,7 +26,8 @@ def call() {
           string(name: 'assetVersion', defaultValue: '1.0.0', description: 'The version of the asset to upload to Exchange'),
           string(name: 'canaryServer', defaultValue: '192.168.0.45', description: 'The Kayenta server used to run the analysis'),
           string(name: 'canaryServerProtocol', defaultValue: 'http', description: 'The protocol used to connect to the Kayenta server'),
-          string(name: 'canaryServerPort', defaultValue: '8090', description: 'The port used to connect to the Kayenta server')
+          string(name: 'canaryServerPort', defaultValue: '8090', description: 'The port used to connect to the Kayenta server'),
+          string(name: 'waitTime', defaultValue: '10', description: 'Wait time (in seconds) to wait until the Canary Analysis is completed')
         ])
     ])
 }
