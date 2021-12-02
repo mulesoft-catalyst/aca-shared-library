@@ -1,7 +1,10 @@
 @Library('automated-canary-analysis-lib') _
+parameters([
+      password(name: 'organizationId', defaultValue: '9033ff23-884a-4352-b75b-14fc8237b2c4', description: 'The organization ID from Anypoint Platform')
+])
 
 //TODO: Externalize as build pipeline parameters
-acaPipeline(organizationId: '9033ff23-884a-4352-b75b-14fc8237b2c4',
+acaPipeline(organizationId: ${params.organizationId}, //'9033ff23-884a-4352-b75b-14fc8237b2c4',
             environmentId: 'eb473ffd-2134-4ecf-b7bc-63a5d0856743',
             groupId: '9033ff23-884a-4352-b75b-14fc8237b2c4',
             assetIdPolicy: 'canary-release-mule4',
