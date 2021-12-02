@@ -16,19 +16,28 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
 }
 
 def executeLoadTesting(String newmanPath, String newmanCollection, String newmanIterations, String reportPath, String reportFilename){
-  String command = """${newmanPath} run ${newmanCollection} \
+  /*String command = """${newmanPath} run ${newmanCollection} \
     --env-var PROTOCOL=${params.endpointProtocol} \
     --env-var URL=${params.endpointHost} \
     --env-var RESOURCE=${params.endpointResource} \
     -n ${newmanIterations} \
     -r htmlextra \
-    --reporter-htmlextra-export '${reportPath}/${reportFilename}' \
-    --suppress-exit-code"""
+    --reporter-htmlextra-export ${reportPath}/${reportFilename} \
+    --suppress-exit-code"""*/
+
+    String command = """newman run ${newmanCollection} \
+      --env-var PROTOCOL=https \
+      --env-var URL=httpbin.org \
+      --env-var RESOURCE=404 \
+      -n 10 \
+      -r htmlextra \
+      --reporter-htmlextra-export 'target/report.html' \
+      --suppress-exit-code"""
 
   println("${command}")
   commons.executeSh(command)
 
-  publishHTML( target:
+  /*publishHTML( target:
   [
     allowMissing: true,
     alwaysLinkToLastBuild: false,
@@ -36,6 +45,17 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
     reportDir: "${reportPath}",
     reportFiles: "${reportFilename}",
     reportName: 'Canary Load Test Report',
+    reportTitles: ''
+  ]
+  )*/
+  publishHTML( target:
+  [
+    allowMissing: true,
+    alwaysLinkToLastBuild: true,
+    keepAll: false,
+    reportDir: "target",
+    reportFiles: "report.html",
+    reportName: 'Example Report',
     reportTitles: ''
   ]
   )
