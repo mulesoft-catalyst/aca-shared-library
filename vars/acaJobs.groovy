@@ -25,17 +25,22 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
     --reporter-htmlextra-export ${reportPath}/${reportFilename} \
     --suppress-exit-code"""*/
 
-    String command = """newman run ${newmanCollection} \
-      --env-var PROTOCOL=https \
-      --env-var URL=httpbin.org \
-      --env-var RESOURCE=404 \
-      -n 10 \
-      -r htmlextra \
-      --reporter-htmlextra-export 'target/report.html' \
-      --suppress-exit-code"""
+    sh """ ${newmanPath} run ${newmanCollection} \
+                            -n ${newmanIterations} \
+                            -r htmlextra \
+                            --reporter-htmlextra-export ${reportPath} \
+                            --suppress-exit-code """
 
-  println("${command}")
-  commons.executeSh(command)
+            script {
+              INT_TEST_REPORT_COMPLETE_PATH = sh(script: "find ${reportPath} -maxdepth 1 -name '*.html'", returnStdout: true).trim()
+              INT_TEST_REPORT_NAME = sh(script: "basename ${INT_TEST_REPORT_COMPLETE_PATH}", returnStdout: true).trim()
+            }
+
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: false, reportDir: "${reportPath}", reportFiles: "${INT_TEST_REPORT_NAME}", reportName: 'Integration Test Report', reportTitles: ''])
+
+
+  //println("${command}")
+  //commons.executeSh(command)
 
   /*publishHTML( target:
   [
@@ -48,17 +53,7 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
     reportTitles: ''
   ]
   )*/
-  publishHTML( target:
-  [
-    allowMissing: true,
-    alwaysLinkToLastBuild: true,
-    keepAll: false,
-    reportDir: "target",
-    reportFiles: "report.html",
-    reportName: 'Example Report',
-    reportTitles: ''
-  ]
-  )
+
 }
 
 def executeCanaryAnalysis(String canaryServerProtocol, String canaryServer, String canaryServerPort, String canaryConfig, String appName){
