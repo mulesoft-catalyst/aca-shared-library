@@ -204,16 +204,3 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
   def response = commons.executePostWithBody("${deploymentsUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 3")
   return "${response}"
 }
-
-def definePipeline(){
-  pipeline {
-      agent any
-      stages {
-        stage('Added Stage From Shared library') {
-          steps {
-            echo "This Step was added by the ACA Shared Library"
-          }
-        }
-      }
-    }
-}
