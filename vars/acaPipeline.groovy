@@ -48,8 +48,8 @@ def call(Map config){
         stage("Apply Canary Policy"){
           steps {
             script {
-              echo "Using map: Calling applyCanaryPolicy with ${config.organizationId}, ${config.environmentId}, ${groupId}, ${assetId}, ${assetName}, ${assetVersion}, ${assetClassifier}, ${apiVersion}, ${assetIdPolicy}, ${assetVersionPolicy}, ${host}, ${port}, ${protocol}, ${path}, ${weight}, ${hostCanary}, ${portCanary}, ${protocolCanary}, ${pathCanary}, ${weightCanary}"
-              acaJobs.applyCanaryPolicy("${config.organizationId}", "${config.environmentId}", "${groupId}", "${assetId}", "${assetName}", "${assetVersion}", "${assetClassifier}", "${apiVersion}", "${assetIdPolicy}", "${assetVersionPolicy}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
+              echo "Using map: Calling applyCanaryPolicy with ${config.organizationId}, ${config.environmentId}, ${config.groupId}, ${config.assetId}, ${config.assetName}, ${config.assetVersion}, ${config.assetClassifier}, ${config.apiVersion}, ${config.assetIdPolicy}, ${config.assetVersionPolicy}, ${config.host}, ${config.port}, ${config.protocol}, ${config.path}, ${config.weight}, ${config.hostCanary}, ${config.portCanary}, ${config.protocolCanary}, ${config.pathCanary}, ${config.weightCanary}"
+              acaJobs.applyCanaryPolicy("${config.organizationId}", "${config.environmentId}", "${config.groupId}", "${config.assetId}", "${config.assetName}", "${config.assetVersion}", "${config.assetClassifier}", "${config.apiVersion}", "${config.assetIdPolicy}", "${config.assetVersionPolicy}", "${config.host}", "${config.port}", "${config.protocol}", "${config.path}", "${config.weight}", "${config.hostCanary}", "${config.portCanary}", "${config.protocolCanary}", "${config.pathCanary}", "${config.weightCanary}")
             }
           }
         }
