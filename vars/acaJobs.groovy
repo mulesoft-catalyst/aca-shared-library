@@ -25,22 +25,22 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
     --reporter-htmlextra-export ${reportPath}/${reportFilename} \
     --suppress-exit-code"""*/
 
-    sh """ ${newmanPath} run ${newmanCollection} \
+    String command = """ ${newmanPath} run ${newmanCollection} \
                             -n ${newmanIterations} \
                             -r htmlextra \
                             --reporter-htmlextra-export ${reportPath} \
                             --suppress-exit-code """
 
-            script {
-              INT_TEST_REPORT_COMPLETE_PATH = sh(script: "find ${reportPath} -maxdepth 1 -name '*.html'", returnStdout: true).trim()
-              INT_TEST_REPORT_NAME = sh(script: "basename ${INT_TEST_REPORT_COMPLETE_PATH}", returnStdout: true).trim()
-            }
-
-            publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: false, reportDir: "${reportPath}", reportFiles: "${INT_TEST_REPORT_NAME}", reportName: 'Integration Test Report', reportTitles: ''])
-
 
   //println("${command}")
-  //commons.executeSh(command)
+  commons.executeSh(command)
+
+  script {
+    INT_TEST_REPORT_COMPLETE_PATH = sh(script: "find ${reportPath} -maxdepth 1 -name '*.html'", returnStdout: true).trim()
+    INT_TEST_REPORT_NAME = sh(script: "basename ${INT_TEST_REPORT_COMPLETE_PATH}", returnStdout: true).trim()
+  }
+
+  publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: false, reportDir: "${reportPath}", reportFiles: "${INT_TEST_REPORT_NAME}", reportName: 'Integration Test Report', reportTitles: ''])
 
   /*publishHTML( target:
   [
