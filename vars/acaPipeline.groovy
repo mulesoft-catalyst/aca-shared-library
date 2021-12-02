@@ -10,8 +10,10 @@ def call(Map config){
 
       stages{
         stage("Apply Canary Policy"){
-          when{
-            "${runEntirePipeline}"
+          when {
+             expression {
+               "${runEntirePipeline}" == true
+             }
           }
           steps {
             script {
@@ -37,8 +39,10 @@ def call(Map config){
           }
 
           stage("Execute Canary Analysis"){
-            when{
-              "${runEntirePipeline}"
+            when {
+               expression {
+                 "${runEntirePipeline}" == true
+               }
             }
             environment{
               //Canary Analysis config
@@ -53,8 +57,10 @@ def call(Map config){
           }
 
           stage("Wait period"){
-            when{
-              "${runEntirePipeline}"
+            when {
+               expression {
+                 "${runEntirePipeline}" == true
+               }
             }
             steps {
               sleep("${params.waitTime}")
@@ -62,8 +68,10 @@ def call(Map config){
           }
 
           stage("Retrieve Analysis canary Results"){
-            when{
-              "${runEntirePipeline}"
+            when {
+               expression {
+                 "${runEntirePipeline}" == true
+               }
             }
             steps {
               script {
@@ -73,8 +81,10 @@ def call(Map config){
           }
 
           stage("Decided Based on Results"){
-            when{
-              "${runEntirePipeline}"
+            when {
+               expression {
+                 "${runEntirePipeline}" == true
+               }
             }
             steps {
               script {
