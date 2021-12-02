@@ -12,8 +12,8 @@ def call(Map config){
         stage("Apply Canary Policy"){
           steps {
             script {
-              echo "Using map: Calling applyCanaryPolicy with ${params.organizationId}, ${params.environmentId}, ${params.groupId}, ${config.assetId}, ${config.assetName}, ${config.assetVersion}, ${config.assetClassifier}, ${config.apiVersion}, ${config.assetIdPolicy}, ${config.assetVersionPolicy}, ${config.host}, ${config.port}, ${config.protocol}, ${config.path}, ${config.weight}, ${config.hostCanary}, ${config.portCanary}, ${config.protocolCanary}, ${config.pathCanary}, ${config.weightCanary}"
-              acaJobs.applyCanaryPolicy("${params.organizationId}", "${params.environmentId}", "${params.groupId}", "${config.assetId}", "${config.assetName}", "${config.assetVersion}", "${config.assetClassifier}", "${config.apiVersion}", "${config.assetIdPolicy}", "${config.assetVersionPolicy}", "${config.host}", "${config.port}", "${config.protocol}", "${config.path}", "${config.weight}", "${config.hostCanary}", "${config.portCanary}", "${config.protocolCanary}", "${config.pathCanary}", "${config.weightCanary}")
+              echo "Using map: Calling applyCanaryPolicy with ${params.organizationId}, ${params.environmentId}, ${params.groupId}, ${params.assetId}, ${params.assetName}, ${params.assetVersion}, ${params.assetClassifier}, ${params.apiVersion}, ${params.assetIdPolicy}, ${params.assetVersionPolicy}, ${params.host}, ${params.port}, ${params.protocol}, ${params.path}, ${params.weight}, ${params.hostCanary}, ${params.portCanary}, ${params.protocolCanary}, ${params.pathCanary}, ${params.weightCanary}"
+              acaJobs.applyCanaryPolicy("${params.organizationId}", "${params.environmentId}", "${params.groupId}", "${params.assetId}", "${params.assetName}", "${params.assetVersion}", "${params.assetClassifier}", "${params.apiVersion}", "${params.assetIdPolicy}", "${params.assetVersionPolicy}", "${params.host}", "${params.port}", "${params.protocol}", "${params.path}", "${params.weight}", "${params.hostCanary}", "${params.portCanary}", "${params.protocolCanary}", "${params.pathCanary}", "${params.weightCanary}")
             }
           }
         }
@@ -40,7 +40,7 @@ def call(Map config){
             }
             steps {
               script {
-                analysisId = acaJobs.executeCanaryAnalysis("${config.canaryServerProtocol}", "${config.canaryServer}", "${config.canaryServerPort}", "${canaryConfig}", "${config.assetId}")
+                analysisId = acaJobs.executeCanaryAnalysis("${params.canaryServerProtocol}", "${params.canaryServer}", "${params.canaryServerPort}", "${canaryConfig}", "${params.assetId}")
                 echo "Analysis ID: ${analysisId}"
               }
             }
@@ -48,14 +48,14 @@ def call(Map config){
 
           stage("Wait period"){
             steps {
-              sleep("${config.waitTime}")
+              sleep("${params.waitTime}")
             }
           }
 
           stage("Retrieve Analysis canary Results"){
             steps {
               script {
-                def analysisresult = acaJobs.retrieveAnalysisResults("${config.canaryServerProtocol}", "${config.canaryServer}", "${config.canaryServerPort}", analysisId)
+                def analysisresult = acaJobs.retrieveAnalysisResults("${params.canaryServerProtocol}", "${params.canaryServer}", "${params.canaryServerPort}", analysisId)
               }
             }
           }
