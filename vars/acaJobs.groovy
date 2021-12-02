@@ -6,15 +6,12 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
                       String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
 
   //Step 1 - Create a Proxy app (optional)
-  echo "applyCanaryPolicy Step 1"
   def proxyApiId= createProxy("${organizationId}", "${environmentId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
 
   //Step 2 - Apply the policy
-  echo "applyCanaryPolicy Step 2"
   def applyPolicyResponse = applyPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetIdPolicy}", "${assetVersionPolicy}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
 
   //Step 3 - Deploy the proxy (optional)
-  echo "applyCanaryPolicy Step 3"
   def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
 }
 
@@ -62,7 +59,6 @@ def retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, St
   get.setRequestProperty("Accept", '*/*')
   get.setRequestProperty("Content-Type", "application/json")
   def getRC = get.getResponseCode();
-  println(getRC);
 
   def slurper = new JsonSlurper()
   def result = slurper.parseText(get.getInputStream().getText())
@@ -82,7 +78,6 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
   def exchangeAssetsUrl = "https://anypoint.mulesoft.com/exchange/api/v1/assets"
 
   def authToken=commons.getAuthToken()
-  echo "Bearer ${authToken}"
 
   //Step a) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
   String curlCommand = "curl \
@@ -99,10 +94,7 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
     -F 'apiVersion=${apiVersion}' \
     -F 'asset=\"undefined\"' "
 
-  println "${curlCommand}"
-
   def uploadToExchangeResponseObj = commons.executePostWithMultipart("${curlCommand}", "201", "createProxy - Upload Asset to Exchange")
-  println "${uploadToExchangeResponseObj}"
 
   //Step b) Create Endpoint with a Proxy
   def postBody = """
@@ -136,7 +128,7 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
   proc.consumeProcessOutput(out, err)
   proc.waitFor()
 
-  println "Created API ID is: ${out.toString()}"
+  echo "Created API ID is: ${out.toString()}"
   return "${out.toString().trim()}"
 
 }
@@ -171,10 +163,8 @@ def applyPolicy(String organizationId, String environmentId, String groupId, Str
   """
 
   def jsonBody = groovy.json.JsonOutput.toJson(postBody)
-  echo "jsonBody: " + jsonBody
 
   def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
-  println "${localPoliciesUrl}"
 
   def authToken=commons.getAuthToken()
   def response = commons.executePostWithBody("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
@@ -197,10 +187,8 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
   """
 
   def jsonBody = groovy.json.JsonOutput.toJson(postBody)
-  echo "jsonBody: " + jsonBody
 
   def deploymentsUrl = "${apiProxiesEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
-  println "${deploymentsUrl}"
 
   def authToken=commons.getAuthToken()
   def response = commons.executePostWithBody("${deploymentsUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 3")

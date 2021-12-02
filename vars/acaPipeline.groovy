@@ -41,7 +41,7 @@ def call(Map config){
             steps {
               script {
                 analysisId = acaJobs.executeCanaryAnalysis("${config.canaryServerProtocol}", "${config.canaryServer}", "${config.canaryServerPort}", "${canaryConfig}", "${config.assetId}")
-                echo "${analysisId}"
+                echo "Analysis ID: ${analysisId}"
               }
             }
           }
