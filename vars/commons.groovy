@@ -12,12 +12,28 @@
 def getAuthToken() {
   def oAuthUrl = "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
   withCredentials([usernamePassword(credentialsId: "connected-app-credentials", passwordVariable: 'clientSecret', usernameVariable: 'clientId')]) {
-       return sh (script: "curl \
+       /*return sh (script: "curl \
          -s ${oAuthUrl} \
          -X POST \
          -H 'Content-Type: application/json' \
          -d '{\"grant_type\": \"client_credentials\", \"client_id\": \"${clientId}\", \"client_secret\": \"${clientSecret}\"}' \
-         | sed -n 's|.*\"access_token\":\"\\([^\"]*\\)\".*|\\1|p'", returnStdout: true).trim()
+         | sed -n 's|.*\"access_token\":\"\\([^\"]*\\)\".*|\\1|p'", returnStdout: true).trim()*/
+
+         String curlCommand = "curl \
+           -s ${oAuthUrl} \
+           -X POST \
+           -H 'Content-Type: application/json' \
+           -d '{\"grant_type\": \"client_credentials\", \"client_id\": \"${clientId}\", \"client_secret\": \"${clientSecret}\"}' \
+           | sed -n 's|.*\"access_token\":\"\\([^\"]*\\)\".*|\\1|p'"
+
+         def process = [ 'bash', '-c', "${curlCommand}" ].execute()
+         process.waitFor()
+         def response = process.text
+
+         def rawResponse = response.split("HTTPSTATUS:")[0]
+         println "Token reponse: ${rawResponse}"
+
+         return "${rawResponse}"
   }
 }
 
