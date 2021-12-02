@@ -27,7 +27,10 @@ def call() {
           string(name: 'canaryServer', defaultValue: '192.168.0.45', description: 'The Kayenta server used to run the analysis'),
           string(name: 'canaryServerProtocol', defaultValue: 'http', description: 'The protocol used to connect to the Kayenta server'),
           string(name: 'canaryServerPort', defaultValue: '8090', description: 'The port used to connect to the Kayenta server'),
-          string(name: 'waitTime', defaultValue: '10', description: 'Wait time (in seconds) to wait until the Canary Analysis is completed')
+          string(name: 'waitTime', defaultValue: '10', description: 'Wait time (in seconds) to wait until the Canary Analysis is completed'),
+          string(name: 'endpointProtocol', defaultValue: 'https', description: 'The protocol to access the endpoint used during the Load Test phase'),
+          string(name: 'endpointHost', defaultValue: '', description: 'The host to access the endpoint used during the Load Test phase (including port)'),
+          string(name: 'endpointResource', defaultValue: '', description: 'The resource to access the endpoint used during the Load Test phase')
         ])
     ])
 }

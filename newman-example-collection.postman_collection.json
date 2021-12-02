@@ -11,14 +11,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://httpbin.org/get",
-					"protocol": "https",
+					"raw": "{{PROTOCOL}}://{{URL}}/{{RESOURCE}}",
+					"protocol": "{{PROTOCOL}}",
 					"host": [
-						"httpbin",
-						"org"
+						"{{URL}}"
 					],
 					"path": [
-						"get"
+						"{{RESOURCE}}"
 					]
 				}
 			},
