@@ -13,7 +13,7 @@ def call(Map config){
           steps {
             script {
               echo "Using map: Calling applyCanaryPolicy with ${params.organizationId}, ${params.environmentId}, ${params.groupId}, ${config.assetId}, ${config.assetName}, ${config.assetVersion}, ${config.assetClassifier}, ${config.apiVersion}, ${config.assetIdPolicy}, ${config.assetVersionPolicy}, ${config.host}, ${config.port}, ${config.protocol}, ${config.path}, ${config.weight}, ${config.hostCanary}, ${config.portCanary}, ${config.protocolCanary}, ${config.pathCanary}, ${config.weightCanary}"
-              acaJobs.applyCanaryPolicy('"${params.organizationId}"', '"${params.environmentId}"', '"${params.groupId}"', "${config.assetId}", "${config.assetName}", "${config.assetVersion}", "${config.assetClassifier}", "${config.apiVersion}", "${config.assetIdPolicy}", "${config.assetVersionPolicy}", "${config.host}", "${config.port}", "${config.protocol}", "${config.path}", "${config.weight}", "${config.hostCanary}", "${config.portCanary}", "${config.protocolCanary}", "${config.pathCanary}", "${config.weightCanary}")
+              acaJobs.applyCanaryPolicy("${params.organizationId}", "${params.environmentId}", "${params.groupId}", "${config.assetId}", "${config.assetName}", "${config.assetVersion}", "${config.assetClassifier}", "${config.apiVersion}", "${config.assetIdPolicy}", "${config.assetVersionPolicy}", "${config.host}", "${config.port}", "${config.protocol}", "${config.path}", "${config.weight}", "${config.hostCanary}", "${config.portCanary}", "${config.protocolCanary}", "${config.pathCanary}", "${config.weightCanary}")
             }
           }
         }
