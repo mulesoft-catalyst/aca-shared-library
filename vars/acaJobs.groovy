@@ -99,6 +99,8 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
     -F 'apiVersion=${apiVersion}' \
     -F 'asset=\"undefined\"' "
 
+  prrintln "${curlCommand}"
+
   def uploadToExchangeResponseObj = commons.executePostWithMultipart("${curlCommand}", "201", "createProxy - Upload Asset to Exchange")
   println "${uploadToExchangeResponseObj}"
 
