@@ -25,7 +25,7 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
 
 def executeLoadTesting(String newmanPath, String newmanCollection, String newmanIterations, String reportPath, String reportFilename){
   dir("${WORKSPACE}"){
-    String command = """${newmanPath} run ${WORKSPACE}/${newmanCollection} \
+    String command = """${newmanPath} run ${newmanCollection} \
       --env-var PROTOCOL=${params.endpointProtocol} \
       --env-var URL=${params.endpointHost} \
       --env-var RESOURCE=${params.endpointResource} \
