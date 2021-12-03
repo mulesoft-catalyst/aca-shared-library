@@ -46,7 +46,7 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
     reportFiles: "index.html",
     reportName: 'Canary Load Test Report',
     reportTitles: ''
-  ]
+  ])
 
   /*publishHTML( target:
   [
