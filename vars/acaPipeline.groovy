@@ -11,6 +11,7 @@
 //Likewise, future modifications must be made by whoever uses it
 
 def analysisId = ''
+def analysisResult = ''
 
 def call(Map config){
   pipeline {
@@ -69,7 +70,7 @@ def call(Map config){
           stage("Retrieve Analysis canary Results"){
             steps {
               script {
-                def analysisresult = acaJobs.retrieveAnalysisResults("${params.canaryServerProtocol}", "${params.canaryServer}", "${params.canaryServerPort}", analysisId)
+                analysisResult = acaJobs.retrieveAnalysisResults("${params.canaryServerProtocol}", "${params.canaryServer}", "${params.canaryServerPort}", analysisId)
               }
             }
           }
@@ -77,7 +78,7 @@ def call(Map config){
           stage("Decided Based on Results"){
             steps {
               script {
-                acaJobs.decideBasedOnResults()
+                acaJobs.decideBasedOnResults("${analysisResult}")
               }
             }
           }
