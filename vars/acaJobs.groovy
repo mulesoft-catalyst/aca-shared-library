@@ -25,34 +25,20 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
 
 def executeLoadTesting(String newmanPath, String newmanCollection, String newmanIterations, String reportPath, String reportFilename){
   dir("${WORKSPACE}"){
-  /*String command = """${newmanPath} run ${newmanCollection} \
+  String command = """${newmanPath} run ${newmanCollection} \
     --env-var PROTOCOL=${params.endpointProtocol} \
     --env-var URL=${params.endpointHost} \
     --env-var RESOURCE=${params.endpointResource} \
     -n ${newmanIterations} \
     -r htmlextra \
     --reporter-htmlextra-export ${reportPath}/${reportFilename} \
-    --suppress-exit-code"""*/
+    --suppress-exit-code"""
 
-  echo "executeLoadTesting()"
   echo pwd()
-  String command="newman run newman-example-collection.postman_collection.json -n 50 -r htmlextra --reporter-htmlextra-export index.html --suppress-exit-code"
   println("${command}")
-  //commons.executeSh(command)
+  commons.executeSh(command)
 
-  sh "${command}"
   publishHTML( target:
-  [
-    allowMissing: true,
-    alwaysLinkToLastBuild: false,
-    keepAll: false,
-    reportDir: '/',
-    reportFiles: 'index.html',
-    reportName: 'Canary Load Test Report',
-    reportTitles: ''
-  ])
-
-  /*publishHTML( target:
   [
     allowMissing: true,
     alwaysLinkToLastBuild: false,
@@ -62,7 +48,7 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
     reportName: 'Canary Load Test Report',
     reportTitles: ''
   ]
-  )*/
+  )
   }
 }
 

@@ -58,9 +58,14 @@ def executeSh(String pipedCommand){
     echo "executeSh()"
     echo pwd()
     def process = [ 'bash', '-c', "${pipedCommand}" ].execute()
+    def out = new ByteArrayOutputStream()
+    def err = new ByteArrayOutputStream()
+    process.consumeProcessOutput(out, err)
     process.waitFor()
-    def output = process.text
-    println "SH output: ${output}"
-    return "${output}"
+    //def output = process.text
+    echo "Output is: ${out.toString()}"
+    echo "Error is: ${err.toString()}"
+    return out.toString()
+    //return "${output}"
   }
 }
