@@ -54,6 +54,8 @@ def executePostWithMultipart(String curlCommand, String expectedHttpCode, String
 
 //Goal: execute a SH command in a thread to avoid hang when using build params
 def executeSh(String pipedCommand){
+  echo "executeSh()"
+  echo pwd
   def process = [ 'bash', '-c', "${pipedCommand}" ].execute()
   process.waitFor()
   def output = process.text
