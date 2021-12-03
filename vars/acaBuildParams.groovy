@@ -17,7 +17,7 @@ def call() {
           string(name: 'hostCanary', defaultValue: 'httpstat.us', description: 'The target host for the canary'),
           string(name: 'portCanary', defaultValue: '443', description: 'The target port for the canary'),
           string(name: 'protocolCanary', defaultValue: 'HTTPS', description: 'The target protocol for the canary'),
-          string(name: 'pathCanary', defaultValue: '/200', description: 'The target protocol for the canary'),
+          string(name: 'pathCanary', defaultValue: '/500', description: 'The target protocol for the canary'),
           string(name: 'weightCanary', defaultValue: '50', description: 'The target weight for the canary'),
           string(name: 'assetName', defaultValue: 'canary-release-prx-REPLACEME', description: 'The name of the proxy to upload to Exchange'),
           string(name: 'assetId', defaultValue: 'canary-release-prx-REPLACEME', description: 'The id of the proxy to upload to Exchange'),
@@ -28,6 +28,7 @@ def call() {
           string(name: 'canaryServerProtocol', defaultValue: 'http', description: 'The protocol used to connect to the Kayenta server'),
           string(name: 'canaryServerPort', defaultValue: '8090', description: 'The port used to connect to the Kayenta server'),
           string(name: 'waitTime', defaultValue: '10', description: 'Wait time (in seconds) to wait until the Canary Analysis is completed'),
+          string(name: 'deploymentWaitTime', defaultValue: '200', description: 'Wait time (in seconds) to wait until the proxy application gets deployed'),
           string(name: 'endpointProtocol', defaultValue: 'https', description: 'The protocol to access the endpoint used during the Load Test phase'),
           string(name: 'endpointHost', defaultValue: 'httpbin.org', description: 'The host to access the endpoint used during the Load Test phase (including port if needed)'),
           string(name: 'endpointResource', defaultValue: 'get', description: 'The resource to access the endpoint used during the Load Test phase')
