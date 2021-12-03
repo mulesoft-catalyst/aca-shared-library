@@ -52,7 +52,7 @@ def executePostWithMultipart(String curlCommand, String expectedHttpCode, String
   return "${rawResponse}"
 }
 
-//Goal: execute a SH command in a thread to avoid hang when using buil params
+//Goal: execute a SH command in a thread to avoid hang when using build params
 def executeSh(String pipedCommand){
   def process = [ 'bash', '-c', "${pipedCommand}" ].execute()
   process.waitFor()

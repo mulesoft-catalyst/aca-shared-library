@@ -1,4 +1,12 @@
 #!/usr/bin/groovy
+
+//Author: Gaston Panizza
+//Date: November 2021
+//Description: Functions definition used across the Automated Canary Analysis Library. Used by the acaPipeline.groovy
+//This pipeline was created by the author specifically for AT&T needs,
+//it is responsability of AT&T teams to evolve and maintain these scripts when
+//the author is not involved in the project anymore
+
 import groovy.json.JsonSlurper
 
 def applyCanaryPolicy(String organizationId, String environmentId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String assetIdPolicy, String assetVersionPolicy,
@@ -24,7 +32,6 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
     -r htmlextra \
     --reporter-htmlextra-export ${reportPath} \
     --suppress-exit-code"""
-
 
   println("${command}")
   commons.executeSh(command)
