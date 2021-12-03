@@ -34,7 +34,7 @@ def call(Map config){
               NEWMAN_PATH = "newman"
               NEWMAN_COLLECTION = "newman-example-collection.postman_collection.json"
               NEWMAN_ITERATIONS = 50
-              POSTMAN_REPORT_PATH = "var/reports/newman/html"
+              POSTMAN_REPORT_PATH = "var/reports"
               POSTMAN_REPORT_FILENAME = "index.html"
             }
             steps {
