@@ -3,10 +3,9 @@
 //Author: Gaston Panizza
 //Date: November 2021
 //Description: Common functions definition used across the Automated Canary Analysis Library. Can be used as base for other libraries as well
-//This pipeline was created by the author specifically for AT&T needs,
-//it is responsability of AT&T teams to evolve and maintain these scripts when
-//the author is not involved in the project anymore
 //Pre-requisites: create a Jenkins credentials called connected-app-credentials, where clientId is stored in the username field and clientSecret in the password field
+//This script was created for research purposes. By no means should be used as-is without understanding what it does and the risks involved.
+//Likewise, future modifications must be made by whoever uses it
 
 //Goal: Obtain an access token that can be used to authenticate Anypoint Platform APIs
 def getAuthToken() {
@@ -55,17 +54,13 @@ def executePostWithMultipart(String curlCommand, String expectedHttpCode, String
 //Goal: execute a SH command in a thread to avoid hang when using build params
 def executeSh(String pipedCommand){
   dir("${WORKSPACE}"){
-    echo "executeSh()"
-    echo pwd()
     def process = [ 'bash', '-c', "${pipedCommand}" ].execute()
     def out = new ByteArrayOutputStream()
     def err = new ByteArrayOutputStream()
     process.consumeProcessOutput(out, err)
     process.waitFor()
-    //def output = process.text
-    echo "Output is: ${out.toString()}"
-    echo "Error is: ${err.toString()}"
+    println "Output is: ${out.toString()}"
+    println "Error is: ${err.toString()}"
     return out.toString()
-    //return "${output}"
   }
 }

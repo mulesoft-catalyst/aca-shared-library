@@ -3,9 +3,8 @@
 //Author: Gaston Panizza
 //Date: November 2021
 //Description: Functions definition used across the Automated Canary Analysis Library. Used by the acaPipeline.groovy
-//This pipeline was created by the author specifically for AT&T needs,
-//it is responsability of AT&T teams to evolve and maintain these scripts when
-//the author is not involved in the project anymore
+//This script was created for research purposes. By no means should be used as-is without understanding what it does and the risks involved. 
+//Likewise, future modifications must be made by whoever uses it
 
 import groovy.json.JsonSlurper
 
@@ -34,8 +33,6 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
       --reporter-htmlextra-export ${reportPath}/${reportFilename} \
       --suppress-exit-code"""
 
-    echo pwd()
-    println("${command}")
     commons.executeSh(command)
 
     publishHTML( target:
@@ -144,7 +141,7 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
   proc.consumeProcessOutput(out, err)
   proc.waitFor()
 
-  echo "Created API ID is: ${out.toString()}"
+  println "Created API ID is: ${out.toString()}"
   return "${out.toString().trim()}"
 
 }
