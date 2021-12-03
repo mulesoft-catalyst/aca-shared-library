@@ -33,7 +33,7 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
     --reporter-htmlextra-export ${reportPath}/${reportFilename} \
     --suppress-exit-code"""*/
 
-  String command="newman run newman-example-collection.postman_collection.json --env-var PROTOCOL=https --env-var URL=httpbin.org --env-var RESOURCE=get -n 50 -r htmlextra --reporter-htmlextra-export var/reports/index.html --suppress-exit-code"
+  String command="newman run newman-example-collection.postman_collection.json -n 50 -r htmlextra --reporter-htmlextra-export var/reports/index.html --suppress-exit-code"
   println("${command}")
   commons.executeSh(command)
 
