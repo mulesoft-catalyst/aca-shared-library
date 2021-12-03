@@ -34,12 +34,12 @@ def call(Map config){
               NEWMAN_PATH = "newman"
               NEWMAN_COLLECTION = "newman-example-collection.postman_collection.json"
               NEWMAN_ITERATIONS = 50
-              POSTMAN_REPORT_PATH = "var/reports"
+              POSTMAN_REPORT_PATH = ""
               POSTMAN_REPORT_FILENAME = "index.html"
             }
             steps {
                 script {
-                  acaJobs.executeLoadTesting("${NEWMAN_PATH}", "${NEWMAN_COLLECTION}", "${NEWMAN_ITERATIONS}", "${POSTMAN_REPORT_PATH}", "${POSTMAN_REPORT_FILENAME}")
+                  acaJobs.executeLoadTesting("${NEWMAN_PATH}", "${WORKSPACE}/${NEWMAN_COLLECTION}", "${NEWMAN_ITERATIONS}", "${WORKSPACE}/${POSTMAN_REPORT_PATH}", "${POSTMAN_REPORT_FILENAME}")
                 }
             }
           }
