@@ -36,7 +36,7 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
 
   echo "executeLoadTesting()"
   echo pwd()
-  String command="newman run newman-example-collection.postman_collection.json -n 50 -r htmlextra --reporter-htmlextra-export /var/reports/index.html --suppress-exit-code"
+  String command="newman run newman-example-collection.postman_collection.json -n 50 -r htmlextra --reporter-htmlextra-export index.html --suppress-exit-code"
   println("${command}")
   commons.executeSh(command)
 
@@ -45,7 +45,7 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
     allowMissing: true,
     alwaysLinkToLastBuild: false,
     keepAll: false,
-    reportDir: '/var/reports',
+    reportDir: '/',
     reportFiles: 'index.html',
     reportName: 'Canary Load Test Report',
     reportTitles: ''
