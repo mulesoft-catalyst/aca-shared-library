@@ -4,8 +4,8 @@
 //Date: November 2021
 //Description: Example pipeline to demonstrate the usage of the automated canary analysis shared library.
 //This pipeline was created by the author specifically for AT&T needs,
-//it is responsability of AT&T teams to evolve and maintain these scripts when
-//the author is not involved in the project anymore
+//This script was created for research purposes. By no means should be used as-is without understanding what it does and the risks involved.
+//Likewise, future modifications must be made by whoever uses it
 
 @Library('automated-canary-analysis-lib') _
 

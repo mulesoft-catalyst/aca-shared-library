@@ -29,7 +29,7 @@ def call(Map config){
 
         stage("Wait for deployment"){
           steps {
-            sleep(300)
+            sleep("${params.deploymentWaitTime}")
           }
         }
 
