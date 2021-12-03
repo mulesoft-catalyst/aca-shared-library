@@ -3,11 +3,15 @@
 //Author: Gaston Panizza
 //Date: November 2021
 //Description: Functions definition used across the Automated Canary Analysis Library. Used by the acaPipeline.groovy
-//This script was created for research purposes. By no means should be used as-is without understanding what it does and the risks involved. 
+//This script was created for research purposes. By no means should be used as-is without understanding what it does and the risks involved.
 //Likewise, future modifications must be made by whoever uses it
 
 import groovy.json.JsonSlurper
 
+/*
+  Goal: Perform required steps in Anypoint Platform using Platform APIs. It uploads a new asset to Exchange, creates an API instance,
+  applies a policy and deploys a proxy app
+*/
 def applyCanaryPolicy(String organizationId, String environmentId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String assetIdPolicy, String assetVersionPolicy,
                       String host, String port, String protocol, String path, String weight,
                       String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
@@ -22,6 +26,9 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
   def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
 }
 
+/*
+  Goal: Executes a Load Testing to collect enough data points to perform an ACA
+*/
 def executeLoadTesting(String newmanPath, String newmanCollection, String newmanIterations, String reportPath, String reportFilename){
   dir("${WORKSPACE}"){
     String command = """${newmanPath} run ${newmanCollection} \
@@ -30,6 +37,7 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
       --env-var RESOURCE=${params.endpointResource} \
       -n ${newmanIterations} \
       -r htmlextra \
+      --reporter-htmlextra-title "Automated Canary Analysis Load Test" \
       --reporter-htmlextra-export ${reportPath}/${reportFilename} \
       --suppress-exit-code"""
 
@@ -49,6 +57,9 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
   }
 }
 
+/*
+  Goal: Executes an Async ACA
+*/
 def executeCanaryAnalysis(String canaryServerProtocol, String canaryServer, String canaryServerPort, String canaryConfig, String appName){
   def post = new URL("${canaryServerProtocol}://${canaryServer}:${canaryServerPort}/standalone_canary_analysis/?metricsAccountName=canary-prometheus&storageAccountName=in-memory-store-account&application=${appName}").openConnection();
   def message = "${canaryConfig}"
@@ -65,6 +76,9 @@ def executeCanaryAnalysis(String canaryServerProtocol, String canaryServer, Stri
   return result.canaryAnalysisExecutionId;
 }
 
+/*
+  Goal: Retrieves the result for a given ACA
+*/
 def retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, String canaryServerPort, String analysisId){
   def url = "${canaryServerProtocol}://${canaryServer}:${canaryServerPort}/standalone_canary_analysis/${analysisId}";
   def get = new URL(url).openConnection();
@@ -79,10 +93,18 @@ def retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, St
   return result.canaryAnalysisExecutionResult;
 }
 
+/*
+  Goal: Takes decisions according the ACA result
+*/
 def decideBasedOnResults(){
+  //TODO: Implement logic according two scenarios: Analysis was successful and Analysis failed
+  // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
   echo "ok"
 }
 
+/*
+  Goal: Uploads asset to Exchange and create the API Manager instance
+*/
 def createProxy(String organizationId, String environmentId, String groupId, String assetId, String assetVersion, String assetName, String assetClassifier, String apiVersion){
 
   //API Manager API config
@@ -146,6 +168,9 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
 
 }
 
+/*
+  Goal: Applies a policy to the created API Instance
+*/
 def applyPolicy(String organizationId, String environmentId, String groupId, String assetId, String assetVersion, String proxyApiId,
                 String host, String port, String protocol, String path, String weight,
                 String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){

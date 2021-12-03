@@ -23,7 +23,6 @@ def getAuthToken() {
          def response = process.text
 
          def rawResponse = response.split("HTTPSTATUS:")[0]
-         println "Token reponse: ${rawResponse}"
 
          return "${rawResponse}"
   }
