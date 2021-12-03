@@ -33,6 +33,8 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
     --reporter-htmlextra-export ${reportPath}/${reportFilename} \
     --suppress-exit-code"""*/
 
+  echo "executeLoadTesting()"
+  echo pwd
   String command="newman run newman-example-collection.postman_collection.json -n 50 -r htmlextra --reporter-htmlextra-export vars/index.html --suppress-exit-code"
   println("${command}")
   commons.executeSh(command)
