@@ -24,15 +24,16 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
 }
 
 def executeLoadTesting(String newmanPath, String newmanCollection, String newmanIterations, String reportPath, String reportFilename){
-  String command = """${newmanPath} run ${newmanCollection} \
+  /*String command = """${newmanPath} run ${newmanCollection} \
     --env-var PROTOCOL=${params.endpointProtocol} \
     --env-var URL=${params.endpointHost} \
     --env-var RESOURCE=${params.endpointResource} \
     -n ${newmanIterations} \
     -r htmlextra \
     --reporter-htmlextra-export ${reportPath}/${reportFilename} \
-    --suppress-exit-code"""
+    --suppress-exit-code"""*/
 
+  String command="newman run newman-example-collection.postman_collection.json --env-var PROTOCOL=https --env-var URL=httpbin.org --env-var RESOURCE=get -n 50 -r htmlextra --reporter-htmlextra-export var/reports/index.html --suppress-exit-code"
   println("${command}")
   commons.executeSh(command)
 
