@@ -12,7 +12,6 @@
 
 def analysisId = ''
 
-//Waiting time in seconds to sleep before retrieve analysis result. TODO: Externalize as part of the canary configuration
 def call(Map config){
   pipeline {
       agent any
