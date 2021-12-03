@@ -45,8 +45,8 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
     allowMissing: true,
     alwaysLinkToLastBuild: false,
     keepAll: false,
-    reportDir: "var/reports",
-    reportFiles: "index.html",
+    reportDir: '/var/reports',
+    reportFiles: 'index.html',
     reportName: 'Canary Load Test Report',
     reportTitles: ''
   ])
