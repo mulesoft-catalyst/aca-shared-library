@@ -30,7 +30,7 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
     --env-var RESOURCE=${params.endpointResource} \
     -n ${newmanIterations} \
     -r htmlextra \
-    --reporter-htmlextra-export ${reportPath} \
+    --reporter-htmlextra-export ${reportPath}/${reportFilename} \
     --suppress-exit-code"""
 
   println("${command}")
