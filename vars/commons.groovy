@@ -56,7 +56,7 @@ def executePostWithMultipart(String curlCommand, String expectedHttpCode, String
 def executeSh(String pipedCommand){
   dir("${WORKSPACE}"){
     echo "executeSh()"
-    echo ls
+    echo pwd()
     def process = [ 'bash', '-c', "${pipedCommand}" ].execute()
     process.waitFor()
     def output = process.text
