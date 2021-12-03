@@ -96,10 +96,13 @@ def retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, St
 /*
   Goal: Takes decisions according the ACA result
 */
-def decideBasedOnResults(String analysisResult){
+def decideBasedOnResults(analysisResult){
   //TODO: Implement logic according two scenarios: Analysis was successful and Analysis failed
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
-  println "${analysisResult}"
+  def slurper = new JsonSlurper()
+  def result = slurper.parseText(analysisResult.getInputStream().getText())
+  
+  println "${result}"
   echo "ok"
 }
 
