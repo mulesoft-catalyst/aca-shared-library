@@ -38,8 +38,9 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
   echo pwd()
   String command="newman run newman-example-collection.postman_collection.json -n 50 -r htmlextra --reporter-htmlextra-export index.html --suppress-exit-code"
   println("${command}")
-  commons.executeSh(command)
+  //commons.executeSh(command)
 
+  sh "${command}"
   publishHTML( target:
   [
     allowMissing: true,
