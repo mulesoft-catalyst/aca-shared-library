@@ -1,5 +1,14 @@
 #!/usr/bin/groovy
 
+//Author: Gaston Panizza
+//Date: November 2021
+//Description: Pipeline definition to execute an automated canary analysis.
+//Usage: acaBuildParams() reference and configure the build params require to run the Pipeline
+//       acaPipeline() Run the pipeline
+//This pipeline was created by the author specifically for AT&T needs,
+//it is responsability of AT&T teams to evolve and maintain these scripts when
+//the author is not involved in the project anymore
+
 def analysisId = ''
 
 //Waiting time in seconds to sleep before retrieve analysis result. TODO: Externalize as part of the canary configuration
