@@ -10,11 +10,8 @@
 //This script was created for research purposes. By no means should be used as-is without understanding what it does and the risks involved.
 //Likewise, future modifications must be made by whoever uses it
 
-import groovy.json.JsonSlurper
-
 def analysisId = ''
-Map analysisResult = null
-
+def analysisResult = null
 
 def call(Map config){
   pipeline {
@@ -82,7 +79,7 @@ def call(Map config){
           stage("Retrieve Analysis canary Results"){
             steps {
               script {
-                analysisResult = readJSON text: (acaJobs.retrieveAnalysisResults("${params.canaryServerProtocol}", "${params.canaryServer}", "${params.canaryServerPort}", analysisId))
+                analysisResult = acaJobs.retrieveAnalysisResults("${params.canaryServerProtocol}", "${params.canaryServer}", "${params.canaryServerPort}", analysisId)
               }
             }
           }
