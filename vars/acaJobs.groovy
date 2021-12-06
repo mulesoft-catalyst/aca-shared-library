@@ -7,6 +7,7 @@
 //Likewise, future modifications must be made by whoever uses it
 
 import groovy.json.JsonSlurper
+import groovy.json.JsonSlurperClassic
 
 /*
   Goal: Perform required steps in Anypoint Platform using Platform APIs. It uploads a new asset to Exchange, creates an API instance,
@@ -90,7 +91,7 @@ def retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, St
   def slurper = new JsonSlurper()
   def result = slurper.parseText(get.getInputStream().getText())
 
-  return result.canaryAnalysisExecutionResult;
+  return new HashMap<>(result.canaryAnalysisExecutionResult);
 }
 
 /*
@@ -101,7 +102,7 @@ def decideBasedOnResults(analysisResult){
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
   def slurper = new JsonSlurper()
   def result = slurper.parseText(analysisResult.getInputStream().getText())
-  
+
   println "${result}"
   echo "ok"
 }
