@@ -10,8 +10,10 @@
 //This script was created for research purposes. By no means should be used as-is without understanding what it does and the risks involved.
 //Likewise, future modifications must be made by whoever uses it
 
+import groovy.json.JsonSlurper
+
 def analysisId = ''
-def analysisResult
+def analysisResult = new JsonSlurper()
 
 def call(Map config){
   pipeline {
