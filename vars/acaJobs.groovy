@@ -105,7 +105,8 @@ def decideBasedOnResults(analysisResult){
   //def result = slurper.parseText(analysisResult)
 
   println "${analysisResult}"
-  println "${analysisResult.didPassThresholds}"
+  println JsonOutput.prettyPrint(JsonOutput.toJson(analysisResult))
+  //println "${analysisResult.didPassThresholds}"
   echo "ok"
 }
 
