@@ -7,7 +7,6 @@
 //Likewise, future modifications must be made by whoever uses it
 
 import groovy.json.JsonSlurper
-import groovy.json.JsonSlurperClassic
 
 /*
   Goal: Perform required steps in Anypoint Platform using Platform APIs. It uploads a new asset to Exchange, creates an API instance,
@@ -88,8 +87,8 @@ def retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, St
   get.setRequestProperty("Content-Type", "application/json")
   def getRC = get.getResponseCode();
 
-  def slurper = new JsonSlurperClassic()
-  def result = slurper.parseText(get.getInputStream().getText())
+  //def slurper = new JsonSlurperClassic()
+  def result = commons.parseJsonText(get.getInputStream().getText()) //slurper.parseText(get.getInputStream().getText())
 
   return result.canaryAnalysisExecutionResult;
 }
@@ -97,11 +96,11 @@ def retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, St
 /*
   Goal: Takes decisions according the ACA result
 */
-def decideBasedOnResults(Map analysisResult){
+def decideBasedOnResults(analysisResult){
   //TODO: Implement logic according two scenarios: Analysis was successful and Analysis failed
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
-  def slurper = new JsonSlurper()
-  def result = slurper.parseText(analysisResult.getInputStream().getText())
+  //def slurper = new JsonSlurper()
+  def result = commons.parseJsonText(analysisResult.getInputStream().getText()) //slurper.parseText(analysisResult.getInputStream().getText())
 
   println "${result}"
   echo "ok"
