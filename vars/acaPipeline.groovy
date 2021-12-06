@@ -11,7 +11,7 @@
 //Likewise, future modifications must be made by whoever uses it
 
 def analysisId = ''
-def analysisResult = null
+def analysisResult
 
 def call(Map config){
   pipeline {
