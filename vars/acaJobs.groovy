@@ -8,6 +8,7 @@
 
 import groovy.json.JsonSlurper
 import groovy.json.JsonSlurperClassic
+import groovy.json.JsonOutput
 
 /*
   Goal: Perform required steps in Anypoint Platform using Platform APIs. It uploads a new asset to Exchange, creates an API instance,
@@ -104,7 +105,7 @@ def decideBasedOnResults(analysisResult){
   //def result = slurper.parseText(analysisResult)
 
   println "${analysisResult}"
-  println "${didPassThresholds}"
+  println "${analysisResult.didPassThresholds}"
   echo "ok"
 }
 
