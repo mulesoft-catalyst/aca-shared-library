@@ -7,6 +7,7 @@
 //Likewise, future modifications must be made by whoever uses it
 
 import groovy.json.JsonSlurper
+import groovy.json.JsonSlurperClassic
 
 /*
   Goal: Perform required steps in Anypoint Platform using Platform APIs. It uploads a new asset to Exchange, creates an API instance,
