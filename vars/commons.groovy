@@ -7,8 +7,6 @@
 //This script was created for research purposes. By no means should be used as-is without understanding what it does and the risks involved.
 //Likewise, future modifications must be made by whoever uses it
 
-import groovy.json.JsonSlurper
-
 //Goal: Obtain an access token that can be used to authenticate Anypoint Platform APIs
 def getAuthToken() {
   def oAuthUrl = "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
@@ -64,14 +62,4 @@ def executeSh(String pipedCommand){
     println "Error is: ${err.toString()}"
     return out.toString()
   }
-}
-
-//Goal: return a map of maps instead of JSON object
-@NonCPS
-def parseJsonText(String json) {
-  def object = new JsonSlurper().parseText(json)
-  if(object instanceof groovy.json.internal.LazyMap) {
-      return new HashMap<>(object)
-  }
-  return object
 }
