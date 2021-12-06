@@ -13,7 +13,8 @@
 import groovy.json.JsonSlurper
 
 def analysisId = ''
-def analysisResult = new JsonSlurper()
+Map analysisResult = null
+
 
 def call(Map config){
   pipeline {
@@ -81,7 +82,7 @@ def call(Map config){
           stage("Retrieve Analysis canary Results"){
             steps {
               script {
-                analysisResult = acaJobs.retrieveAnalysisResults("${params.canaryServerProtocol}", "${params.canaryServer}", "${params.canaryServerPort}", analysisId)
+                analysisResult = readJSON text: (acaJobs.retrieveAnalysisResults("${params.canaryServerProtocol}", "${params.canaryServer}", "${params.canaryServerPort}", analysisId))
               }
             }
           }
