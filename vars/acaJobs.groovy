@@ -88,10 +88,10 @@ def retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, St
   get.setRequestProperty("Content-Type", "application/json")
   def getRC = get.getResponseCode();
 
-  def slurper = new JsonSlurper()
+  def slurper = new JsonSlurperClassic()
   def result = slurper.parseText(get.getInputStream().getText())
 
-  return new HashMap<>(result.canaryAnalysisExecutionResult);
+  return result.canaryAnalysisExecutionResult;
 }
 
 /*
