@@ -19,7 +19,6 @@ def getAuthToken() {
            | sed -n 's|.*\"access_token\":\"\\([^\"]*\\)\".*|\\1|p'"
 
          def response = executeSh(curlCommand)
-
          def rawResponse = response.split("HTTPSTATUS:")[0]
          return "${rawResponse}"
   }
@@ -38,13 +37,12 @@ def executePostWithBody(String url, String token, String body, String expectedHt
 }
 
 //Goal: execute a PATCH request with a body using Curl in a thread. TODO: refactor along with executePostWithBody to make it a single function
-def executePatchWithBody(String url, String token, String body){
+def executePatchWithBody(String url, String body){
+  def token = "fff8141b-ab75-4290-9628-9061b8679816"
   String curlCommand="curl -X PATCH -d '${body}' -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}"
   println "${curlCommand}"
   def response = executeSh(curlCommand)
   println "${response}"
-  //def rawResponse = response.split("HTTPSTATUS:")[0]
-  //println "rawResponse: ${rawResponse}"
 }
 
 //Goal: execute a multipart POST request using Curl in a thread
