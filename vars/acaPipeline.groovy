@@ -12,9 +12,6 @@
 
 def analysisId = ''
 def analysisResult = ''
-def applyCanaryPolicyResponse = ''
-def proxyApiId = ''
-def policyId = ''
 
 def call(Map config){
   pipeline {
@@ -38,9 +35,7 @@ def call(Map config){
           steps {
             script {
               echo "Using map: Calling applyCanaryPolicy with ${params.organizationId}, ${params.environmentId}, ${params.groupId}, ${params.assetId}, ${params.assetName}, ${params.assetVersion}, ${params.assetClassifier}, ${params.apiVersion}, ${params.assetIdPolicy}, ${params.assetVersionPolicy}, ${params.host}, ${params.port}, ${params.protocol}, ${params.path}, ${params.weight}, ${params.hostCanary}, ${params.portCanary}, ${params.protocolCanary}, ${params.pathCanary}, ${params.weightCanary}"
-              applyCanaryPolicyResponse = acaJobs.applyCanaryPolicy("${params.organizationId}", "${params.environmentId}", "${params.groupId}", "${params.assetId}", "${params.assetName}", "${params.assetVersion}", "${params.assetClassifier}", "${params.apiVersion}", "${params.assetIdPolicy}", "${params.assetVersionPolicy}", "${params.host}", "${params.port}", "${params.protocol}", "${params.path}", "${params.weight}", "${params.hostCanary}", "${params.portCanary}", "${params.protocolCanary}", "${params.pathCanary}", "${params.weightCanary}")
-              proxyApiId=applyCanaryPolicyResponse.proxyApiId
-              policyId=applyCanaryPolicyResponse.policyId
+              acaJobs.applyCanaryPolicy("${params.organizationId}", "${params.environmentId}", "${params.groupId}", "${params.assetId}", "${params.assetName}", "${params.assetVersion}", "${params.assetClassifier}", "${params.apiVersion}", "${params.assetIdPolicy}", "${params.assetVersionPolicy}", "${params.host}", "${params.port}", "${params.protocol}", "${params.path}", "${params.weight}", "${params.hostCanary}", "${params.portCanary}", "${params.protocolCanary}", "${params.pathCanary}", "${params.weightCanary}")
             }
           }
         }
@@ -102,7 +97,7 @@ def call(Map config){
           stage("Decided Based on Results"){
             steps {
               script {
-                acaJobs.decideBasedOnResults("${analysisResult}", "${params.organizationId}", "${params.environmentId}", "${proxyApiId}", "${policyId}",
+                acaJobs.decideBasedOnResults("${analysisResult}", "${params.organizationId}", "${params.environmentId}",
                                             "${params.host}", "${params.port}", "${params.protocol}", "${params.path}", "${params.weightBaseSuccessful}",
                                             "${params.hostCanary}", "${params.portCanary}", "${params.protocolCanary}", "${params.pathCanary}", "${params.weightCanarySuccessful}")
               }
