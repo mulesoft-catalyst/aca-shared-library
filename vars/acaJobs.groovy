@@ -106,7 +106,7 @@ def decideBasedOnResults(String analysisResult, String organizationId, String en
     if(result.canaryAnalysisExecutionResult.didPassThresholds){
       //Increase traffic
       println "Increasing traffic weight to Canary"
-      updateCanaryTraffic("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}", "${weightBase}, "${weightCanary})
+      updateCanaryTraffic("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}", "${weightBase}", "${weightCanary}")
     }else{
       //Rollback Canary
       println "Rollbacking Canary"
