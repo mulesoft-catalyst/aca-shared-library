@@ -32,8 +32,10 @@ def String applyCanaryPolicy(String organizationId, String environmentId, String
 
   //Step 2 - Apply the policy
   def applyPolicyResponse = applyPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetIdPolicy}", "${assetVersionPolicy}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
-  policyId=slurper.parseText(applyPolicyResponse).id
-
+  def result=slurper.parseText(applyPolicyResponse)
+  policyId=result.id
+  println policyId.getClass()
+  
   //Step 3 - Deploy the proxy (optional)
   def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
 
