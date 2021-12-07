@@ -228,10 +228,14 @@ def String applyPolicy(String organizationId, String environmentId, String group
 
 //  proc.consumeProcessOutput(out, err)
 //  proc.waitFor()
-  def policyId = commons.executeSh("echo '${response}' | sed -n 's|.*\"id\":\([^\"]*\),.*|\1|p'")
 
-  println "${policyId}"
-  return "Created Policy ID is: ${policyId.trim()}"
+//def policyId = commons.executeSh("echo '${response}' | sed -n 's|.*\"id\":\([^\"]*\),.*|\1|p'")
+def slurper = new JsonSlurper()
+def result = slurper.parseText(response)
+  def policyId = result.id
+  println "${policyId.toString().trim()}"
+  println "Created Policy ID is: ${policyId.trim()}"
+  return "${policyId}"
   //println "Created Policy ID is: ${out.toString()}"
   //return "${out.toString().trim()}"
   //return "${response}"
