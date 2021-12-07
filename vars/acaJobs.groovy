@@ -214,8 +214,6 @@ def String applyPolicy(String organizationId, String environmentId, String group
   }
   """
 
-  def jsonBody = groovy.json.JsonOutput.toJson(postBody)
-
   def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
 
   def authToken=commons.getAuthToken()
@@ -237,8 +235,6 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
       "expectedStatus":"deployed"
   }
   """
-
-  def jsonBody = groovy.json.JsonOutput.toJson(postBody)
 
   def deploymentsUrl = "${apiProxiesEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
 
@@ -284,6 +280,6 @@ def updateCanaryTraffic(String organizationId, String environmentId, String prox
       }
   }
   """
-  def response=commons.executePatchWithBody("${policiesUrl}", "", "${body}", "204", "updateCanaryTraffic")
+  def response=commons.executePatchWithBody("${policiesUrl}", "123", "${body}")
   println "${response}"
 }
