@@ -284,7 +284,6 @@ def updateCanaryTraffic(String organizationId, String environmentId, String prox
       }
   }
   """
-  String authToken=commons.getAuthToken().toString().trim()
-  commons.executePatchWithBody("${policiesUrl}", "${authToken}", "", "204", "updateCanaryTraffic")
+  def response=commons.executePatchWithBody("${policiesUrl}", "", "${body}", "204", "updateCanaryTraffic")
   println "${response}"
 }
