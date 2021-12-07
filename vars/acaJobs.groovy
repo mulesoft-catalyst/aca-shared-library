@@ -222,23 +222,11 @@ def String applyPolicy(String organizationId, String environmentId, String group
 
   def response = commons.executePostWithBody("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
 
-//  def out = new ByteArrayOutputStream()
-//  def err = new ByteArrayOutputStream()
-//  def proc = ['bash', '-c', "echo '${response}' | sed -n 's|.*\"id\":\\([^\"]*\\),.*|\1|p'"].execute()
-
-//  proc.consumeProcessOutput(out, err)
-//  proc.waitFor()
-
-//def policyId = commons.executeSh("echo '${response}' | sed -n 's|.*\"id\":\([^\"]*\),.*|\1|p'")
-def slurper = new JsonSlurper()
-def result = slurper.parseText(response)
+  def slurper = new JsonSlurper()
+  def result = slurper.parseText(response)
   def policyId = result.id
-  println "${policyId.toString().trim()}"
-  println "Created Policy ID is: ${policyId.trim()}"
+  println "Created Policy ID is: ${policyId.toString().trim()}"
   return "${policyId}"
-  //println "Created Policy ID is: ${out.toString()}"
-  //return "${out.toString().trim()}"
-  //return "${response}"
 }
 
 def deployCreatedProxy(String organizationId, String environmentId, String assetId, String proxyApiId){
