@@ -40,9 +40,9 @@ def executePostWithBody(String url, String token, String body, String expectedHt
 def executePatchWithBody(String url, String body, String token){
   String curlCommand="curl -X PATCH -d '${body}' -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}"
   def response = executeSh(curlCommand)
-  def rawResponse = response.split("HTTPSTATUS:")[0]
-  println "rawResponse: ${rawResponse}"
-  return "${rawResponse}"
+  //def rawResponse = response.split("HTTPSTATUS:")[0]
+  //println "rawResponse: ${rawResponse}"
+  //return "${rawResponse}"
 }
 
 //Goal: execute a multipart POST request using Curl in a thread
