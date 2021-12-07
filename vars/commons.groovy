@@ -47,8 +47,6 @@ def executePatchWithBody(url, token, body, expectedHttpCode, methodName){
   println "${response}"
   def rawResponse = response.split("HTTPSTATUS:")[0]
   println "rawResponse: ${rawResponse}"
-
-  return "${rawResponse}"
 }
 
 //Goal: execute a multipart POST request using Curl in a thread
