@@ -23,7 +23,7 @@ def getAuthToken() {
          def response = process.text
 
          def rawResponse = response.split("HTTPSTATUS:")[0]
-
+         println "${rawResponse}"
          return "${rawResponse}"
   }
 }
@@ -40,8 +40,31 @@ def executePostWithBody(String url, String token, String body, String expectedHt
   return "${rawResponse}"
 }
 
+//Goal: execute a PATCH request with a body using Curl in a thread. TODO: refactor along with executePostWithBody to make it a single function
+def executePatchWithBody(String url, String token, String body, String expectedHttpCode, String methodName){
+  String curlCommand="curl -X PATCH -d '${body}' -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}"
+  def response = executeSh(curlCommand)
+
+  def rawResponse = response.split("HTTPSTATUS:")[0]
+  println "rawResponse: ${rawResponse}"
+
+  return "${rawResponse}"
+}
+
 //Goal: execute a multipart POST request using Curl in a thread
 def executePostWithMultipart(String curlCommand, String expectedHttpCode, String methodName){
+  def response = executeSh(curlCommand)
+
+  def rawResponse = response.split("HTTPSTATUS:")[0]
+  println "rawResponse: ${rawResponse}"
+
+  return "${rawResponse}"
+}
+
+
+//Goal: execute a DELETE request with a body using Curl in a thread.
+def executeDelete(String url, String token, String expectedHttpCode, String methodName){
+  String curlCommand="curl -X DELETE -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}"
   def response = executeSh(curlCommand)
 
   def rawResponse = response.split("HTTPSTATUS:")[0]

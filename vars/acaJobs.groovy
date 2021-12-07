@@ -12,7 +12,7 @@ import groovy.json.JsonSlurper
   Goal: Perform required steps in Anypoint Platform using Platform APIs. It uploads a new asset to Exchange, creates an API instance,
   applies a policy and deploys a proxy app
 */
-def applyCanaryPolicy(String organizationId, String environmentId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String assetIdPolicy, String assetVersionPolicy,
+def String applyCanaryPolicy(String organizationId, String environmentId, String groupId, String assetId, String assetName, String assetVersion, String assetClassifier, String apiVersion, String assetIdPolicy, String assetVersionPolicy,
                       String host, String port, String protocol, String path, String weight,
                       String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
 
@@ -24,6 +24,8 @@ def applyCanaryPolicy(String organizationId, String environmentId, String groupI
 
   //Step 3 - Deploy the proxy (optional)
   def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
+
+  return "${proxyApiId}"
 }
 
 /*
@@ -93,19 +95,25 @@ def String retrieveAnalysisResults(String canaryServerProtocol, String canarySer
 /*
   Goal: Takes decisions according the ACA result
 */
-def decideBasedOnResults(String analysisResult){
+def decideBasedOnResults(String analysisResult, String organizationId, String environmentId, String proxyApiId, String weightBase, String weightCanary){
   //TODO: Implement logic according two scenarios: Analysis was successful and Analysis failed
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
   def slurper = new JsonSlurper()
   def result = slurper.parseText(analysisResult)
+  def authToken=commons.getAuthToken()
 
   if(result.complete == true){
     if(result.canaryAnalysisExecutionResult.didPassThresholds){
       //Increase traffic
       println "Increasing traffic weight to Canary"
+      updateCanaryTraffic("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}", "${weightBase}, "${weightCanary})
     }else{
       //Rollback Canary
       println "Rollbacking Canary"
+      //Rollback the API Manager app
+      rollBackCreatedProxy("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}")
+      //Rollback the API Manager instance
+      rollbackProxyInstance("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}")
     }
   }
 }
@@ -238,5 +246,44 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
 
   def authToken=commons.getAuthToken()
   def response = commons.executePostWithBody("${deploymentsUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 3")
+  return "${response}"
+}
+
+//TODO: move to commons and make extra headers an optional step of the executeDelete function
+def rollBackCreatedProxy(String organizationId, String environmentId, String appId, String authToken){
+  //TODO refactor
+  def applicationsEndpoint = "https://anypoint.mulesoft.com/hybrid/api/v1/applications/${appId}"
+  String curlCommand = "curl \
+  -w 'HTTPSTATUS:%{http_code}' \
+  -X DELETE ${applicationsEndpoint} \
+  -H 'Authorization: Bearer ${authToken}' \
+  -H 'X-ANYPNT-ENV-ID: ${environmentId}' \
+  -H 'X-ANYPNT-ORG-ID: ${organizationId}' \
+  -H 'Content-Type: application/json' "
+
+  def response = commons.executeSh(curlCommand)
+
+  def rawResponse = response.split("HTTPSTATUS:")[0]
+  println "rawResponse: ${rawResponse}"
+}
+
+def rollbackProxyInstance(String organizationId, String environmentId, String proxyApiId, String authToken){
+  //TODO refactor
+  def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
+  def response = commons.executeDelete("${apiManagerEndpoint}", "${authToken}", "204", "updateCanaryTraffic")
+  return "${response}"
+}
+
+def updateCanaryTraffic(String organizationId, String environmentId, String proxyApiId, String authToken, String weightBase, String weightCanary){
+  def policiesUrl = https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
+  def body = """
+  {
+      "configurationData": {
+        "weight": "${weightBase}",
+        "weightCanary": "${weightCanary}"
+      }
+  }
+  """
+  def response = commons.executePatchWithBody("${policiesUrl}", "${authToken}", "${body}", "204", "updateCanaryTraffic")
   return "${response}"
 }
