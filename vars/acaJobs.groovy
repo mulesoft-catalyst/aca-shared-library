@@ -26,11 +26,13 @@ def String applyCanaryPolicy(String organizationId, String environmentId, String
 
   //Step 2 - Apply the policy
   def applyPolicyResponse = applyPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetIdPolicy}", "${assetVersionPolicy}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
+  println applyPolicyResponse.getClass()
 
   //Step 3 - Deploy the proxy (optional)
   def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
 
-  return "${proxyApiId}"
+  //return "${proxyApiId}"
+  return jsonSlurper.parseText('{ "proxyApiId": "${proxyApiId}", "policyId": "${applyPolicyResponse.id.toString().trim()}" } ')
 }
 
 /*
@@ -100,7 +102,9 @@ def String retrieveAnalysisResults(String canaryServerProtocol, String canarySer
 /*
   Goal: Takes decisions according the ACA result
 */
-def decideBasedOnResults(String analysisResult, String organizationId, String environmentId, String proxyApiId, String weightBase, String weightCanary){
+def decideBasedOnResults(String analysisResult, String organizationId, String environmentId, String proxyApiId, String policyId,
+                        String host, String port, String protocol, String path, String weightBase,
+                        String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
   //TODO: Implement logic according two scenarios: Analysis was successful and Analysis failed
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
   def slurper = new JsonSlurper()
@@ -109,7 +113,7 @@ def decideBasedOnResults(String analysisResult, String organizationId, String en
     if(result.canaryAnalysisExecutionResult.didPassThresholds){
       //Increase traffic
       println "Increasing traffic weight to Canary"
-      updateCanaryTraffic("${organizationId}", "${environmentId}", "${proxyApiId}", "${weightBase}", "${weightCanary}")
+      updateCanaryTraffic("${organizationId}", "${environmentId}", "${groupId}", "${assetIdPolicy}", "${assetVersionPolicy}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weightBase}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
     }else{
       //Rollback Canary
       println "Rollbacking Canary"
@@ -130,8 +134,6 @@ def String createProxy(String organizationId, String environmentId, String group
   def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
 
   def exchangeAssetsUrl = "https://anypoint.mulesoft.com/exchange/api/v1/assets"
-
-  //def authToken=commons.getAuthToken()
 
   //Step a) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
     String curlCommand = "curl \
@@ -221,7 +223,6 @@ def String applyPolicy(String organizationId, String environmentId, String group
 
   def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
 
-  //def authToken=commons.getAuthToken()
   def response = commons.executePostWithBody("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
   return "${response}"
 }
@@ -243,7 +244,6 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
 
   def deploymentsUrl = "${apiProxiesEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
 
-  //def authToken=commons.getAuthToken()
   def response = commons.executePostWithBody("${deploymentsUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 3")
   return "${response}"
 }
@@ -251,7 +251,6 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
 //TODO: move to commons and make extra headers an optional step of the executeDelete function
 def rollBackCreatedProxy(String organizationId, String environmentId, String appId){
   //TODO refactor
-  //def authToken=commons.getAuthToken()
   def applicationsEndpoint = "https://anypoint.mulesoft.com/hybrid/api/v1/applications/${appId}"
   String curlCommand = "curl \
   -w 'HTTPSTATUS:%{http_code}' \
@@ -270,25 +269,26 @@ def rollBackCreatedProxy(String organizationId, String environmentId, String app
 def rollbackProxyInstance(String organizationId, String environmentId, String proxyApiId){
   //TODO refactor
   def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
-  //def authToken=commons.getAuthToken()
   def response = commons.executeDelete("${apiManagerEndpoint}", "${authToken}", "204", "updateCanaryTraffic")
   return "${response}"
 }
 
-def updateCanaryTraffic(String organizationId, String environmentId, String proxyApiId, String weightBase, String weightCanary){
-  def policiesUrl = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
+def updateCanaryTraffic(String organizationId, String environmentId, String proxyApiId, String policyId,
+                        String host, String port, String protocol, String path, String weightBase,
+                        String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
+  def policiesUrl = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies/${policyId}"
   def body = """{
       "configurationData": {
-            "host": "httpstat.us",
-            "port": "443",
-            "protocol": "HTTPS",
-            "path": "/200",
-            "weight": "${weightBase}",
-            "hostCanary": "httpstat.us",
-            "portCanary": "443",
-            "protocolCanary": "HTTPS",
-            "pathCanary": "/500",
-            "weightCanary": "${weightCanary}"
+        "host": "${host}",
+        "port": "${port}",
+        "protocol": "${protocol}",
+        "path": "${path}",
+        "weight": "${weightBase}",
+        "hostCanary": "${hostCanary}",
+        "portCanary": "${portCanary}",
+        "protocolCanary": "${protocolCanary}",
+        "pathCanary": "${pathCanary}",
+        "weightCanary": "${weightCanary}"
     }
   }"""
   def response=commons.executePatchWithBody("${policiesUrl}", "${body}", "${authToken}")
