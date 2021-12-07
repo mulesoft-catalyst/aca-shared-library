@@ -7,11 +7,7 @@
 //Likewise, future modifications must be made by whoever uses it
 
 import groovy.json.JsonSlurper
-
-//Globals calculated during procesing
 def authToken=''
-def proxyApiId = ''
-def policyId = ''
 
 def obtainAPToken(){
   authToken=commons.getAuthToken()
@@ -25,20 +21,17 @@ def String applyCanaryPolicy(String organizationId, String environmentId, String
                       String host, String port, String protocol, String path, String weight,
                       String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
 
-  def slurper = new JsonSlurper()
-
   //Step 1 - Create a Proxy app (optional)
-  proxyApiId=createProxy("${organizationId}", "${environmentId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
+  def proxyApiId= createProxy("${organizationId}", "${environmentId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
 
   //Step 2 - Apply the policy
   def applyPolicyResponse = applyPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetIdPolicy}", "${assetVersionPolicy}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
-  def result=slurper.parseText(applyPolicyResponse)
-  policyId=result.id
-  println policyId.getClass()
-  
+  println applyPolicyResponse.getClass()
+
   //Step 3 - Deploy the proxy (optional)
   def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
 
+  return "${proxyApiId}"
 }
 
 /*
@@ -108,9 +101,9 @@ def String retrieveAnalysisResults(String canaryServerProtocol, String canarySer
 /*
   Goal: Takes decisions according the ACA result
 */
-def decideBasedOnResults(String analysisResult, String organizationId, String environmentId,
-                        String host, String port, String protocol, String path, String weightBase,
-                        String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
+def decideBasedOnResults(String analysisResult, String organizationId, String environmentId, String proxyApiId, String policyId,
+                          String host, String port, String protocol, String path, String weightBase,
+                          String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
   //TODO: Implement logic according two scenarios: Analysis was successful and Analysis failed
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
   def slurper = new JsonSlurper()
@@ -119,7 +112,7 @@ def decideBasedOnResults(String analysisResult, String organizationId, String en
     if(result.canaryAnalysisExecutionResult.didPassThresholds){
       //Increase traffic
       println "Increasing traffic weight to Canary"
-      updateCanaryTraffic("${organizationId}", "${environmentId}", "${host}", "${port}", "${protocol}", "${path}", "${weightBase}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
+      updateCanaryTraffic("${organizationId}", "${environmentId}", "${proxyApiId}", "${policyId}", "${weightBase}", "${weightCanary}")
     }else{
       //Rollback Canary
       println "Rollbacking Canary"
@@ -279,7 +272,7 @@ def rollbackProxyInstance(String organizationId, String environmentId, String pr
   return "${response}"
 }
 
-def updateCanaryTraffic(String organizationId, String environmentId,
+def updateCanaryTraffic(String organizationId, String environmentId, String proxyApiId, String policyId,
                         String host, String port, String protocol, String path, String weightBase,
                         String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
   def policiesUrl = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies/${policyId}"
