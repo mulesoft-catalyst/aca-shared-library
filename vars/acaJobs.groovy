@@ -7,6 +7,11 @@
 //Likewise, future modifications must be made by whoever uses it
 
 import groovy.json.JsonSlurper
+def authToken=''
+
+def obtainAPToken(){
+  authToken=commons.getAuthToken()
+}
 
 /*
   Goal: Perform required steps in Anypoint Platform using Platform APIs. It uploads a new asset to Exchange, creates an API instance,
@@ -126,7 +131,7 @@ def String createProxy(String organizationId, String environmentId, String group
 
   def exchangeAssetsUrl = "https://anypoint.mulesoft.com/exchange/api/v1/assets"
 
-  def authToken=commons.getAuthToken()
+  //def authToken=commons.getAuthToken()
 
   //Step a) Create a base prx asset (201 only if the first time). TODO: implement idempotency as this step is considering we should always create an asset in Exchange
     String curlCommand = "curl \
@@ -216,7 +221,7 @@ def String applyPolicy(String organizationId, String environmentId, String group
 
   def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
 
-  def authToken=commons.getAuthToken()
+  //def authToken=commons.getAuthToken()
   def response = commons.executePostWithBody("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
   return "${response}"
 }
@@ -238,7 +243,7 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
 
   def deploymentsUrl = "${apiProxiesEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
 
-  def authToken=commons.getAuthToken()
+  //def authToken=commons.getAuthToken()
   def response = commons.executePostWithBody("${deploymentsUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 3")
   return "${response}"
 }
@@ -246,7 +251,7 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
 //TODO: move to commons and make extra headers an optional step of the executeDelete function
 def rollBackCreatedProxy(String organizationId, String environmentId, String appId){
   //TODO refactor
-  def authToken=commons.getAuthToken()
+  //def authToken=commons.getAuthToken()
   def applicationsEndpoint = "https://anypoint.mulesoft.com/hybrid/api/v1/applications/${appId}"
   String curlCommand = "curl \
   -w 'HTTPSTATUS:%{http_code}' \
@@ -265,7 +270,7 @@ def rollBackCreatedProxy(String organizationId, String environmentId, String app
 def rollbackProxyInstance(String organizationId, String environmentId, String proxyApiId){
   //TODO refactor
   def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
-  def authToken=commons.getAuthToken()
+  //def authToken=commons.getAuthToken()
   def response = commons.executeDelete("${apiManagerEndpoint}", "${authToken}", "204", "updateCanaryTraffic")
   return "${response}"
 }
@@ -274,10 +279,18 @@ def updateCanaryTraffic(String organizationId, String environmentId, String prox
   def policiesUrl = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
   def body = """{
       "configurationData": {
-        "weight": "${weightBase}",
-        "weightCanary": "${weightCanary}"
-      }
+            "host": "httpstat.us",
+            "port": "443",
+            "protocol": "HTTPS",
+            "path": "/200",
+            "weight": "${weightBase}",
+            "hostCanary": "httpstat.us",
+            "portCanary": "443",
+            "protocolCanary": "HTTPS",
+            "pathCanary": "/500",
+            "weightCanary": "${weightCanary}"
+    }
   }"""
-  def response=commons.executePatchWithBody("${policiesUrl}", "${body}")
+  def response=commons.executePatchWithBody("${policiesUrl}", "${body}", "${authToken}")
   println "${response}"
 }
