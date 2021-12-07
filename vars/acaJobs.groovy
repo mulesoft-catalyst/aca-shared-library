@@ -102,8 +102,8 @@ def decideBasedOnResults(analysisResult){
   //TODO: Implement logic according two scenarios: Analysis was successful and Analysis failed
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
   println "${analysisResult}"
-  println "${analysisResult[0]}"
-  println "${analysisResult[0].didPassThresholds}"
+
+  println analysisResult.didPassThresholds
   echo "ok"
 }
 
