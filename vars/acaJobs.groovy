@@ -229,7 +229,7 @@ def String applyPolicy(String organizationId, String environmentId, String group
 
 //  proc.consumeProcessOutput(out, err)
 //  proc.waitFor()
-  def policyId = executeSh("echo '${response}' | sed -n 's|.*\"id\":\\([^\"]*\\),.*|\1|p'")
+  def policyId = commons.executeSh("echo '${response}' | sed -n 's|.*\"id\":\\([^\"]*\\),.*|\1|p'")
   println "${policyId}"
   return "${policyId.trim()}"
   //println "Created Policy ID is: ${out.toString()}"
