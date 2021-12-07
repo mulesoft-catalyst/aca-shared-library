@@ -20,9 +20,9 @@ def call(Map config){
 
       stages{
         stage("Apply Canary Policy"){
-          when {
+          /*when {
               branch 'nonexistant'
-          }
+          }*/
           steps {
             script {
               echo "Using map: Calling applyCanaryPolicy with ${params.organizationId}, ${params.environmentId}, ${params.groupId}, ${params.assetId}, ${params.assetName}, ${params.assetVersion}, ${params.assetClassifier}, ${params.apiVersion}, ${params.assetIdPolicy}, ${params.assetVersionPolicy}, ${params.host}, ${params.port}, ${params.protocol}, ${params.path}, ${params.weight}, ${params.hostCanary}, ${params.portCanary}, ${params.protocolCanary}, ${params.pathCanary}, ${params.weightCanary}"
@@ -32,18 +32,18 @@ def call(Map config){
         }
 
         stage("Wait for deployment"){
-          when {
+          /*when {
               branch 'nonexistant'
-          }
+          }*/
           steps {
             sleep("${params.deploymentWaitTime}")
           }
         }
 
         stage('Canary Load tests') {
-            when {
+            /*when {
                 branch 'nonexistant'
-            }
+            }*/
             environment {
               NEWMAN_PATH = "newman"
               NEWMAN_COLLECTION = "base_collection.json"
