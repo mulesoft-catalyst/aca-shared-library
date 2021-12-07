@@ -21,9 +21,7 @@ def getAuthToken() {
          def process = [ 'bash', '-c', "${curlCommand}" ].execute()
          process.waitFor()
          def response = process.text
-         println response.getClass()
          def rawResponse = response.split("HTTPSTATUS:")[0]
-         println rawResponse.getClass()
          println "${rawResponse}"
          return "${rawResponse}"
   }
