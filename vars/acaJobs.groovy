@@ -275,7 +275,7 @@ def rollbackProxyInstance(String organizationId, String environmentId, String pr
 }
 
 def updateCanaryTraffic(String organizationId, String environmentId, String proxyApiId, String authToken, String weightBase, String weightCanary){
-  def policiesUrl = https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
+  def policiesUrl = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
   def body = """
   {
       "configurationData": {
