@@ -21,9 +21,8 @@ def getAuthToken() {
          def response = executeSh(curlCommand)
 
          def rawResponse = response.split("HTTPSTATUS:")[0]
-         println "${rawResponse}"
+         return "${rawResponse}"
   }
-  return "${rawResponse}"
 }
 
 
