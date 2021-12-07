@@ -25,13 +25,12 @@ def String applyCanaryPolicy(String organizationId, String environmentId, String
   def proxyApiId= createProxy("${organizationId}", "${environmentId}", "${groupId}", "${assetId}", "${assetVersion}", "${assetName}", "${assetClassifier}", "${apiVersion}")
 
   //Step 2 - Apply the policy
-  def applyPolicyResponse = applyPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetIdPolicy}", "${assetVersionPolicy}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
-  println applyPolicyResponse.getClass()
+  def policyId = applyPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetIdPolicy}", "${assetVersionPolicy}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
 
   //Step 3 - Deploy the proxy (optional)
   def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
 
-  return "${proxyApiId}"
+  return ["${proxyApiId}", "${policyId}"]
 }
 
 /*
@@ -223,7 +222,16 @@ def String applyPolicy(String organizationId, String environmentId, String group
   def localPoliciesUrl = "${apiManagerEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
 
   def response = commons.executePostWithBody("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
-  return "${response}"
+
+  def out = new ByteArrayOutputStream()
+  def err = new ByteArrayOutputStream()
+  def proc = ['bash', '-c', "echo '${response}' | sed -n 's|.*\"id\":\\([^\"]*\\)},.*|\\1|p'"].execute()
+  proc.consumeProcessOutput(out, err)
+  proc.waitFor()
+
+  println "Created Policy ID is: ${out.toString()}"
+  return "${out.toString().trim()}"
+  //return "${response}"
 }
 
 def deployCreatedProxy(String organizationId, String environmentId, String assetId, String proxyApiId){
