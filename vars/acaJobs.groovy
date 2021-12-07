@@ -101,19 +101,19 @@ def decideBasedOnResults(String analysisResult, String organizationId, String en
   def slurper = new JsonSlurper()
   def result = slurper.parseText(analysisResult)
   def authToken=commons.getAuthToken()
-
+  println "${result}"
   if(result.complete == true){
     if(result.canaryAnalysisExecutionResult.didPassThresholds){
       //Increase traffic
       println "Increasing traffic weight to Canary"
-      updateCanaryTraffic("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}", "${weightBase}", "${weightCanary}")
+      //updateCanaryTraffic("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}", "${weightBase}", "${weightCanary}")
     }else{
       //Rollback Canary
       println "Rollbacking Canary"
       //Rollback the API Manager app
-      rollBackCreatedProxy("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}")
+      //rollBackCreatedProxy("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}")
       //Rollback the API Manager instance
-      rollbackProxyInstance("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}")
+      //rollbackProxyInstance("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}")
     }
   }
 }
