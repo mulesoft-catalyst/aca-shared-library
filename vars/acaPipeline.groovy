@@ -19,6 +19,16 @@ def call(Map config){
       agent any
 
       stages{
+        stage("Obtain AP Token"){
+          /*when {
+              branch 'nonexistant'
+          }*/
+          steps {
+            script {
+              acaJobs.obtainAPToken()
+            }
+          }
+        }
         stage("Apply Canary Policy"){
           /*when {
               branch 'nonexistant'
