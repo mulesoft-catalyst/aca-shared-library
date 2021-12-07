@@ -100,14 +100,11 @@ def decideBasedOnResults(String analysisResult, String organizationId, String en
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
   def slurper = new JsonSlurper()
   def result = slurper.parseText(analysisResult)
-  //def authToken=commons.getAuthToken()
-  println "decideBasedOnResults() - 1"
-  println "${result}"
   if(result.complete == true){
     if(result.canaryAnalysisExecutionResult.didPassThresholds){
       //Increase traffic
       println "Increasing traffic weight to Canary"
-      //updateCanaryTraffic("${organizationId}", "${environmentId}", "${proxyApiId}", "${weightBase}", "${weightCanary}")
+      updateCanaryTraffic("${organizationId}", "${environmentId}", "${proxyApiId}", "${weightBase}", "${weightCanary}")
     }else{
       //Rollback Canary
       println "Rollbacking Canary"
