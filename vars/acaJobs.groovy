@@ -225,7 +225,8 @@ def String applyPolicy(String organizationId, String environmentId, String group
 
   def out = new ByteArrayOutputStream()
   def err = new ByteArrayOutputStream()
-  def proc = ['bash', '-c', "echo '${response}' | sed -n 's|.*\"id\":\\([^\"]*\\)},.*|\\1|p'"].execute()
+  def proc = ['bash', '-c', "echo '${response}' | sed -n 's|.*\"id\":\\([^\"]*\\),.*|\1|p'"].execute()
+                                                         
   proc.consumeProcessOutput(out, err)
   proc.waitFor()
 
