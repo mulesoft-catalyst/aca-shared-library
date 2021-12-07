@@ -294,5 +294,5 @@ def updateCanaryTraffic(String organizationId, String environmentId, String prox
     }
   }"""
   def response=commons.executePatchWithBody("${policiesUrl}", "${body}", "${authToken}")
-  println "${response}"
+
 }

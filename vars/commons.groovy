@@ -37,12 +37,12 @@ def executePostWithBody(String url, String token, String body, String expectedHt
 }
 
 //Goal: execute a PATCH request with a body using Curl in a thread. TODO: refactor along with executePostWithBody to make it a single function
-def executePatchWithBody(String url, String body, String token2){
-  def token = "fff8141b-ab75-4290-9628-9061b8679816"
+def executePatchWithBody(String url, String body, String token){
   String curlCommand="curl -X PATCH -d '${body}' -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}"
-  println "${curlCommand}"
   def response = executeSh(curlCommand)
-  println "${response}"
+  def rawResponse = response.split("HTTPSTATUS:")[0]
+  println "rawResponse: ${rawResponse}"
+  return "${rawResponse}"
 }
 
 //Goal: execute a multipart POST request using Curl in a thread
