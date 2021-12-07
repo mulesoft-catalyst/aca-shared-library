@@ -32,7 +32,7 @@ def call() {
           string(name: 'endpointProtocol', defaultValue: 'https', description: 'The protocol to access the endpoint used during the Load Test phase'),
           string(name: 'endpointHost', defaultValue: 'httpbin.org', description: 'The host to access the endpoint used during the Load Test phase (including port if needed)'),
           string(name: 'endpointResource', defaultValue: 'get', description: 'The resource to access the endpoint used during the Load Test phase'),
-          string(name: 'weightBaseSuccessful', defaultValue: '80', description: 'The final weight to assign to the baseline version after the Canary Analysis was successful and the Canary is considered a suitable version')
+          string(name: 'weightBaseSuccessful', defaultValue: '80', description: 'The final weight to assign to the baseline version after the Canary Analysis was successful and the Canary is considered a suitable version'),
           string(name: 'weightCanarySuccessful', defaultValue: '20', description: 'The final weight to assign to the canary version after the Canary Analysis was successful and the Canary is considered a suitable version')
         ])
     ])
