@@ -100,9 +100,7 @@ def String retrieveAnalysisResults(String canaryServerProtocol, String canarySer
 /*
   Goal: Takes decisions according the ACA result
 */
-def decideBasedOnResults(String analysisResult, String organizationId, String environmentId, String proxyApiId, String policyId,
-                          String host, String port, String protocol, String path, String weightBase,
-                          String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
+def decideBasedOnResults(String analysisResult, String proxyApiId, String policyId){
   //TODO: Implement logic according two scenarios: Analysis was successful and Analysis failed
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
   def slurper = new JsonSlurper()
@@ -111,7 +109,8 @@ def decideBasedOnResults(String analysisResult, String organizationId, String en
     if(result.canaryAnalysisExecutionResult.didPassThresholds){
       //Increase traffic
       println "Increasing traffic weight to Canary"
-      updateCanaryTraffic("${organizationId}", "${environmentId}", "${proxyApiId}", "${policyId}", "${weightBase}", "${weightCanary}")
+      updateCanaryTraffic("${params.organizationId}", "${params.environmentId}", "${proxyApiId}", "${policyId}",
+                          "${params.host}", "${params.port}", "${params.protocol}", "${params.path}", "${params.weightBaseSuccessful}", "${params.hostCanary}", "${params.portCanary}", "${params.protocolCanary}", "${params.pathCanary}", "${params.weightCanarySuccessful}")
     }else{
       //Rollback Canary
       println "Rollbacking Canary"
