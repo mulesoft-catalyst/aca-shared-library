@@ -80,7 +80,6 @@ def call(Map config){
             steps {
               script {
                 analysisResult = acaJobs.retrieveAnalysisResults("${params.canaryServerProtocol}", "${params.canaryServer}", "${params.canaryServerPort}", analysisId)
-                println analysisResult.getClass()
               }
             }
           }

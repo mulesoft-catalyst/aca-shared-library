@@ -7,8 +7,6 @@
 //Likewise, future modifications must be made by whoever uses it
 
 import groovy.json.JsonSlurper
-import groovy.json.JsonSlurperClassic
-import groovy.json.JsonOutput
 
 /*
   Goal: Perform required steps in Anypoint Platform using Platform APIs. It uploads a new asset to Exchange, creates an API instance,
@@ -62,7 +60,7 @@ def executeLoadTesting(String newmanPath, String newmanCollection, String newman
 /*
   Goal: Executes an Async ACA
 */
-def executeCanaryAnalysis(String canaryServerProtocol, String canaryServer, String canaryServerPort, String canaryConfig, String appName){
+def String executeCanaryAnalysis(String canaryServerProtocol, String canaryServer, String canaryServerPort, String canaryConfig, String appName){
   def post = new URL("${canaryServerProtocol}://${canaryServer}:${canaryServerPort}/standalone_canary_analysis/?metricsAccountName=canary-prometheus&storageAccountName=in-memory-store-account&application=${appName}").openConnection();
   def message = "${canaryConfig}"
   post.setRequestMethod("POST")
@@ -81,7 +79,7 @@ def executeCanaryAnalysis(String canaryServerProtocol, String canaryServer, Stri
 /*
   Goal: Retrieves the result for a given ACA
 */
-def retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, String canaryServerPort, String analysisId){
+def String retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, String canaryServerPort, String analysisId){
   def url = "${canaryServerProtocol}://${canaryServer}:${canaryServerPort}/standalone_canary_analysis/${analysisId}";
   def get = new URL(url).openConnection();
   get.setRequestMethod("GET")
@@ -89,16 +87,13 @@ def retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, St
   get.setRequestProperty("Content-Type", "application/json")
   def getRC = get.getResponseCode();
 
-  //def slurper = new JsonSlurperClassic()
-  //def result = slurper.parseText(get.getInputStream().getText())
-
-  return get.getInputStream().getText() //result.canaryAnalysisExecutionResult;
+  return get.getInputStream().getText()
 }
 
 /*
   Goal: Takes decisions according the ACA result
 */
-def decideBasedOnResults(analysisResult){
+def decideBasedOnResults(String analysisResult){
   //TODO: Implement logic according two scenarios: Analysis was successful and Analysis failed
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
   def slurper = new JsonSlurper()
@@ -118,7 +113,7 @@ def decideBasedOnResults(analysisResult){
 /*
   Goal: Uploads asset to Exchange and create the API Manager instance
 */
-def createProxy(String organizationId, String environmentId, String groupId, String assetId, String assetVersion, String assetName, String assetClassifier, String apiVersion){
+def String createProxy(String organizationId, String environmentId, String groupId, String assetId, String assetVersion, String assetName, String assetClassifier, String apiVersion){
 
   //API Manager API config
   def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations"
@@ -184,7 +179,7 @@ def createProxy(String organizationId, String environmentId, String groupId, Str
 /*
   Goal: Applies a policy to the created API Instance
 */
-def applyPolicy(String organizationId, String environmentId, String groupId, String assetId, String assetVersion, String proxyApiId,
+def String applyPolicy(String organizationId, String environmentId, String groupId, String assetId, String assetVersion, String proxyApiId,
                 String host, String port, String protocol, String path, String weight,
                 String hostCanary, String portCanary, String protocolCanary, String pathCanary, String weightCanary){
 
