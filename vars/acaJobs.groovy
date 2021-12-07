@@ -223,15 +223,17 @@ def String applyPolicy(String organizationId, String environmentId, String group
 
   def response = commons.executePostWithBody("${localPoliciesUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 2")
 
-  def out = new ByteArrayOutputStream()
-  def err = new ByteArrayOutputStream()
-  def proc = ['bash', '-c', "echo '${response}' | sed -n 's|.*\"id\":\\([^\"]*\\),.*|\1|p'"].execute()
-                                                         
-  proc.consumeProcessOutput(out, err)
-  proc.waitFor()
+//  def out = new ByteArrayOutputStream()
+//  def err = new ByteArrayOutputStream()
+//  def proc = ['bash', '-c', "echo '${response}' | sed -n 's|.*\"id\":\\([^\"]*\\),.*|\1|p'"].execute()
 
-  println "Created Policy ID is: ${out.toString()}"
-  return "${out.toString().trim()}"
+//  proc.consumeProcessOutput(out, err)
+//  proc.waitFor()
+  def policyId = executeSh("echo '${response}' | sed -n 's|.*\"id\":\\([^\"]*\\),.*|\1|p'")
+  println "${policyId}"
+  return "${policyId.trim()}"
+  //println "Created Policy ID is: ${out.toString()}"
+  //return "${out.toString().trim()}"
   //return "${response}"
 }
 
