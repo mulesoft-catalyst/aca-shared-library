@@ -88,7 +88,7 @@ def call(Map config){
           stage("Decided Based on Results"){
             steps {
               script {
-                acaJobs.decideBasedOnResults("${analysisResult}", "${params.organizationId}", "${params.environmentId}", "${proxyApiId}", "${params.weightBaseSuccessful}, "${params.weightCanarySuccessful})
+                acaJobs.decideBasedOnResults("${analysisResult}", "${params.organizationId}", "${params.environmentId}", "${proxyApiId}", "${params.weightBaseSuccessful}", "${params.weightCanarySuccessful}")
               }
             }
           }
