@@ -101,6 +101,7 @@ def decideBasedOnResults(String analysisResult, String organizationId, String en
   def slurper = new JsonSlurper()
   def result = slurper.parseText(analysisResult)
   def authToken=commons.getAuthToken()
+  println "decideBasedOnResults() - 1"
   println "${result}"
   if(result.complete == true){
     if(result.canaryAnalysisExecutionResult.didPassThresholds){
