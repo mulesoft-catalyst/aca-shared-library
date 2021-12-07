@@ -101,11 +101,18 @@ def retrieveAnalysisResults(String canaryServerProtocol, String canaryServer, St
 def decideBasedOnResults(analysisResult){
   //TODO: Implement logic according two scenarios: Analysis was successful and Analysis failed
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
-  println "${analysisResult}"
   def slurper = new JsonSlurper()
   def result = slurper.parseText(analysisResult)
-  println "${result.canaryAnalysisExecutionResult}"
-  echo "ok"
+
+  if(result.complete == true){
+    if(result.canaryAnalysisExecutionResult.didPassThresholds){
+      //Increase traffic
+      println "Increasing traffic weight to Canary"
+    }else{
+      //Rollback Canary
+      println "Rollbacking Canary"
+    }
+  }
 }
 
 /*
