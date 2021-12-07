@@ -32,7 +32,8 @@ def String applyCanaryPolicy(String organizationId, String environmentId, String
   def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
 
   //return "${proxyApiId}"
-  return jsonSlurper.parseText('{ "proxyApiId": "${proxyApiId}", "policyId": "${applyPolicyResponse.id.toString().trim()}" } ')
+  def slurper = new JsonSlurper()
+  return slurper.parseText('{ "proxyApiId": "${proxyApiId}", "policyId": "${applyPolicyResponse.id.toString().trim()}" } ')
 }
 
 /*
