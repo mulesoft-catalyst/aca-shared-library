@@ -18,15 +18,12 @@ def getAuthToken() {
            -d '{\"grant_type\": \"client_credentials\", \"client_id\": \"${clientId}\", \"client_secret\": \"${clientSecret}\"}' \
            | sed -n 's|.*\"access_token\":\"\\([^\"]*\\)\".*|\\1|p'"
 
-         println "getAuthToken() - 1"
          def process = [ 'bash', '-c', "${curlCommand}" ].execute()
          process.waitFor()
-         println "getAuthToken() - 2"
          def response = process.text
 
-         println "getAuthToken() - 3"
          def rawResponse = response.split("HTTPSTATUS:")[0]
-         println "getAuthToken() - 4"
+         println "${rawResponse}"
          return "${rawResponse}"
   }
 }

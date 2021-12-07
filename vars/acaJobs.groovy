@@ -107,14 +107,14 @@ def decideBasedOnResults(String analysisResult, String organizationId, String en
     if(result.canaryAnalysisExecutionResult.didPassThresholds){
       //Increase traffic
       println "Increasing traffic weight to Canary"
-      //updateCanaryTraffic("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}", "${weightBase}", "${weightCanary}")
+      //updateCanaryTraffic("${organizationId}", "${environmentId}", "${proxyApiId}", "${weightBase}", "${weightCanary}")
     }else{
       //Rollback Canary
       println "Rollbacking Canary"
       //Rollback the API Manager app
-      //rollBackCreatedProxy("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}")
+      //rollBackCreatedProxy("${organizationId}", "${environmentId}", "${proxyApiId}")
       //Rollback the API Manager instance
-      //rollbackProxyInstance("${organizationId}", "${environmentId}", "${proxyApiId}", "${authToken}")
+      //rollbackProxyInstance("${organizationId}", "${environmentId}", "${proxyApiId}")
     }
   }
 }
@@ -251,8 +251,9 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
 }
 
 //TODO: move to commons and make extra headers an optional step of the executeDelete function
-def rollBackCreatedProxy(String organizationId, String environmentId, String appId, String authToken){
+def rollBackCreatedProxy(String organizationId, String environmentId, String appId){
   //TODO refactor
+  def authToken=commons.getAuthToken()
   def applicationsEndpoint = "https://anypoint.mulesoft.com/hybrid/api/v1/applications/${appId}"
   String curlCommand = "curl \
   -w 'HTTPSTATUS:%{http_code}' \
@@ -268,14 +269,15 @@ def rollBackCreatedProxy(String organizationId, String environmentId, String app
   println "rawResponse: ${rawResponse}"
 }
 
-def rollbackProxyInstance(String organizationId, String environmentId, String proxyApiId, String authToken){
+def rollbackProxyInstance(String organizationId, String environmentId, String proxyApiId){
   //TODO refactor
   def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
+  def authToken=commons.getAuthToken()
   def response = commons.executeDelete("${apiManagerEndpoint}", "${authToken}", "204", "updateCanaryTraffic")
   return "${response}"
 }
 
-def updateCanaryTraffic(String organizationId, String environmentId, String proxyApiId, String authToken, String weightBase, String weightCanary){
+def updateCanaryTraffic(String organizationId, String environmentId, String proxyApiId, String weightBase, String weightCanary){
   def policiesUrl = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/policies"
   def body = """
   {
@@ -285,6 +287,7 @@ def updateCanaryTraffic(String organizationId, String environmentId, String prox
       }
   }
   """
+  def authToken=commons.getAuthToken()
   def response = commons.executePatchWithBody("${policiesUrl}", "${authToken}", "${body}", "204", "updateCanaryTraffic")
   return "${response}"
 }
