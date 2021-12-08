@@ -100,7 +100,7 @@ def String retrieveAnalysisResults(String canaryServerProtocol, String canarySer
 /*
   Goal: Takes decisions according the ACA result
 */
-def decideBasedOnResults(String analysisResult, String proxyApiId, String policyId, String appId){
+def decideBasedOnResults(String analysisResult, String proxyApiId, String policyId){
   //TODO: Implement logic according two scenarios: Analysis was successful and Analysis failed
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
   def slurper = new JsonSlurper()
@@ -111,7 +111,7 @@ def decideBasedOnResults(String analysisResult, String proxyApiId, String policy
       println "Increasing traffic weight to Canary"
       //updateCanaryTraffic("${params.organizationId}", "${params.environmentId}", "${proxyApiId}", "${policyId}",
       //                    "${params.host}", "${params.port}", "${params.protocol}", "${params.path}", "${params.weightBaseSuccessful}", "${params.hostCanary}", "${params.portCanary}", "${params.protocolCanary}", "${params.pathCanary}", "${params.weightCanarySuccessful}")
-      rollBackCreatedProxy("${params.organizationId}", "${params.environmentId}", "${appId}")
+      rollBackCreatedProxy("${params.organizationId}", "${params.environmentId}", "${params.assetName}")
     }else{
       //Rollback Canary
       println "Rollbacking Canary"
@@ -256,9 +256,9 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
 }
 
 //TODO: move to commons and make extra headers an optional step of the executeDelete function
-def rollBackCreatedProxy(String organizationId, String environmentId, String appId){
+def rollBackCreatedProxy(String organizationId, String environmentId, String assetName){
   //TODO refactor
-  def applicationsEndpoint = "https://anypoint.mulesoft.com/hybrid/api/v1/applications/${appId}"
+  def applicationsEndpoint = "https://anypoint.mulesoft.com/cloudhub/api/applications/${assetName}"
   String curlCommand = "curl \
   -w 'HTTPSTATUS:%{http_code}' \
   -X DELETE ${applicationsEndpoint} \
