@@ -27,6 +27,8 @@ def call() {
           string(name: 'canaryServer', defaultValue: '192.168.0.45', description: 'The Kayenta server used to run the analysis'),
           string(name: 'canaryServerProtocol', defaultValue: 'http', description: 'The protocol used to connect to the Kayenta server'),
           string(name: 'canaryServerPort', defaultValue: '8090', description: 'The port used to connect to the Kayenta server'),
+          string(name: 'startTimeIso', defaultValue: '2021-12-08T15:00:00Z', description: 'Analysis Start Time in ISO format'),
+          string(name: 'endTimeIso', defaultValue: '2021-12-08T19:00:00Z', description: 'Analysis End Time in ISO format'),
           string(name: 'waitTime', defaultValue: '10', description: 'Wait time (in seconds) to wait until the Canary Analysis is completed'),
           string(name: 'deploymentWaitTime', defaultValue: '120', description: 'Wait time (in seconds) to wait until the proxy application gets deployed'),
           string(name: 'endpointProtocol', defaultValue: 'https', description: 'The protocol to access the endpoint used during the Load Test phase'),
