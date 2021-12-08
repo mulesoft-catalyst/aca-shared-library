@@ -80,6 +80,10 @@ def executeSh(String pipedCommand){
     process.waitFor()
     println "Output is: ${out.toString()}"
     println "Error is: ${err.toString()}"
-    return out.toString()
+    String response = out.toString()
+    process = null
+    err = null
+    out = null
+    return response
   }
 }
