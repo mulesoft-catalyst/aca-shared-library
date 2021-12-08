@@ -25,17 +25,26 @@ NOTE: Kayenta requires redis to work. Redis must work in a non-clustered fashion
 - Canary Policy: this is a custom policy made to balance the traffic to different APIs (base and canary) based on weights captured as percentages. For instance, you could configure the base version to receive 90% of the traffic, while leaving the canary with the other 10%
 
 ### Shared Library Architecture
-TODO
-
-
-### Deprecation and retirement
-TODO
+The shared library is made up of 4 Groovy scripts:
+- acaBuildParams.groovy: this script contains the parameters that the pipeline steps require to work
+- acaPipeline.groovy: this script defines the pipeline steps to perform an ACA
+- acaJobs.groovy: this script contains the jobs (functions) with the logic implementation. acaPipeline uses this one
+- commons.groovy: this script contains repetitive functions and is called by acaJobs.groovy
 
 ### Usage
-TODO
+1. Import the shared library in Jenkins (in Jenkins go to: *manage jenkins* -> *configure system* -> *Global Pipeline Libraries*)
+2. In your jenkinsfile add the following
+```
+@Library('automated-canary-analysis-lib') _ //import the library. The name used here must be equal to the given during step 1
+...
+acaBuildParams() //reference and configure the build params require to run the ACA Pipeline
+acaPipeline() //Run the ACA pipeline
+...
+```
 
 ### Limitations
-TODO
+- Some Groovy functions are implemented without reusing some of the existing functions defined in commons.groovy. This is mainly due to some [Serialization](https://stackoverflow.com/questions/37864542/jenkins-pipeline-notserializableexception-groovy-json-internal-lazymap) errors experienced in Groovy. This has turned the code a little bit DRY. Whoever uses this library can choose to make a general refactor, which has not been done yet since it is advisable to replace some native Groovy libraries with software that does not come by default in Jenkins (e.g. jq to replace sed).
+- Current pipeline is based on CloudHub. Using this with other MuleSoft deployment models requires extending the functionality to include the different Platform APIs.
 
 ### Contribution
 
