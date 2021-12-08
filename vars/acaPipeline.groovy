@@ -104,7 +104,7 @@ def call(Map config){
           stage("Decide Based on Results"){
             steps {
               script {
-                acaJobs.decideBasedOnResults("${analysisResult}", "${proxyApiId}", "${policyId}", "${appId}")
+                acaJobs.decideBasedOnResults("${analysisResult}", "${proxyApiId}", "${policyId}")
               }
             }
           }
