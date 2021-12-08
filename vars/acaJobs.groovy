@@ -293,6 +293,8 @@ def updateCanaryTraffic(String organizationId, String environmentId, String prox
         "weightCanary": "${weightCanary}"
     }
   }"""
-  commons.executePatchWithBody("${policiesUrl}", "${body}", "${authToken}")
+  String response = commons.executePatchWithBody("${policiesUrl}", "${body}", "${authToken}")
   body = null
+  policiesUrl = null
+  println "updateCanaryTraffic response: ${response}"
 }
