@@ -60,11 +60,12 @@ def executePostWithMultipart(String curlCommand, String expectedHttpCode, String
 def executeDelete(String url, String token, String expectedHttpCode, String methodName){
   String curlCommand="curl -X DELETE -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}"
   def response = executeSh(curlCommand)
-
+  println "post response"
   def rawResponse = response.split("HTTPSTATUS:")[0]
   println "rawResponse: ${rawResponse}"
-
-  return "${rawResponse}"
+  String strResponse = rawResponse.toString().trim()
+  rawResponse = null
+  return "${strResponse}"
 }
 
 //Goal: execute a SH command in a thread to avoid hang when using build params
