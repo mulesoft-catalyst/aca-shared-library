@@ -40,7 +40,12 @@ def executePostWithBody(String url, String token, String body, String expectedHt
 def executePatchWithBody(String url, String body, String token){
   String curlCommand="curl -X PATCH -d '${body}' -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}"
   def response = executeSh(curlCommand)
-  //def rawResponse = response.split("HTTPSTATUS:")[0]
+  println "post - response"
+  def rawResponse = response.split("HTTPSTATUS:")[0]
+  println "post - raw response"
+  String strResponse = rawResponse.toString().trim()
+  response = null
+  rawResponse = null
   //println "rawResponse: ${rawResponse}"
   //return "${rawResponse}"
 }
@@ -60,12 +65,9 @@ def executePostWithMultipart(String curlCommand, String expectedHttpCode, String
 def executeDelete(String url, String token, String expectedHttpCode, String methodName){
   String curlCommand="curl -X DELETE -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}"
   def response = executeSh(curlCommand)
-  println "post response"
   def rawResponse = response.split("HTTPSTATUS:")[0]
   println "rawResponse: ${rawResponse}"
-  String strResponse = rawResponse.toString().trim()
-  rawResponse = null
-  return "${strResponse}"
+  return "${rawResponse}"
 }
 
 //Goal: execute a SH command in a thread to avoid hang when using build params
