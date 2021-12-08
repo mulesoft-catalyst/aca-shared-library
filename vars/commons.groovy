@@ -39,15 +39,25 @@ def executePostWithBody(String url, String token, String body, String expectedHt
 //Goal: execute a PATCH request with a body using Curl in a thread. TODO: refactor along with executePostWithBody to make it a single function
 def executePatchWithBody(String url, String body, String token){
   String curlCommand="curl -X PATCH -d '${body}' -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}"
-  def response = executeSh(curlCommand)
-  println "post - response"
-  def rawResponse = response.split("HTTPSTATUS:")[0]
-  println "post - raw response"
-  String strResponse = rawResponse.toString().trim()
-  response = null
-  rawResponse = null
+  //def response = executeSh(curlCommand)
+  //def rawResponse = response.split("HTTPSTATUS:")[0]
+  //String strResponse = rawResponse.toString().trim()
+  //response = null
+  //rawResponse = null
   //println "rawResponse: ${rawResponse}"
   //return "${rawResponse}"
+
+  def process = [ 'bash', '-c', "${curlCommand}" ].execute()
+  def out = new ByteArrayOutputStream()
+  def err = new ByteArrayOutputStream()
+  process.consumeProcessOutput(out, err)
+  process.waitFor()
+  println "Output is: ${out.toString()}"
+  println "Error is: ${err.toString()}"
+  String response = out.toString().trim()
+  process = null
+  err = null
+  out = null
 }
 
 //Goal: execute a multipart POST request using Curl in a thread
