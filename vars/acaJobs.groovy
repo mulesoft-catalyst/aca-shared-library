@@ -111,14 +111,14 @@ def decideBasedOnResults(String analysisResult, String proxyApiId, String policy
       println "Increasing traffic weight to Canary"
       //updateCanaryTraffic("${params.organizationId}", "${params.environmentId}", "${proxyApiId}", "${policyId}",
       //                    "${params.host}", "${params.port}", "${params.protocol}", "${params.path}", "${params.weightBaseSuccessful}", "${params.hostCanary}", "${params.portCanary}", "${params.protocolCanary}", "${params.pathCanary}", "${params.weightCanarySuccessful}")
-      rollBackCreatedProxy("${params.organizationId}", "${params.environmentId}", "${params.assetName}")
+      rollbackProxyInstance("${params.organizationId}", "${params.environmentId}", "${proxyApiId}")
     }else{
       //Rollback Canary
       println "Rollbacking Canary"
       //Rollback the API Manager app
-      rollBackCreatedProxy("${organizationId}", "${environmentId}", "${proxyApiId}")
+      rollBackCreatedProxy("${params.organizationId}", "${params.environmentId}", "${params.assetName}")
       //Rollback the API Manager instance
-      //rollbackProxyInstance("${organizationId}", "${environmentId}", "${proxyApiId}")
+      rollbackProxyInstance("${params.organizationId}", "${params.environmentId}", "${proxyApiId}")
     }
   }
 }
@@ -276,8 +276,15 @@ def rollBackCreatedProxy(String organizationId, String environmentId, String ass
 def rollbackProxyInstance(String organizationId, String environmentId, String proxyApiId){
   //TODO refactor
   def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
-  def response = commons.executeDelete("${apiManagerEndpoint}", "${authToken}", "204", "rollbackProxyInstance")
-  return "${response}"
+  String curlCommand = "curl \
+  -w 'HTTPSTATUS:%{http_code}' \
+  -X DELETE ${apiManagerEndpoint} \
+  -H 'Authorization: Bearer ${authToken}' \
+  -H 'Content-Type: application/json' "
+  String response = commons.executeDelete("${curlCommand}", "204", "rollbackProxyInstance")
+  body = null
+  policiesUrl = null
+  println "${response}"
 }
 
 def updateCanaryTraffic(String organizationId, String environmentId, String proxyApiId, String policyId,
