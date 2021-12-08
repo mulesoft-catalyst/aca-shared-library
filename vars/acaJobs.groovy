@@ -275,7 +275,7 @@ def rollBackCreatedProxy(String organizationId, String environmentId, String ass
 
 def rollbackProxyInstance(String organizationId, String environmentId, String proxyApiId){
   //TODO refactor
-  def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
+  def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}"
   String curlCommand = "curl \
   -w 'HTTPSTATUS:%{http_code}' \
   -X DELETE ${apiManagerEndpoint} \
