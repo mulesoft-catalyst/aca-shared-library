@@ -45,8 +45,6 @@ def executePatchWithBody(String url, String body, String token){
   def err = new ByteArrayOutputStream()
   process.consumeProcessOutput(out, err)
   process.waitFor()
-  println "Output is: ${out.toString()}"
-  println "Error is: ${err.toString()}"
   String response = out.toString().trim()
   process = null
   err = null

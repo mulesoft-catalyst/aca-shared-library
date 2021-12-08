@@ -109,13 +109,14 @@ def decideBasedOnResults(String analysisResult, String proxyApiId, String policy
     if(result.canaryAnalysisExecutionResult.didPassThresholds){
       //Increase traffic
       println "Increasing traffic weight to Canary"
-      updateCanaryTraffic("${params.organizationId}", "${params.environmentId}", "${proxyApiId}", "${policyId}",
-                          "${params.host}", "${params.port}", "${params.protocol}", "${params.path}", "${params.weightBaseSuccessful}", "${params.hostCanary}", "${params.portCanary}", "${params.protocolCanary}", "${params.pathCanary}", "${params.weightCanarySuccessful}")
+      //updateCanaryTraffic("${params.organizationId}", "${params.environmentId}", "${proxyApiId}", "${policyId}",
+      //                    "${params.host}", "${params.port}", "${params.protocol}", "${params.path}", "${params.weightBaseSuccessful}", "${params.hostCanary}", "${params.portCanary}", "${params.protocolCanary}", "${params.pathCanary}", "${params.weightCanarySuccessful}")
+      rollBackCreatedProxy("${params.organizationId}", "${params.environmentId}", "${proxyApiId}")
     }else{
       //Rollback Canary
       println "Rollbacking Canary"
       //Rollback the API Manager app
-      //rollBackCreatedProxy("${organizationId}", "${environmentId}", "${proxyApiId}")
+      rollBackCreatedProxy("${organizationId}", "${environmentId}", "${proxyApiId}")
       //Rollback the API Manager instance
       //rollbackProxyInstance("${organizationId}", "${environmentId}", "${proxyApiId}")
     }
@@ -271,7 +272,7 @@ def rollBackCreatedProxy(String organizationId, String environmentId, String app
 def rollbackProxyInstance(String organizationId, String environmentId, String proxyApiId){
   //TODO refactor
   def apiManagerEndpoint = "https://anypoint.mulesoft.com/apimanager/api/v1/organizations/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
-  def response = commons.executeDelete("${apiManagerEndpoint}", "${authToken}", "204", "updateCanaryTraffic")
+  def response = commons.executeDelete("${apiManagerEndpoint}", "${authToken}", "204", "rollbackProxyInstance")
   return "${response}"
 }
 
@@ -296,5 +297,5 @@ def updateCanaryTraffic(String organizationId, String environmentId, String prox
   String response = commons.executePatchWithBody("${policiesUrl}", "${body}", "${authToken}")
   body = null
   policiesUrl = null
-  println "updateCanaryTraffic response: ${response}"
+  println "${response}"
 }
