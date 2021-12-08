@@ -64,7 +64,7 @@ def executePostWithMultipart(String curlCommand, String expectedHttpCode, String
 
 
 //Goal: execute a DELETE request with a body using Curl in a thread.
-def executeDelete(String url, String expectedHttpCode, String methodName){
+def executeDelete(String url, String token, String expectedHttpCode, String methodName){
   String curlCommand="curl -X DELETE -w 'HTTPSTATUS:%{http_code}' -H \"Content-Type: application/json\" -H \"Authorization: Bearer ${token}\" ${url}"
   //TODO: refactor. Calling executeSh will throw a serialization exception given the nested LazyMaps
   def process = [ 'bash', '-c', "${curlCommand}" ].execute()
