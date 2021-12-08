@@ -15,6 +15,7 @@ def analysisResult = ''
 def applyCanaryPolicyResponse = ''
 def proxyApiId = ''
 def policyId = ''
+def appId = ''
 
 def call(Map config){
   pipeline {
@@ -41,6 +42,7 @@ def call(Map config){
                applyCanaryPolicyResponse = acaJobs.applyCanaryPolicy("${params.organizationId}", "${params.environmentId}", "${params.groupId}", "${params.assetId}", "${params.assetName}", "${params.assetVersion}", "${params.assetClassifier}", "${params.apiVersion}", "${params.assetIdPolicy}", "${params.assetVersionPolicy}", "${params.host}", "${params.port}", "${params.protocol}", "${params.path}", "${params.weight}", "${params.hostCanary}", "${params.portCanary}", "${params.protocolCanary}", "${params.pathCanary}", "${params.weightCanary}")
                proxyApiId = applyCanaryPolicyResponse[0]
                policyId = applyCanaryPolicyResponse[1]
+               appId = applyCanaryPolicyResponse[2]
             }
           }
         }
@@ -102,7 +104,7 @@ def call(Map config){
           stage("Decide Based on Results"){
             steps {
               script {
-                acaJobs.decideBasedOnResults("${analysisResult}", "${proxyApiId}", "${policyId}")
+                acaJobs.decideBasedOnResults("${analysisResult}", "${proxyApiId}", "${policyId}", "${appId}")
               }
             }
           }

@@ -28,9 +28,9 @@ def String applyCanaryPolicy(String organizationId, String environmentId, String
   def policyId = applyPolicy("${organizationId}", "${environmentId}", "${groupId}", "${assetIdPolicy}", "${assetVersionPolicy}", "${proxyApiId}", "${host}", "${port}", "${protocol}", "${path}", "${weight}", "${hostCanary}", "${portCanary}", "${protocolCanary}", "${pathCanary}", "${weightCanary}")
 
   //Step 3 - Deploy the proxy (optional)
-  def deployProxyResponse = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
+  def appId = deployCreatedProxy("${organizationId}", "${environmentId}", "${assetId}", "${proxyApiId}")
 
-  return ["${proxyApiId}", "${policyId}"]
+  return ["${proxyApiId}", "${policyId}", "${appId}"]
 }
 
 /*
@@ -100,7 +100,7 @@ def String retrieveAnalysisResults(String canaryServerProtocol, String canarySer
 /*
   Goal: Takes decisions according the ACA result
 */
-def decideBasedOnResults(String analysisResult, String proxyApiId, String policyId){
+def decideBasedOnResults(String analysisResult, String proxyApiId, String policyId, String appId){
   //TODO: Implement logic according two scenarios: Analysis was successful and Analysis failed
   // Suggestions: If sucessful --> Notify distribution list. If fail --> Rollback steps from applyCanaryPolicy and notify distribution list
   def slurper = new JsonSlurper()
@@ -111,7 +111,7 @@ def decideBasedOnResults(String analysisResult, String proxyApiId, String policy
       println "Increasing traffic weight to Canary"
       //updateCanaryTraffic("${params.organizationId}", "${params.environmentId}", "${proxyApiId}", "${policyId}",
       //                    "${params.host}", "${params.port}", "${params.protocol}", "${params.path}", "${params.weightBaseSuccessful}", "${params.hostCanary}", "${params.portCanary}", "${params.protocolCanary}", "${params.pathCanary}", "${params.weightCanarySuccessful}")
-      rollBackCreatedProxy("${params.organizationId}", "${params.environmentId}", "${proxyApiId}")
+      rollBackCreatedProxy("${params.organizationId}", "${params.environmentId}", "${appId}")
     }else{
       //Rollback Canary
       println "Rollbacking Canary"
@@ -246,9 +246,13 @@ def deployCreatedProxy(String organizationId, String environmentId, String asset
   """
 
   def deploymentsUrl = "${apiProxiesEndpoint}/${organizationId}/environments/${environmentId}/apis/${proxyApiId}/deployments"
-
   def response = commons.executePostWithBody("${deploymentsUrl}", "${authToken}", "${postBody}", "201", "applyCanaryPolicy - Step 3")
-  return "${response}"
+  def slurper = new JsonSlurper()
+  def result = slurper.parseText(response)
+  def appId = result.id
+  println "Created App ID is: ${appId.toString().trim()}"
+  return "${appId}"
+  //return "${response}"
 }
 
 //TODO: move to commons and make extra headers an optional step of the executeDelete function
