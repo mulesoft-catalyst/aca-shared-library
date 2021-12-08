@@ -263,10 +263,10 @@ def rollBackCreatedProxy(String organizationId, String environmentId, String app
   -H 'X-ANYPNT-ORG-ID: ${organizationId}' \
   -H 'Content-Type: application/json' "
 
-  def response = commons.executeSh(curlCommand)
-
-  def rawResponse = response.split("HTTPSTATUS:")[0]
-  println "rawResponse: ${rawResponse}"
+  String response = commons.executeDelete("${policiesUrl}", "204", "rollBackCreatedProxy")
+  body = null
+  policiesUrl = null
+  println "${response}"
 }
 
 def rollbackProxyInstance(String organizationId, String environmentId, String proxyApiId){
