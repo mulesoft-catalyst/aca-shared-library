@@ -13,9 +13,9 @@ This solution was specifically designed to be executed after the deployment of a
 For the solution to work, a stack is required to run the canary analyzes. The stack is made up of:
 -   Prometheus: Prometheus is a monitoring system that includes its own time series database. It works by scraping endpoints that we specify, to collect the metrics.
 
--   Kayenta: Kayenta is an open source tool developed by Netflix that performs an automated canary analysis. It collects a list of metrics produced by the canary and the previous version (both stored in a metrics source), and compares them using statistical methods to obtain an overall result to determine if there are anomalies or problems, indicating the rollout should be aborted if the new service fails to meet specified tolerances. It also has an REST API that makes it convenient to integrate this analysis in CI / CD environments.
+-   Kayenta: Kayenta is an open source tool developed by Netflix that performs an automated canary analysis. It collects a list of metrics produced by the canary and the previous version (both stored in a metrics source), and compares them using statistical methods to obtain an overall result to determine if there are anomalies or problems, indicating the rollout should be aborted if the new service fails to meet specified tolerances. It also has a REST API that makes it convenient to integrate this analysis in CI/CD environments.
 
-	NOTE: Generally, Kayenta comes installed as a Spinnaker module (a CI tool), but since we are only interested in the ACA part, this design will only consider the Kayenta standalone installation.
+	NOTE: Generally, Kayenta comes installed as a Spinnaker module (a CI tool), but since we are only interested in the ACA part, only the Kayenta standalone installation is needed.
 
 -   Redis: In memory data structure store, used by Kayenta to keep track of the internal pipelines run by Kayenta.
 NOTE: Kayenta requires redis to work. Redis must work in a non-clustered fashion.
