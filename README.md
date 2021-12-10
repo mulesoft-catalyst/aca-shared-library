@@ -45,6 +45,8 @@ acaPipeline() //Run the ACA pipeline
 ### Limitations
 - Some Groovy functions are implemented without reusing some of the existing functions defined in commons.groovy. This is mainly due to some [Serialization](https://stackoverflow.com/questions/37864542/jenkins-pipeline-notserializableexception-groovy-json-internal-lazymap) errors experienced in Groovy. This has turned the code a little bit DRY. Whoever uses this library can choose to make a general refactor, which has not been done yet since it is advisable to replace some native Groovy libraries with software that does not come by default in Jenkins (e.g. jq to replace JSON slurper and sed).
 - Current pipeline is based on CloudHub. Using this with other MuleSoft deployment models requires extending the functionality to include the different Platform APIs.
+- Current Canary Config is embedded in the pipeline. The only parameterization that supports is the start and end time of the analysis. It is necessary to modify the metrics query to adapt it to the specific needs of those who implement it (name of aggregated metrics, aggregation functions, etc). It is recommended to externalize this configuration either as one more parameter or as an external dynamic file.
+
 
 ### Contribution
 
