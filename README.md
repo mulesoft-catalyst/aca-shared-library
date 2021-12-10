@@ -32,6 +32,7 @@ The shared library is made up of 4 Groovy scripts:
 - commons.groovy: this script contains repetitive functions and is called by acaJobs.groovy
 
 ### Pre-requisites
+- Jenkins and a Jenkins Secret called "connected-app-credentials" (you can rename it) containing the credentials of a [connected app](https://docs.mulesoft.com/access-management/connected-apps-overview)
 - [Canary Policy for Mule 4](https://github.com/mulesoft-catalyst/canary-policy-mule-4)
 - [Kayenta](https://github.com/spinnaker/kayenta/blob/master/docs/kayenta-standalone.md) (and its dependencies)
 - Prometheus
