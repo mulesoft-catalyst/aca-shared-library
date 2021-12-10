@@ -1,5 +1,5 @@
 
-# Automate Canary Analysis Jenkins Shared Library
+# Automated Canary Analysis Jenkins Shared Library
 A Jenkins shared library to perform automated canary analysis (ACA) with Mule 4 using Groovy, configuring a canary release policy, generating interesting traffic for metrics gathering, executing the analysis and acting based on the results. Using this shared library you would be able to:
   - Extend your existing pipelines to perform ACA
   - Automate the configuration in Anypoint Platform with the required custom components
