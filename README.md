@@ -31,6 +31,12 @@ The shared library is made up of 4 Groovy scripts:
 - acaJobs.groovy: this script contains the jobs (functions) with the logic implementation. acaPipeline uses this one
 - commons.groovy: this script contains repetitive functions and is called by acaJobs.groovy
 
+### Pre-requisites
+- [Canary Policy for Mule 4](https://github.com/mulesoft-catalyst/canary-policy-mule-4)
+- [Kayenta](https://github.com/spinnaker/kayenta/blob/master/docs/kayenta-standalone.md) (and its dependencies)
+- Prometheus
+- Metrics API (Not provided)
+
 ### Usage
 1. Import the shared library in Jenkins (in Jenkins go to: *manage jenkins* -> *configure system* -> *Global Pipeline Libraries*)
 2. In your jenkinsfile add the following
