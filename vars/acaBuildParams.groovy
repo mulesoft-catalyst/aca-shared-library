@@ -4,9 +4,9 @@
 def call() {
     properties([
         parameters([
-          string(name: 'organizationId', defaultValue: '9033ff23-884a-4352-b75b-14fc8237b2c4', description: 'The organization ID from Anypoint Platform'),
-          string(name: 'environmentId', defaultValue: 'eb473ffd-2134-4ecf-b7bc-63a5d0856743', description: 'The environment ID from Anypoint Platform'),
-          string(name: 'groupId', defaultValue: '9033ff23-884a-4352-b75b-14fc8237b2c4', description: 'The environment ID from Anypoint Platform'),
+          string(name: 'organizationId', defaultValue: '9133ef23-884a-4352-b75b-14fc8237b2c2', description: 'The organization ID from Anypoint Platform'),
+          string(name: 'environmentId', defaultValue: 'ec473ffd-2134-4ecf-b7bb-63a5d0856741', description: 'The environment ID from Anypoint Platform'),
+          string(name: 'groupId', defaultValue: '9132ff23-884b-4352-b75a-14fc8237b2c3', description: 'The environment ID from Anypoint Platform'),
           string(name: 'assetIdPolicy', defaultValue: 'canary-release-mule4', description: 'The name given to the canary policy when installed'),
           string(name: 'assetVersionPolicy', defaultValue: '3.0.11-SNAPSHOT', description: 'The version of the canary policy to use'),
           string(name: 'host', defaultValue: 'httpstat.us', description: 'The target host for the baseline'),
