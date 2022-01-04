@@ -44,7 +44,7 @@ The shared library is made up of 4 Groovy scripts:
 ```
 @Library('automated-canary-analysis-lib') _ //import the library. The name used here must be equal to the given during step 1
 ...
-acaBuildParams() //reference and configure the build params require to run the ACA Pipeline
+acaBuildParams() //reference and configure the build params required to run the ACA Pipeline
 acaPipeline() //Run the ACA pipeline
 ...
 ```
